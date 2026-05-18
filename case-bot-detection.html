@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<title>Bot-Detection Bypass · Anmol</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&display=swap" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-logo" title="Try tapping me 7 times">
+      <span class="dot"></span>
+      <span>anmol<span style="color: var(--pass)">.</span>qa</span>
+    </div>
+    <div class="nav-links">
+      <a href="index.html">home</a>
+      <a href="work.html">work</a>
+      <a href="visual-diff.html">visual diff</a>
+      <a href="aio-tcc.html">aio tcc</a>
+      <a href="writing.html">writing</a>
+      <a href="about.html">about</a>
+    </div>
+    <div class="nav-status">
+      <span class="dot"></span>
+      <span>all systems · operational</span>
+    </div>
+  </div>
+</nav>
+
+<section class="block" style="padding-top:64px;padding-bottom:40px">
+  <div class="wrap-narrow">
+    <div class="section-index">case study · 03 · /bot-detection</div>
+    <h1 class="h1" style="margin-bottom: 12px">
+      Bot-detection bypass for production smoke<span style="color:var(--pass)">.</span>
+    </h1>
+    <p class="lead" style="margin: 0;">
+      The story of running headed Playwright via MCP with request-shaping injection to keep prod verification viable, without weakening upstream bot-detection for actual customers.
+    </p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:24px">
+      <span class="badge badge-pass">production · lotusflare</span>
+      <span class="badge badge-info">MCP</span>
+      <span class="badge badge-info">playwright</span>
+      <span class="badge badge-muted">90 min build</span>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap-narrow">
+    <div class="prose">
+      <h2>The setup</h2>
+      <p>Production smoke runs on real prod URLs. That's the whole point — they catch what staging can't, because staging doesn't have the upstream CDN, the real CMS, the real third-party JS that breaks on Tuesdays.</p>
+      <p>The catch: prod has bot-detection turned on (we have it for a reason — credit-card fraud through automated checkout). Playwright headed-and-instrumented looks like exactly the thing bot-detection is built to block. So the smoke suite started failing at the CDN before reaching our app.</p>
+
+      <blockquote>
+        We had three options: weaken prod bot-detection (no), give up prod smoke (no), or find a third way.
+      </blockquote>
+
+      <h2>The third way</h2>
+      <p>Run Playwright via MCP. The Model Context Protocol indirection happens to give us a clean injection point for request-shaping — we can stamp the smoke traffic with a verifiable, time-boxed token that our edge accepts as "this is QA, let it through" while leaving the default-deny posture for everyone else intact.</p>
+      <p>That's the one-line summary. The interesting part is the boundaries.</p>
+
+      <h3>What the request-shape does</h3>
+      <ul>
+        <li>Stamps an HMAC-signed token with a 90-second TTL into a custom header.</li>
+        <li>The edge validates the token and bypasses bot-detection only if the IP is in our CI runner CIDR.</li>
+        <li>Token signing key is rotated weekly via the same secret pipeline as our deploy keys.</li>
+      </ul>
+
+      <h3>What it doesn't do</h3>
+      <ul>
+        <li>Doesn't disable bot-detection for real traffic — the check still runs for every other request.</li>
+        <li>Doesn't whitelist runners by IP alone — IP + token + TTL.</li>
+        <li>Doesn't survive a leaked token — TTL kills it inside 90s.</li>
+      </ul>
+
+      <h2>The MCP angle</h2>
+      <p>This pattern works without MCP too — you could inject the headers in plain Playwright. But the MCP layer gave us two unexpected wins:</p>
+      <ul>
+        <li><strong>Auditability.</strong> Every prod-smoke action goes through the MCP gateway, which logs the agent identity, the spec name, and the action verb. We get an audit trail that's missing in a plain Playwright run.</li>
+        <li><strong>Reuse.</strong> The same shaping pattern works for any agent — the Codex RCA agent, the Browser Use eval harness — without each having to re-implement it.</li>
+      </ul>
+
+      <h2>Results</h2>
+      <ul>
+        <li><strong>Prod smoke runs green.</strong> 100% reachability since deployment.</li>
+        <li><strong>Bot-detection unchanged.</strong> Customer-side surface area is the same.</li>
+        <li><strong>One fraud attempt caught</strong> in the first month — the same week we deployed this. Bot-detection still works.</li>
+      </ul>
+
+      <h2>What I'd tell another QA engineer</h2>
+      <ul>
+        <li>If you're tempted to disable security to make tests pass, stop. There's almost always a token-shaped third option.</li>
+        <li>Make tokens short-lived. 90 seconds is fine. Anything longer is a credential.</li>
+        <li>Audit logs from the MCP gateway became unexpectedly useful for debugging "why did this test fail in prod but pass in staging."</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer class="site-foot">
+  <div class="foot-grid">
+    <div class="foot-col">
+      <h4>// Anmol</h4>
+      <p style="color:var(--text-muted);max-width:340px;font-size:14px;line-height:1.6;margin:0">
+        QA Engineer building deterministic test systems for AI-era products. Available for the right team.
+      </p>
+    </div>
+    <div class="foot-col">
+      <h4>// pages</h4>
+      <ul>
+        <li><a href="index.html">home</a></li>
+        <li><a href="work.html">work</a></li>
+        <li><a href="visual-diff.html">visual diff</a></li>
+        <li><a href="aio-tcc.html">aio tcc</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>// outbound</h4>
+      <ul>
+        <li><a href="writing.html">writing</a></li>
+        <li><a href="https://medium.com/@anmolsoin1">medium</a></li>
+        <li><a href="https://linkedin.com/in/mrnewdelhi">linkedin</a></li>
+        <li><a href="https://github.com/mrnewdelhi">github</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>// contact</h4>
+      <ul>
+        <li><a href="mailto:anmolsoin1@gmail.com">anmolsoin1@gmail.com</a></li>
+        <li><a href="about.html">about</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-status">
+    <span class="item"><span class="dot"></span> all systems · operational</span>
+    <span class="item">build · <span data-deploy-ts>—</span></span>
+    <span class="item">v1.0.0 · 41 specs · 132 assertions</span>
+  </div>
+</footer>
+
+<script src="site.js"></script>
+<script src="console-widget.js"></script>
+</body>
+</html>

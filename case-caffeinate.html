@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<title>CaffeinateBar · Anmol</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&display=swap" />
+<link rel="stylesheet" href="styles.css" />
+
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-logo" title="Try tapping me 7 times">
+      <span class="dot"></span>
+      <span>anmol<span style="color: var(--pass)">.</span>qa</span>
+    </div>
+    <div class="nav-links">
+      <a href="index.html">home</a>
+      <a href="work.html">work</a>
+      <a href="visual-diff.html">visual diff</a>
+      <a href="aio-tcc.html">aio tcc</a>
+      <a href="writing.html">writing</a>
+      <a href="about.html">about</a>
+    </div>
+    <div class="nav-status">
+      <span class="dot"></span>
+      <span>all systems · operational</span>
+    </div>
+  </div>
+</nav>
+
+<section class="block" style="padding-top:64px;padding-bottom:40px">
+  <div class="wrap">
+    <div class="section-index">side project · /caffeinate</div>
+    <h1 class="h1" style="max-width: 880px; margin-bottom: 12px">CaffeinateBar<span style="color:var(--pass)">.</span></h1>
+    <p class="lead" style="margin: 0; max-width: 760px;">A tiny macOS menu bar utility for keeping your Mac awake &mdash; only in the way you actually need. Solves the "AI agent is running autonomously but macOS still thinks the system is idle" problem.</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:24px">
+      <span class="badge badge-pass">open source</span>
+      <span class="badge badge-info">swift</span>
+      <span class="badge badge-info">macOS menu bar</span>
+      <span class="badge badge-muted">side project</span>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px">
+      <a class="btn btn-primary" href="https://github.com/MrNewDelhi/caffeinate-menu-bar-widget" target="_blank">↗ github.com/MrNewDelhi/caffeinate-menu-bar-widget</a>
+      <a class="btn" href="https://www.linkedin.com/posts/mrnewdelhi_macos-swiftui-developertools-share-7461640278211477504-HzNi" target="_blank">↗ linkedin post</a>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 01 · why</div>
+        <h2>One small workflow annoyance.</h2>
+      </div>
+    </div>
+    <div class="prose">
+      <p>If you've left a long-running task on your Mac &mdash; a regression suite, a build, an AI agent autonomously walking through a flow &mdash; you've watched macOS quietly decide the system is idle and put things to sleep. Same for downloads and demos. The built-in <code>caffeinate</code> command works, but it's terminal-only and one-shot.</p>
+      <p>CaffeinateBar is the menu bar shim. Click. Pick a mode. Done.</p>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 02 · modes</div>
+        <h2>Four modes for four use cases.</h2>
+      </div>
+    </div>
+    <div class="grid grid-2">
+      <div class="card"><div class="card-meta">display</div><div class="card-title" style="font-size:17px;margin-top:6px">Screen stays on</div><div class="card-body" style="margin-top:8px">For demos and presentations where the screen must not dim.</div></div>
+      <div class="card"><div class="card-meta">system</div><div class="card-title" style="font-size:17px;margin-top:6px">Mac stays awake, screen can sleep</div><div class="card-body" style="margin-top:8px">For long-running tasks, builds, downloads. Save power; keep working.</div></div>
+      <div class="card"><div class="card-meta">full</div><div class="card-title" style="font-size:17px;margin-top:6px">Stronger mode for long autonomous runs</div><div class="card-body" style="margin-top:8px">For AI agents and long debugging sessions where macOS shouldn't interrupt.</div></div>
+      <div class="card"><div class="card-meta">timed</div><div class="card-title" style="font-size:17px;margin-top:6px">Timed sessions or "until stopped"</div><div class="card-body" style="margin-top:8px">"Stay awake for 2 hours" or "stay awake until I tell you to stop." Self-disarming.</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="prose">
+      <h2>Small tool, opinionated UX</h2>
+      <p>Small tools are fun because the scope is tiny but the UX details matter a lot. CaffeinateBar's whole shipment is: <em>which mode am I in?</em> at a glance, from the menu bar. That's it.</p>
+      <p>Especially relevant when AI agents are asked to run autonomously &mdash; macOS still recognizes it as an idle system. CaffeinateBar keeps the session alive through the whole run without manual intervention.</p>
+      <p>If you build a small utility and want to compare notes &mdash; <a href="mailto:anmolsoin1@gmail.com" style="color:var(--pass)">say hi</a>.</p>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> use cases</div>
+        <h2>When it actually matters.</h2>
+      </div>
+    </div>
+    <div class="grid grid-2">
+      <div class="card"><div class="card-meta">test runs &amp; builds</div><div class="card-body" style="margin-top:8px">Long regression suites or slow CI builds don't need the display on &mdash; system mode keeps things running, display sleeps.</div></div>
+      <div class="card"><div class="card-meta">demos &amp; presentations</div><div class="card-body" style="margin-top:8px">Display mode ensures the screen never dims mid-demo. No "sorry, let me wake that up."</div></div>
+      <div class="card"><div class="card-meta">AI agent runs</div><div class="card-body" style="margin-top:8px">Agents running autonomously get interrupted when macOS thinks the system is idle. Full mode prevents that for unattended long runs.</div></div>
+      <div class="card"><div class="card-meta">downloads &amp; debugging</div><div class="card-body" style="margin-top:8px">Timed sessions let you set "stay awake for 2 hours" and forget it. Self-disarming.</div></div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-foot">
+  <div class="foot-grid">
+    <div class="foot-col">
+      <h4>// Anmol</h4>
+      <p style="color:var(--text-muted);max-width:340px;font-size:14px;line-height:1.6;margin:0">QA Engineer building deterministic test systems for AI-era products. Available for the right team.</p>
+    </div>
+    <div class="foot-col">
+      <h4>// pages</h4>
+      <ul>
+        <li><a href="index.html">home</a></li>
+        <li><a href="work.html">work</a></li>
+        <li><a href="visual-diff.html">visual diff</a></li>
+        <li><a href="aio-tcc.html">aio tcc</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>// outbound</h4>
+      <ul>
+        <li><a href="writing.html">writing</a></li>
+        <li><a href="https://medium.com/@anmolsoin1">medium</a></li>
+        <li><a href="https://linkedin.com/in/mrnewdelhi">linkedin</a></li>
+        <li><a href="https://github.com/MrNewDelhi">github</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>// contact</h4>
+      <ul>
+        <li><a href="mailto:anmolsoin1@gmail.com">anmolsoin1@gmail.com</a></li>
+        <li><a href="about.html">about</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-status">
+    <span class="item"><span class="dot"></span> all systems · operational</span>
+    <span class="item">build · <span data-deploy-ts>—</span></span>
+    <span class="item">v1.0.0 · 41 specs · 132 assertions</span>
+  </div>
+</footer>
+<script src="site.js"></script>
+<script src="console-widget.js"></script>
+</body>
+</html>

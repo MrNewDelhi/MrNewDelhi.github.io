@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<title>404 · Test Failure</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&display=swap" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-logo" title="Try tapping me 7 times">
+      <span class="dot"></span>
+      <span>anmol<span style="color: var(--pass)">.</span>qa</span>
+    </div>
+    <div class="nav-links">
+      <a href="index.html">home</a>
+      <a href="work.html">work</a>
+      <a href="visual-diff.html">visual diff</a>
+      <a href="aio-tcc.html">aio tcc</a>
+      <a href="writing.html">writing</a>
+      <a href="about.html">about</a>
+    </div>
+    <div class="nav-status">
+      <span class="dot" style="background: var(--fail); box-shadow: 0 0 12px var(--fail)"></span>
+      <span style="color: var(--fail)">1 test failed</span>
+    </div>
+  </div>
+</nav>
+
+<section class="block" style="padding-top: 64px">
+  <div class="wrap-narrow">
+    <div class="section-index" style="color: var(--fail)">/error</div>
+    <h1 class="display" style="font-size: clamp(56px, 9vw, 110px); line-height: 0.95">
+      <span style="color: var(--fail)">×</span> 404<span style="color: var(--pass)">.</span>
+    </h1>
+    <p class="lead" style="margin-top: 18px">
+      <em style="font-family: var(--font-serif); color: var(--text-strong);">Expected route to exist. Got 404.</em>
+    </p>
+
+    <div class="test-fail">
+      <div class="label">FAIL · routing.spec.ts &gt; 404</div>
+      <div style="margin-top: 8px; color: var(--text)">expected: a real page at this URL</div>
+      <div style="margin-top: 4px; color: var(--text)">received: nothing 😬</div>
+      <div class="trace">
+  at Router.resolve (router.ts:42:8)
+  at Server.handle (server.ts:118:6)
+  at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+  Possible causes:
+    × the page was deleted
+    × the URL was mistyped
+    × the page is being built (check back)
+    × you found a secret · nice
+      </div>
+    </div>
+
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:24px">
+      <a class="btn btn-primary" href="index.html">↩ back to home</a>
+      <a class="btn" href="work.html">view case studies</a>
+      <a class="btn" href="#" onclick="window.__toggleShortcuts();return false;">
+        <span class="kbd" style="background:transparent;border-color:var(--text-muted)">?</span>
+        <span>shortcuts</span>
+      </a>
+    </div>
+
+    <p class="muted" style="margin-top: 32px; font-family: var(--font-mono); font-size: 12.5px">
+      // open console &amp; type <code style="color:var(--pass)">test()</code> to watch the rest of the suite pass while this one fails
+    </p>
+  </div>
+</section>
+
+<footer class="site-foot">
+  <div class="foot-status">
+    <span class="item"><span class="dot" style="background: var(--fail)"></span> 1 test failed · 40 passed</span>
+    <span class="item">build · <span data-deploy-ts>—</span></span>
+    <span class="item">v1.0.0 · 41 specs · 132 assertions</span>
+  </div>
+</footer>
+
+<script src="site.js"></script>
+<script src="console-widget.js"></script>
+</body>
+</html>

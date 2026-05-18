@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<title>Slack Bots · Anmol</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&display=swap" />
+<link rel="stylesheet" href="styles.css" />
+
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-logo" title="Try tapping me 7 times">
+      <span class="dot"></span>
+      <span>anmol<span style="color: var(--pass)">.</span>qa</span>
+    </div>
+    <div class="nav-links">
+      <a href="index.html">home</a>
+      <a href="work.html">work</a>
+      <a href="visual-diff.html">visual diff</a>
+      <a href="aio-tcc.html">aio tcc</a>
+      <a href="writing.html">writing</a>
+      <a href="about.html">about</a>
+    </div>
+    <div class="nav-status">
+      <span class="dot"></span>
+      <span>all systems · operational</span>
+    </div>
+  </div>
+</nav>
+
+<section class="block" style="padding-top:64px;padding-bottom:40px">
+  <div class="wrap">
+    <div class="section-index">case study · /slack-bots</div>
+    <h1 class="h1" style="max-width: 880px; margin-bottom: 12px">Slack bots for the QA stack<span style="color:var(--pass)">.</span></h1>
+    <p class="lead" style="margin: 0; max-width: 760px;">Two ChatGPT Enterprise bots built on connectors / MCP / skills. One for triage. One for generating test cases. Both deployed cross-team so PMs and devs can use QA tooling without leaving Slack.</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:24px">
+      <span class="badge badge-pass">production · lotusflare</span>
+      <span class="badge badge-info">chatgpt enterprise</span>
+      <span class="badge badge-info">slack</span>
+      <span class="badge badge-muted">connectors · MCP · skills</span>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 01 · triage bot</div>
+        <h2>"Triage this for me."</h2>
+      </div>
+    </div>
+    <div class="prose">
+      <p>Drop a Jira ticket link or paste a stack trace into the channel and tag the bot. It does what the Multimodal Triage pipeline does, but conversational:</p>
+      <ul>
+        <li>Fetches the ticket via the Jira connector.</li>
+        <li>If there's a video attachment, runs the Gemini 3 extraction.</li>
+        <li>Cross-references Sentry + Victoria Logs via MCP.</li>
+        <li>Surfaces likely commits via GitHub MCP.</li>
+        <li>Returns a Slack-formatted summary with confidence.</li>
+      </ul>
+      <p>What it doesn't do: act. The triage bot only summarizes. Humans decide.</p>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 02 · test-case creator bot</div>
+        <h2>"Write me a test case for X."</h2>
+      </div>
+    </div>
+    <div class="prose">
+      <p>The AIO Test Case Creator skill, but in Slack. PMs and devs can:</p>
+      <ul>
+        <li>Describe a flow in plain language ("user activates eSIM with number transfer on a family line").</li>
+        <li>Get back a fully-normalized test case in the canonical format.</li>
+        <li>One-click "publish to AIO" once it looks right.</li>
+      </ul>
+      <p>The lift: PMs and devs no longer wait for QA to write tests for new features. They draft. QA reviews. Releases speed up.</p>
+      <p>The guard rail: every test created via the bot lands in <code>Status: Draft</code> and goes through standard human review before promotion.</p>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="prose">
+      <h2>Why ChatGPT Enterprise vs. a custom bot</h2>
+      <ul>
+        <li><strong>Connector-native.</strong> Jira, GitHub, Slack, Confluence all wire in without extra OAuth juggling.</li>
+        <li><strong>Identity-scoped.</strong> Each user's queries inherit their own access. A PM can't accidentally see a sensitive Jira project they don't have access to.</li>
+        <li><strong>MCP and skills are first-class.</strong> The same skill that powers AIO TCC plugs into the bot directly &mdash; no duplication.</li>
+      </ul>
+      <p>Time to first useful bot: about a week. Without ChatGPT Enterprise as the substrate, that would've been months.</p>
+    </div>
+  </div>
+</section>
+
+<footer class="site-foot">
+  <div class="foot-grid">
+    <div class="foot-col">
+      <h4>// Anmol</h4>
+      <p style="color:var(--text-muted);max-width:340px;font-size:14px;line-height:1.6;margin:0">QA Engineer building deterministic test systems for AI-era products. Available for the right team.</p>
+    </div>
+    <div class="foot-col">
+      <h4>// pages</h4>
+      <ul>
+        <li><a href="index.html">home</a></li>
+        <li><a href="work.html">work</a></li>
+        <li><a href="visual-diff.html">visual diff</a></li>
+        <li><a href="aio-tcc.html">aio tcc</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>// outbound</h4>
+      <ul>
+        <li><a href="writing.html">writing</a></li>
+        <li><a href="https://medium.com/@anmolsoin1">medium</a></li>
+        <li><a href="https://linkedin.com/in/mrnewdelhi">linkedin</a></li>
+        <li><a href="https://github.com/MrNewDelhi">github</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>// contact</h4>
+      <ul>
+        <li><a href="mailto:anmolsoin1@gmail.com">anmolsoin1@gmail.com</a></li>
+        <li><a href="about.html">about</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-status">
+    <span class="item"><span class="dot"></span> all systems · operational</span>
+    <span class="item">build · <span data-deploy-ts>—</span></span>
+    <span class="item">v1.0.0 · 41 specs · 132 assertions</span>
+  </div>
+</footer>
+<script src="site.js"></script>
+<script src="console-widget.js"></script>
+</body>
+</html>

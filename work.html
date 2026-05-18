@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<title>Work · Anmol</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&display=swap" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-logo" title="Try tapping me 7 times">
+      <span class="dot"></span>
+      <span>anmol<span style="color: var(--pass)">.</span>qa</span>
+    </div>
+    <div class="nav-links">
+      <a href="index.html">home</a>
+      <a href="work.html" aria-current="page">work</a>
+      <a href="visual-diff.html">visual diff</a>
+      <a href="aio-tcc.html">aio tcc</a>
+      <a href="writing.html">writing</a>
+      <a href="about.html">about</a>
+    </div>
+    <div class="nav-status">
+      <span class="dot"></span>
+      <span>all systems · operational</span>
+    </div>
+  </div>
+</nav>
+
+<section class="block" style="padding-top:64px;padding-bottom:24px">
+  <div class="wrap">
+    <div class="section-index">/work</div>
+    <h1 class="h1" style="max-width: 880px; margin-bottom: 12px">Case studies<span style="color:var(--pass)">.</span></h1>
+    <p class="lead" style="margin: 0; max-width: 720px;">Tools, frameworks, and AI agents I&#39;ve built or rebuilt to remove manual toil from QA. Most are in production; some are open source on <a href="https://github.com/MrNewDelhi" style="color:var(--pass)">github.com/MrNewDelhi</a>; one is a tiny side project.</p>
+  </div>
+</section>
+
+<section class="block" style="padding-top: 16px; padding-bottom: 16px">
+  <div class="wrap">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;font-family:var(--font-mono);font-size:12px">
+      <button class="btn" data-filter="all" style="border-color: var(--pass); color: var(--pass)">all · 13</button>
+      <button class="btn" data-filter="agent" >agents · 6</button>
+      <button class="btn" data-filter="framework" >frameworks · 1</button>
+      <button class="btn" data-filter="tool" >tools · 4</button>
+      <button class="btn" data-filter="infra" >infra · 1</button>
+      <button class="btn" data-filter="sideproject" >side projects · 1</button>
+    </div>
+  </div>
+</section>
+
+<section class="block" style="padding-top: 8px">
+  <div class="wrap">
+    <div class="grid grid-2" id="case-grid">
+
+      <a href="visual-diff.html" class="card linkable" data-tag="tool">
+        <div class="card-head">
+          <div>
+            <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap">
+              <span class="badge badge-pass">tool · shipped</span><span class="badge badge-info">pre-prod · prod</span><span class="badge badge-muted">playwright</span>
+            </div>
+            <div class="card-title">Visual Diff Analyzer</div>
+          </div>
+          <div class="card-meta">01</div>
+        </div>
+        <div class="card-body">Pixel-level diff with semantic component grouping over Playwright screenshots. False-positive rate down from 31% to 4%. Includes an interactive in-browser diff demo and skeleton-loader stabilization writeup.</div>
+        <div class="card-foot"><span class="muted">read full case</span><span class="arrow">→</span></div>
+      </a>
+
+      <a href="aio-tcc.html" class="card linkable" data-tag="agent">
+        <div class="card-head">
+          <div>
+            <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap">
+              <span class="badge badge-pass">skill · shipped</span><span class="badge badge-info">LLM</span>
+            </div>
+            <div class="card-title">AIO Test Case Creator</div>
+          </div>
+          <div class="card-meta">02</div>
+        </div>
+        <div class="card-body">LLM skill that normalizes manual test-case drafts (title, preconditions, step grammar, tags) against a 1,891-case rulebook before publish to AIO. Downloadable .md skill bundled.</div>
+        <div class="card-foot"><span class="muted">read full case</span><span class="arrow">→</span></div>
+      </a>
+
+      <a href="case-multimodal-triage.html" class="card linkable" data-tag="agent">
+        <div class="card-head">
+          <div>
+            <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap">
+              <span class="badge badge-pass">agent · shipped</span><span class="badge badge-info">gemini 3</span><span class="badge badge-muted">JAM MCP</span>
+            </div>
+            <div class="card-title">Multimodal Ticket Triage</div>
+          </div>
+          <div class="card-meta">03</div>
+        </div>
+        <div class="card-body">Gemini 3 pipeline: epic → linked tickets → video attachment → step extraction → Playwright MCP replay → RCA via Sentry + Victoria Logs + GitHub. Comment-only on prod. Adaptive: HAR file, solo ticket, description-only branches.</div>
+        <div class="card-foot"><span class="muted">read full case</span><span class="arrow">→</span></div>
+      </a>
+
+      <a href="case-self-healing.html" class="card linkable" data-tag="framework">
+        <div class="card-head">
+          <div>
+            <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap">
+              <span class="badge badge-pass">production · LTTS</span><span class="badge badge-info">appium</span><span class="badge badge-muted">open source</span>
+            </div>
+            <div class="card-title">Self-Healing Locator Framework</div>
+          </div>
+          <div class="card-meta">04</div>
+        </div>
+        <div class="card-body">Multi-model Appium framework that re-identifies elements at runtime across DOM heuristics + vision models. Built at L&amp;T for two T-Mobile US MVNEs. <span style="color:var(--pass)">github.com/MrNewDelhi/self-healing-locator-framework</span></div>
+        <div class="card-foot"><span class="muted">read full case</span><span class="arrow">→</span></div>
+      </a>
+
+      <a href="case-adb-mcp.html" class="card linkable" data-tag="agent">
+        <div class="card-head">
+          <div>
+            <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap">
+              <span class="badge badge-pass">open source</span><span class="badge badge-info">MCP server</span><span class="badge badge-muted">38 tools</span>
+            </div>
+            <div class="card-title">ADB MCP</div>
+          </div>
+          <div class="card-meta">05</div>
+        </div>
+        <div class="card-body">Open-source MCP server for Android Debug Bridge. 38 typed, Zod-validated tools across devices, shell, packages, files, screenshots, logs, intents, settings. LLM skill bundled. <span style="color:var(--pass)">github.com/MrNewDelhi/adb-mcp</span></div>
+        <div class="card-foot"><span class="muted">read full case</span><span class="arrow">→</span></div>
+      </a>
+
+      <a href="case-codex-browser.html" class="card linkable" data-tag="agent">
+        <div class="card-head">
+          <div>
+            <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap">
+              <span class="badge badge-pass">production · lotusflare</span><span class="badge badge-info">codex</span><span class="badge badge-muted">browser security</span>
+            </div>
+            <div class="card-title">Codex In-Browser, Safely</div>
+          </div>
+          <div class="card-meta">06</div>
+        </div>
+        <div class="card-body">How I rolled out Codex&#39;s built-in browser to manual QA and non-tech teammates with a permissions posture security could live with. Always-ask, narrow allowed domains, short-lived sessions.</div>
+        <div class="card-foot"><span class="muted">read full case</span><span class="arrow">→</span></div>
+      </a>
+
+      <a href="case-slack-bots.html" class="card linkable" data-tag="agent">
+        <div class="card-head">
+          <div>
+            <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap">
+              <span class="badge badge-pass">agent · shipped</span><span class="badge badge-info">chatgpt enterprise</span><span class="badge badge-muted">slack</span>
+            </div>
+            <div class="card-title">Slack Bots for the QA Stack</div>
+          </div>
+          <div class="card-meta">07</div>
+        </div>
+        <div class="card-body">Two ChatGPT Enterprise bots on connectors / MCP / skills. One for triage. One for test-case generation. Identity-scoped, deployed cross-team.</div>
+        <div class="card-foot"><span class="muted">read full case</span><span class="arrow">→</span></div>
+      </a>
+
+      <a href="case-mailosaur-mcp.html" class="card linkable" data-tag="tool">
+        <div class="card-head">
+          <div>
+            <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap">
+              <span class="badge badge-pass">shipped</span><span class="badge badge-info">MCP tool</span><span class="badge badge-muted">mailosaur · gmail</span>
+            </div>
+            <div class="card-title">Mailosaur MCP</div>
+          </div>
+          <div class="card-meta">08</div>
+        </div>
+        <div class="card-body">MCP tool that wraps email-testing behind typed tools. Made specs and agents able to assert on OTPs / confirmations without per-spec polling glue. Later migrated to Gmail + Google Groups — same MCP surface.</div>
+        <div class="card-foot"><span class="muted">read full case</span><span class="arrow">→</span></div>
+      </a>
+
+      <a href="case-skeleton-loader.html" class="card linkable" data-tag="tool">
+        <div class="card-head">
+          <div>
+            <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap">
+              <span class="badge badge-pass">production · lotusflare</span><span class="badge badge-info">playwright</span>
+            </div>
+            <div class="card-title">Stabilizing Through Skeletons</div>
+          </div>
+          <div class="card-meta">09</div>
+        </div>
+        <div class="card-body">Don&#39;t take a screenshot until the page is actually done. Wait-for-skeleton + layout-stable pattern that cut flaky visual tests by half on the Visual Diff Analyzer.</div>
+        <div class="card-foot"><span class="muted">read full case</span><span class="arrow">→</span></div>
+      </a>
+
+      <a href="case-llm-eval.html" class="card linkable" data-tag="agent">
+        <div class="card-head">
+          <div>
+            <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap">
+              <span class="badge badge-pass">production · lotusflare</span><span class="badge badge-info">model evaluation</span>
+            </div>
+            <div class="card-title">LLM Evaluation Rubrics</div>
+          </div>
+          <div class="card-meta">10</div>
+        </div>
+        <div class="card-body">How I picked the models behind the QA agent stack. Browser-action accuracy, tool-call correctness, minimum tool calls, cost per task. Eight model families compared. Runtime hooks for the real cost log.</div>
+        <div class="card-foot"><span class="muted">read full case</span><span class="arrow">→</span></div>
+      </a>
+
+      <a href="work.html#account-pool" class="card linkable" data-tag="infra">
+        <div class="card-head">
+          <div>
+            <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap">
+              <span class="badge badge-pass">infra · production</span><span class="badge badge-info">postgres</span><span class="badge badge-muted">draft</span>
+            </div>
+            <div class="card-title">Test-Data Account Pool</div>
+          </div>
+          <div class="card-meta">11</div>
+        </div>
+        <div class="card-body">Postgres-backed, state-tagged account pool that manual QA, debug, and automation share. Killed the "who has a clean account?" bottleneck and cut billable client eSIM inventory burn. <em>Case study draft.</em></div>
+        <div class="card-foot"><span class="muted">read full case</span><span class="arrow">→</span></div>
+      </a>
+
+      <a href="case-bot-detection.html" class="card linkable" data-tag="tool">
+        <div class="card-head">
+          <div>
+            <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap">
+              <span class="badge badge-pass">production</span><span class="badge badge-info">MCP</span><span class="badge badge-muted">90 min build</span>
+            </div>
+            <div class="card-title">Bot-Detection Bypass for Prod Smoke</div>
+          </div>
+          <div class="card-meta">12</div>
+        </div>
+        <div class="card-body">Headed Playwright via MCP with request-shaping injection. Kept production smoke verification viable without disabling upstream bot-detection.</div>
+        <div class="card-foot"><span class="muted">read full case</span><span class="arrow">→</span></div>
+      </a>
+
+      <a href="case-caffeinate.html" class="card linkable" data-tag="sideproject">
+        <div class="card-head">
+          <div>
+            <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap">
+              <span class="badge badge-pass">open source</span><span class="badge badge-info">macOS · swift</span>
+            </div>
+            <div class="card-title">CaffeinateBar</div>
+          </div>
+          <div class="card-meta">13</div>
+        </div>
+        <div class="card-body">Tiny macOS menu bar utility for keeping a Mac awake — only in the way you actually need. Display / system / full / timed modes. <span style="color:var(--pass)">github.com/MrNewDelhi/caffeinate-menu-bar-widget</span></div>
+        <div class="card-foot"><span class="muted">read full case</span><span class="arrow">→</span></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> open source</div>
+        <h2>On GitHub.</h2>
+      </div>
+      <div class="meta"><a href="https://github.com/MrNewDelhi">github.com/MrNewDelhi →</a></div>
+    </div>
+    <div class="grid grid-3">
+      <a href="https://github.com/MrNewDelhi/adb-mcp" class="card linkable" target="_blank">
+        <div class="card-meta" style="margin-bottom:6px">↗ MrNewDelhi/adb-mcp</div>
+        <div class="card-title" style="font-size:17px">adb-mcp</div>
+        <div class="card-body" style="margin-top:8px">MCP server for Android Debug Bridge. 38 typed tools, Zod-validated, with bundled LLM skill.</div>
+      </a>
+      <a href="https://github.com/MrNewDelhi/self-healing-locator-framework" class="card linkable" target="_blank">
+        <div class="card-meta" style="margin-bottom:6px">↗ MrNewDelhi/self-healing-locator-framework</div>
+        <div class="card-title" style="font-size:17px">self-healing-locator-framework</div>
+        <div class="card-body" style="margin-top:8px">Multi-model Appium framework with runtime locator recovery.</div>
+      </a>
+      <a href="https://github.com/MrNewDelhi/caffeinate-menu-bar-widget" class="card linkable" target="_blank">
+        <div class="card-meta" style="margin-bottom:6px">↗ MrNewDelhi/caffeinate-menu-bar-widget</div>
+        <div class="card-title" style="font-size:17px">caffeinate-menu-bar-widget</div>
+        <div class="card-body" style="margin-top:8px">macOS menu bar utility. Display / system / full / timed modes.</div>
+      </a>
+      <a href="https://github.com/MrNewDelhi/mailosaur-mcp" class="card linkable" target="_blank">
+        <div class="card-meta" style="margin-bottom:6px">↗ MrNewDelhi/mailosaur-mcp</div>
+        <div class="card-title" style="font-size:17px">mailosaur-mcp</div>
+        <div class="card-body" style="margin-top:8px">MCP tool wrapping Mailosaur email-testing API. OTP extraction, link extraction, inbox management — used in QA automation at Lotusflare.</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer class="site-foot">
+  <div class="foot-grid">
+    <div class="foot-col">
+      <h4>// Anmol</h4>
+      <p style="color:var(--text-muted);max-width:340px;font-size:14px;line-height:1.6;margin:0">QA Engineer building deterministic test systems for AI-era products. Available for the right team.</p>
+    </div>
+    <div class="foot-col">
+      <h4>// pages</h4>
+      <ul>
+        <li><a href="index.html">home</a></li>
+        <li><a href="work.html">work</a></li>
+        <li><a href="visual-diff.html">visual diff</a></li>
+        <li><a href="aio-tcc.html">aio tcc</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>// outbound</h4>
+      <ul>
+        <li><a href="writing.html">writing</a></li>
+        <li><a href="https://medium.com/@anmolsoin1">medium</a></li>
+        <li><a href="https://linkedin.com/in/mrnewdelhi">linkedin</a></li>
+        <li><a href="https://github.com/MrNewDelhi">github</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>// contact</h4>
+      <ul>
+        <li><a href="mailto:anmolsoin1@gmail.com">anmolsoin1@gmail.com</a></li>
+        <li><a href="about.html">about</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-status">
+    <span class="item"><span class="dot"></span> all systems · operational</span>
+    <span class="item">build · <span data-deploy-ts>—</span></span>
+    <span class="item">v1.0.0 · 41 specs · 132 assertions</span>
+  </div>
+</footer>
+<script src="site.js"></script>
+<script src="console-widget.js"></script>
+<script>
+  const buttons = document.querySelectorAll('[data-filter]');
+  const cards = document.querySelectorAll('[data-tag]');
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const f = btn.getAttribute('data-filter');
+      buttons.forEach(b => { b.style.borderColor = ''; b.style.color = ''; });
+      btn.style.borderColor = 'var(--pass)';
+      btn.style.color = 'var(--pass)';
+      cards.forEach(c => {
+        c.style.display = (f === 'all' || c.getAttribute('data-tag') === f) ? '' : 'none';
+      });
+    });
+  });
+</script>
+</body>
+</html>

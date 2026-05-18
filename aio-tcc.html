@@ -1,0 +1,719 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<title>AIO Test Case Creator · Anmol</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&display=swap" />
+<link rel="stylesheet" href="styles.css" />
+<style>
+  .arch { background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:28px;font-family:var(--font-mono);font-size:12.5px;overflow-x:auto; }
+  .arch-row { display:grid;grid-template-columns:1fr;gap:14px;margin-bottom:14px; }
+  .arch-stage { display:grid;grid-template-columns:24px 180px 1fr;gap:14px;align-items:start; }
+  .arch-num { font-family:var(--font-mono);font-size:11px;color:var(--pass);padding-top:12px; }
+  .arch-box { background:var(--bg-elevated);border:1px solid var(--border);border-left:3px solid var(--pass);border-radius:var(--r-sm);padding:10px 14px;font-family:var(--font-mono);font-size:12px;color:var(--text-strong); }
+  .arch-box .small { color:var(--text-muted);font-size:11px;font-weight:400;margin-top:2px;display:block; }
+  .arch-detail { padding-top:10px;font-family:var(--font-sans);color:var(--text-muted);font-size:14px;line-height:1.5; }
+  .arch-detail code { font-family:var(--font-mono);font-size:12.5px;background:var(--bg);color:var(--pass);padding:1px 5px;border-radius:3px;border:1px solid var(--border); }
+  .arch-arrow { text-align:center;color:var(--text-dim);font-family:var(--font-mono);margin:-6px 0;grid-column:1 / -1; }
+
+  /* ── File viewer ── */
+  .file-viewer { background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);overflow:hidden;margin-top:20px; }
+  .fv-bar { display:flex;align-items:center;gap:10px;padding:9px 14px;background:var(--bg-elevated);border-bottom:1px solid var(--border); }
+  .fv-bar .lights { display:flex;gap:5px; }
+  .fv-bar .lights span { width:10px;height:10px;border-radius:50%;background:var(--border); }
+  .fv-filename { font-family:var(--font-mono);font-size:12.5px;color:var(--text-strong);margin-left:4px; }
+  .fv-meta { font-family:var(--font-mono);font-size:11.5px;color:var(--text-muted);margin-left:auto; }
+  .fv-acts { display:flex;gap:6px; }
+  .fv-body .code { margin:0;border:none;border-radius:0;background:transparent;max-height:540px;overflow-y:auto;font-size:12px;line-height:1.65;padding:18px 20px; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-logo" title="Try tapping me 7 times">
+      <span class="dot"></span>
+      <span>anmol<span style="color: var(--pass)">.</span>qa</span>
+    </div>
+    <div class="nav-links">
+      <a href="index.html">home</a>
+      <a href="work.html">work</a>
+      <a href="visual-diff.html">visual diff</a>
+      <a href="aio-tcc.html" aria-current="page">aio tcc</a>
+      <a href="writing.html">writing</a>
+      <a href="about.html">about</a>
+    </div>
+    <div class="nav-status">
+      <span class="dot"></span>
+      <span>all systems · operational</span>
+    </div>
+  </div>
+</nav>
+
+<!-- ================== HEADER ================== -->
+<section class="block" style="padding-top:64px;padding-bottom:40px">
+  <div class="wrap">
+    <div class="section-index">case study · 02 · /aio-tcc</div>
+    <h1 class="h1" style="max-width: 880px; margin-bottom: 12px">
+      AIO Test Case Creator<span style="color:var(--pass)">.</span>
+    </h1>
+    <p class="lead" style="margin: 0; max-width: 760px;">
+      An LLM skill that takes a manual test-case draft and outputs a publish-ready entry for the AIO test pool. Title format, preconditions, step grammar, expected results, variables, tags — normalized against a 1,891-case rulebook before anything reaches the suite.
+    </p>
+
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:24px">
+      <span class="badge badge-pass">shipped</span>
+      <span class="badge badge-info">LLM skill</span>
+      <span class="badge badge-info">aio · jira</span>
+      <span class="badge badge-muted">1,891 cases</span>
+      <span class="badge badge-muted">production · lotusflare</span>
+    </div>
+
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px">
+      <a class="btn btn-primary" href="skill-aio-tcc.md" download="skill-aio-tcc.md" id="fv-dl-btn">↓ download the skill (.md)</a>
+      <button class="btn" id="fv-toggle">view file ↓</button>
+      <span class="badge badge-muted" style="align-self:center">drop into Claude Project / Custom GPT / Codex</span>
+    </div>
+
+    <!-- ── In-page file viewer ── -->
+    <div id="skill-viewer" class="file-viewer" style="display:none">
+      <div class="fv-bar">
+        <div class="lights"><span></span><span></span><span></span></div>
+        <span class="fv-filename">skill-aio-tcc.md</span>
+        <span class="fv-meta">288 lines · v2.0 · Feb 2026 · LLM skill</span>
+        <div class="fv-acts">
+          <button class="btn" id="fv-copy">copy</button>
+          <a class="btn btn-primary" href="skill-aio-tcc.md" download="skill-aio-tcc.md">↓ download</a>
+        </div>
+      </div>
+      <div class="fv-body">
+        <pre class="code" id="fv-content"><span style="color:var(--text-muted)">loading skill file...</span></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================== STATS ================== -->
+<section class="block" style="padding-top: 0">
+  <div class="wrap">
+    <div class="stat-strip">
+      <div class="stat-cell">
+        <div class="num">1,891</div>
+        <div class="lbl">test cases analyzed · v2 rulebook</div>
+      </div>
+      <div class="stat-cell">
+        <div class="num"><span class="accent">~70%</span></div>
+        <div class="lbl">draft → publish-ready in one pass</div>
+      </div>
+      <div class="stat-cell">
+        <div class="num">16</div>
+        <div class="lbl">metadata fields normalized</div>
+      </div>
+      <div class="stat-cell">
+        <div class="num">5</div>
+        <div class="lbl">incident-driven rules added in v2</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================== PROBLEM ================== -->
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 01 · the problem</div>
+        <h2>Manual test cases were inconsistent. The pool became un-queryable.</h2>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>1,891 test cases. Six engineers writing them. Three years of accumulated drift. The result was a test pool you couldn't query — the tag <code>eSIM</code> sometimes meant SIM type, sometimes meant flow, sometimes was missing entirely. Step format varied case-by-case. Variables were sometimes <code>$EMAIL_ID</code>, sometimes <code>$email</code>, sometimes literal "<code>testuser@example.com</code>".</p>
+      <p>That cost us in two ways:</p>
+      <ul>
+        <li>Manual QA couldn't filter to "show me everything that touches checkout on Family Line" without reading 200 titles.</li>
+        <li>Automation engineers couldn't reliably pull a case from the pool and execute it without a 10-minute "what does this even mean" review.</li>
+      </ul>
+      <p>Two incidents in 2025 made this concrete: a batch-update script silently dropped <code>data</code> fields from 14 cases (TC-18 incident), and another lost <code>jiraRequirementIDs</code> on 9 cases (TC-16). The cost wasn't the bug — it was the fact that nobody noticed for three weeks.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================== APPROACH ================== -->
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 02 · approach</div>
+        <h2>Codify the rules. Run drafts through an LLM that knows them.</h2>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>I wrote a 1,658-line <strong>Test Case Writing Guidelines v2.0</strong> derived from MVNE-TC-1 and a full sweep of the existing 1,891 cases. That document is the system prompt for the skill — every rule that ever bit us is in there, with examples.</p>
+      <p>Then I wrapped it in an LLM skill that does five things in sequence on any draft:</p>
+    </div>
+
+    <ul class="spec-list" style="margin-top: 20px">
+      <li>
+        <div>
+          <h4>Validate critical fields</h4>
+          <p>If the draft is missing <code>jiraRequirementIDs</code>, <code>data</code>, or <code>jiraComponentIDs</code> when it shouldn't be, reject before normalizing.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h4>Normalize the title</h4>
+          <p>Strip redundant tags. Add <code>[Page Name]</code> for atomic, <code>[Flow][Line][SIM]</code> for flows. Drop default-implied tags (Single Line, Owner, eSIM only if it's not the differentiator).</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h4>Rewrite preconditions to the structured format</h4>
+          <p>Force <code>State:</code>, <code>Flow Complete:</code>, line config, <code>$URL</code> variables. pSIM cases get an explicit line spec.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h4>Fix step grammar</h4>
+          <p>UI elements in <code>"double quotes"</code>. Variables in <code>$CAPS</code>. Action verbs (Click, Enter, Select). One action per step — split combined ones. "Navigates to" not "redirects to."</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h4>Tag and categorize</h4>
+          <p>Set <code>Case Category</code>, <code>Type</code>, <code>Priority</code> from the decision tree. Output 3–10 search-friendly tags. Choose folder path from the canonical hierarchy.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h4>Diff &amp; explain</h4>
+          <p>Output what changed and why. The QA author approves before publish — the skill is an assistant, not an autonomous editor.</p>
+        </div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================== BEFORE / AFTER ================== -->
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 03 · before &amp; after</div>
+        <h2>A real draft, normalized.</h2>
+      </div>
+    </div>
+
+    <div class="diff">
+      <div class="diff-pane before">
+        <div class="lbl">× draft · as written by manual QA</div>
+<pre class="code" style="background:transparent;border:none;padding:0;margin:0;font-size:12.5px">Title: Buy eSIM
+Description: Test buy flow
+Pre-condition: User on home page
+
+Steps:
+1. Go to home
+2. Click buy plan
+3. Enter all info: name, email, zip
+4. Submit the form
+
+Expected Result:
+1. Page loads
+2. Goes to plans
+3. Info entered
+4. Order placed and success and dashboard
+
+Tags: test,flow,esim
+Case Category: Flow
+Priority: Critical
+</pre>
+      </div>
+
+      <div class="diff-pane after">
+        <div class="lbl">✓ normalized · by aio-tcc skill</div>
+<pre class="code" style="background:transparent;border:none;padding:0;margin:0;font-size:12.5px"><span class="b">Title:</span> [Buy Flow][Single Line] User can buy an eSIM
+<span class="b">Description:</span> Verify that the user is able to buy an eSIM with Single Line
+<span class="b">Pre-condition:</span>
+  State: User is on $URL
+
+<span class="b">Steps:</span>
+1. Navigate to Home Page
+2. Click <span class="s">"Buy a Plan"</span> button
+3. Enter $EMAIL_ID in <span class="s">"Email Address"</span> field
+4. Enter $ZIP_CODE in <span class="s">"ZIP Code"</span> field
+5. Click <span class="s">"Submit Order"</span> button
+
+<span class="b">Expected Result:</span>
+1. User is redirected to $URL/ page
+2. User navigates to $URL/plans page
+3. $EMAIL_ID is populated in <span class="s">"Email Address"</span> field
+4. $ZIP_CODE is populated in <span class="s">"ZIP Code"</span> field
+5. <span class="s">"Order Confirmation"</span> page is displayed
+
+<span class="b">Tags:</span> Buy Flow,eSIM,Single Line,New Number
+<span class="b">Case Category:</span> Flow
+<span class="b">Type:</span> Positive
+<span class="b">Priority:</span> Critical
+<span class="b">Line:</span> Single Line
+<span class="b">Folder:</span> SmartlessMobile - Web -&gt; Flows -&gt; BuyFlow -&gt; eSIM -&gt; Single Line
+</pre>
+      </div>
+    </div>
+
+    <div style="margin-top: 16px; padding: 14px 18px; background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--pass); border-radius: var(--r-md); font-family: var(--font-mono); font-size: 12.5px; color: var(--text-muted)">
+      <span style="color:var(--pass)">9 rules applied · 4 fields added · 1 combined step split · ready for publish.</span>
+    </div>
+  </div>
+</section>
+
+<!-- ================== RULES ENFORCED ================== -->
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 04 · rules enforced</div>
+        <h2>Every rule has an origin story.</h2>
+        <p>The skill's rulebook isn't an abstract style guide. Each rule traces back to a real production incident.</p>
+      </div>
+    </div>
+
+    <div class="grid grid-2">
+      <div class="card">
+        <div style="display:flex;gap:8px;margin-bottom:10px">
+          <span class="badge badge-fail">TC-18 incident</span>
+          <span class="badge badge-muted">critical</span>
+        </div>
+        <div class="card-title" style="font-size:17px">Preserve data fields in every step</div>
+        <div class="card-body">
+          A batch update silently dropped <code>data</code> fields from 14 cases. The skill now refuses to output a step that has <code>$VARIABLES</code> without a matching <code>data</code> entry.
+        </div>
+      </div>
+      <div class="card">
+        <div style="display:flex;gap:8px;margin-bottom:10px">
+          <span class="badge badge-fail">TC-16 incident</span>
+          <span class="badge badge-muted">critical</span>
+        </div>
+        <div class="card-title" style="font-size:17px">Never drop jiraRequirementIDs</div>
+        <div class="card-body">
+          A normalization run lost requirement-traceability on 9 cases. Now <code>jiraRequirementIDs</code> is in the validation pre-flight; if it's there on input, it's there on output.
+        </div>
+      </div>
+      <div class="card">
+        <div style="display:flex;gap:8px;margin-bottom:10px">
+          <span class="badge badge-warn">TC-19 step 9</span>
+          <span class="badge badge-muted">grammar</span>
+        </div>
+        <div class="card-title" style="font-size:17px">One action per step</div>
+        <div class="card-body">
+          A single step tried to enter 8 fields. Automation skipped the case entirely. Now the skill splits any "Enter all info" pattern into atomic steps automatically.
+        </div>
+      </div>
+      <div class="card">
+        <div style="display:flex;gap:8px;margin-bottom:10px">
+          <span class="badge badge-warn">TC-38/40/55</span>
+          <span class="badge badge-muted">precondition</span>
+        </div>
+        <div class="card-title" style="font-size:17px">pSIM cases declare line type explicitly</div>
+        <div class="card-body">
+          Three cases assumed line type from tags. Test data went stale. Preconditions now always include <code>Line: Single Line | pSIM | Not Activated</code> when SIM is non-default.
+        </div>
+      </div>
+      <div class="card">
+        <div style="display:flex;gap:8px;margin-bottom:10px">
+          <span class="badge badge-warn">batch 3</span>
+          <span class="badge badge-muted">grammar</span>
+        </div>
+        <div class="card-title" style="font-size:17px">Apply all rules, not just the easy one</div>
+        <div class="card-body">
+          An early batch only fixed "Click on" → "Click" and missed variables, quotes, capitalization. Now the skill runs a complete linter pass before declaring done.
+        </div>
+      </div>
+      <div class="card">
+        <div style="display:flex;gap:8px;margin-bottom:10px">
+          <span class="badge badge-info">default</span>
+          <span class="badge badge-muted">tags</span>
+        </div>
+        <div class="card-title" style="font-size:17px">Drop redundant default tags</div>
+        <div class="card-body">
+          Tags like "Single Line", "Owner" are defaults; tagging them hides the real differentiators. The skill removes them unless they're the contrast point of the case.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================== FIELDS NORMALIZED ================== -->
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 05 · fields</div>
+        <h2>16 fields normalized in one pass.</h2>
+      </div>
+    </div>
+
+    <div class="grid grid-3">
+      <div class="card">
+        <div class="card-meta">Title</div>
+        <div class="card-body" style="margin-top:8px">Tag prefix, action statement, default-aware</div>
+      </div>
+      <div class="card">
+        <div class="card-meta">Description</div>
+        <div class="card-body" style="margin-top:8px">"Verify that…", 1–3 sentences, role-aware</div>
+      </div>
+      <div class="card">
+        <div class="card-meta">Pre-condition</div>
+        <div class="card-body" style="margin-top:8px">Structured State/Flow/Line/User block</div>
+      </div>
+      <div class="card">
+        <div class="card-meta">Steps</div>
+        <div class="card-body" style="margin-top:8px">Action verb, quoted UI, $CAPS vars, atomic</div>
+      </div>
+      <div class="card">
+        <div class="card-meta">Expected Result</div>
+        <div class="card-body" style="margin-top:8px">One per step, measurable, "Navigates to"</div>
+      </div>
+      <div class="card">
+        <div class="card-meta">Data</div>
+        <div class="card-body" style="margin-top:8px">Numbered, realistic, env-appropriate</div>
+      </div>
+      <div class="card">
+        <div class="card-meta">Case Category</div>
+        <div class="card-body" style="margin-top:8px">Flow / Functional / Notification / Visual</div>
+      </div>
+      <div class="card">
+        <div class="card-meta">Type</div>
+        <div class="card-body" style="margin-top:8px">Positive / Negative / Edge</div>
+      </div>
+      <div class="card">
+        <div class="card-meta">Priority</div>
+        <div class="card-body" style="margin-top:8px">Critical / High / Medium / Low (decision tree)</div>
+      </div>
+      <div class="card">
+        <div class="card-meta">Tags</div>
+        <div class="card-body" style="margin-top:8px">Flow + page + non-default config, 3–10 tags</div>
+      </div>
+      <div class="card">
+        <div class="card-meta">Line</div>
+        <div class="card-body" style="margin-top:8px">Single Line / Family Line / No Line</div>
+      </div>
+      <div class="card">
+        <div class="card-meta">Components</div>
+        <div class="card-body" style="margin-top:8px">User-facing App: Web (preserved)</div>
+      </div>
+      <div class="card">
+        <div class="card-meta">Folder</div>
+        <div class="card-body" style="margin-top:8px">Hierarchy chosen from canonical tree</div>
+      </div>
+      <div class="card">
+        <div class="card-meta">Status</div>
+        <div class="card-body" style="margin-top:8px">Draft / Under Review / Published</div>
+      </div>
+      <div class="card">
+        <div class="card-meta">Requirements</div>
+        <div class="card-body" style="margin-top:8px">jiraRequirementIDs preserved verbatim</div>
+      </div>
+      <div class="card">
+        <div class="card-meta">Automation Status</div>
+        <div class="card-body" style="margin-top:8px">Manual / To Be Automated / Automated</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================== INVOCATION ================== -->
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 06 · how it's used</div>
+        <h2>One command from anywhere.</h2>
+      </div>
+    </div>
+
+<pre class="code"><span class="c">// from Jira ticket, Slack, or the AIO browser extension</span>
+<span class="k">/aio-tcc normalize</span>
+
+<span class="m">&gt;</span> reading draft from clipboard...
+<span class="m">&gt;</span> validating critical fields...     <span class="s">PASS</span>
+<span class="m">&gt;</span> normalizing title...               <span class="s">applied 2 rules</span>
+<span class="m">&gt;</span> rewriting preconditions...         <span class="s">applied 3 rules</span>
+<span class="m">&gt;</span> fixing step grammar...             <span class="s">applied 9 rules, split 1 combined step</span>
+<span class="m">&gt;</span> categorizing &amp; tagging...           <span class="s">Flow / Positive / Critical</span>
+<span class="m">&gt;</span> selecting folder...                <span class="s">SmartlessMobile - Web -&gt; Flows -&gt; BuyFlow -&gt; eSIM -&gt; Single Line</span>
+<span class="m">&gt;</span> diff ready · review at: aio.lotusflare.internal/draft/MVNE-TC-1893</span>
+
+<span class="s">✓ ready to publish</span>
+</pre>
+  </div>
+</section>
+
+<!-- ================== ARCHITECTURE PLACEHOLDER ================== -->
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 07 · architecture</div>
+        <h2>How it's wired.</h2>
+      </div>
+    </div>
+
+    <div class="arch">
+      <div class="arch-row">
+        <div class="arch-stage">
+          <div class="arch-num">01</div>
+          <div class="arch-box">Input
+            <span class="small">Jira · Slack · clipboard · AIO extension</span></div>
+          <div class="arch-detail">
+            Draft enters from any surface. The skill accepts a free-form test case description and extracts the relevant fields before processing.
+          </div>
+        </div>
+        <div class="arch-arrow">↓</div>
+        <div class="arch-stage">
+          <div class="arch-num">02</div>
+          <div class="arch-box">Critical-field validator
+            <span class="small">pre-flight check</span></div>
+          <div class="arch-detail">
+            Check for <code>jiraRequirementIDs</code>, <code>data</code>, <code>jiraComponentIDs</code> before any normalization runs. Missing required fields → reject with a clear error. Prevents silent data loss (TC-16/TC-18 incidents).
+          </div>
+        </div>
+        <div class="arch-arrow">↓</div>
+        <div class="arch-stage">
+          <div class="arch-num">03</div>
+          <div class="arch-box">Rule-aware LLM
+            <span class="small">skill prompt = guidelines v2.0 · 1,658 lines</span></div>
+          <div class="arch-detail">
+            The system prompt encodes every rule derived from 1,891 cases and 5 incident post-mortems. The LLM normalizes title, preconditions, step grammar, expected results, tags, and folder path in one pass.
+          </div>
+        </div>
+        <div class="arch-arrow">↓</div>
+        <div class="arch-stage">
+          <div class="arch-num">04</div>
+          <div class="arch-box">Field normalizer pipeline
+            <span class="small">16 fields · structured output</span></div>
+          <div class="arch-detail">
+            Structured output maps to the 16 AIO fields. Variables validated (<code>$CAPS</code>), step atomicity verified, tags de-duped, folder path resolved from the canonical hierarchy.
+          </div>
+        </div>
+        <div class="arch-arrow">↓</div>
+        <div class="arch-stage">
+          <div class="arch-num">05</div>
+          <div class="arch-box">Diff &amp; review
+            <span class="small">human approves before publish</span></div>
+          <div class="arch-detail">
+            The skill outputs what changed and why. The QA author sees the diff and clicks approve. The skill is an assistant, not an autonomous editor — nothing reaches AIO without a human sign-off.
+          </div>
+        </div>
+        <div class="arch-arrow">↓</div>
+        <div class="arch-stage">
+          <div class="arch-num">06</div>
+          <div class="arch-box">AIO API
+            <span class="small">Status: Draft → review → publish</span></div>
+          <div class="arch-detail">
+            Approved cases land in <code>Status: Draft</code> and go through the standard AIO review flow before promotion to the live suite. Full traceability preserved.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================== ROADMAP ================== -->
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 08 · next</div>
+        <h2>What's coming.</h2>
+      </div>
+    </div>
+
+    <div class="grid grid-3">
+      <div class="card">
+        <div style="display:flex;gap:8px;margin-bottom:10px">
+          <span class="badge badge-warn">in flight</span>
+        </div>
+        <div class="card-title" style="font-size:17px">Bulk re-linting</div>
+        <div class="card-body">
+          Run the skill across the existing 1,891 cases as a one-shot migration. Output a diff PR for the team to review section by section.
+        </div>
+      </div>
+      <div class="card">
+        <div style="display:flex;gap:8px;margin-bottom:10px">
+          <span class="badge badge-info">planned</span>
+        </div>
+        <div class="card-title" style="font-size:17px">Automation-readiness scoring</div>
+        <div class="card-body">
+          Score each case on "how automation-ready is this draft?" (step atomicity, variables defined, asserts measurable) and surface low-score cases for rewriting first.
+        </div>
+      </div>
+      <div class="card">
+        <div style="display:flex;gap:8px;margin-bottom:10px">
+          <span class="badge badge-info">planned</span>
+        </div>
+        <div class="card-title" style="font-size:17px">Coverage map from spec → ticket</div>
+        <div class="card-body">
+          Cross-link each AIO case back to the Jira tickets it covers, surfacing requirements that have <em>zero</em> test cases.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================== RELATED ================== -->
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 09 · related</div>
+        <h2>Adjacent work.</h2>
+      </div>
+    </div>
+
+    <div class="grid grid-3">
+      <a href="visual-diff.html" class="card linkable">
+        <div class="card-title" style="font-size:17px;margin-bottom:8px">Visual Diff Analyzer</div>
+        <div class="card-body">Semantic visual regression on top of Playwright screenshots.</div>
+        <div class="card-foot"><span class="muted">read</span><span class="arrow">→</span></div>
+      </a>
+      <a href="work.html#multimodal-triage" class="card linkable">
+        <div class="card-title" style="font-size:17px;margin-bottom:8px">Multimodal Ticket Triage</div>
+        <div class="card-body">Gemini 3 pipeline that turns video tickets into actionable repro steps.</div>
+        <div class="card-foot"><span class="muted">read</span><span class="arrow">→</span></div>
+      </a>
+      <a href="work.html#slack-rca" class="card linkable">
+        <div class="card-title" style="font-size:17px;margin-bottom:8px">Slack RCA Agent</div>
+        <div class="card-body">Codex agent that produces logs-grounded root-cause summaries from Slack.</div>
+        <div class="card-foot"><span class="muted">read</span><span class="arrow">→</span></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ================== FOOTER ================== -->
+<footer class="site-foot">
+  <div class="foot-grid">
+    <div class="foot-col">
+      <h4>// Anmol</h4>
+      <p style="color:var(--text-muted);max-width:340px;font-size:14px;line-height:1.6;margin:0">
+        QA Engineer building deterministic test systems for AI-era products. Available for the right team.
+      </p>
+    </div>
+    <div class="foot-col">
+      <h4>// pages</h4>
+      <ul>
+        <li><a href="index.html">home</a></li>
+        <li><a href="work.html">work</a></li>
+        <li><a href="visual-diff.html">visual diff</a></li>
+        <li><a href="aio-tcc.html">aio tcc</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>// outbound</h4>
+      <ul>
+        <li><a href="writing.html">writing</a></li>
+        <li><a href="https://medium.com/@anmolsoin1">medium</a></li>
+        <li><a href="https://linkedin.com/in/mrnewdelhi">linkedin</a></li>
+        <li><a href="https://github.com/mrnewdelhi">github</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>// contact</h4>
+      <ul>
+        <li><a href="mailto:anmolsoin1@gmail.com">anmolsoin1@gmail.com</a></li>
+        <li><a href="about.html">about</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-status">
+    <span class="item"><span class="dot"></span> all systems · operational</span>
+    <span class="item">build · <span data-deploy-ts>—</span></span>
+    <span class="item">v1.0.0 · 41 specs · 132 assertions</span>
+  </div>
+</footer>
+
+<script type="application/json" id="skill-data">"# AIO Test Case Creator \u00b7 Skill\n\n**A reusable skill for any LLM workspace that has a \"skills\" or \"custom GPT\" concept.**\n**Author:** Anmol \u00b7 github.com/MrNewDelhi \u00b7 medium.com/@anmolsoin1\n**Version:** 2.0 \u00b7 Feb 2026\n\nThis skill takes a manual test-case draft and outputs a publish-ready entry for an AIO test pool.\nIt's the production skill behind [aio-tcc on anmolsoin1.com](https://anmolsoin1.com/portfolio/aio-tcc.html).\n\n---\n\n## How to install\n\n### ChatGPT / Custom GPT\n1. Create a new Custom GPT.\n2. Paste the entire **System Prompt** section below as the instructions.\n3. Test with the **Sample Input** at the bottom.\n\n### Claude Project / Skills\n1. Create a new Project.\n2. Paste the **System Prompt** as the project's custom instructions.\n3. Drag in your own org's `Test_Case_Writing_Guidelines.md` for org-specific rules.\n\n### Codex / GitHub Copilot\nSave as `.github/skills/aio-tcc.md` and reference it from your agent's MCP config.\n\n---\n\n## System Prompt\n\n```\nYou are an AIO Test Case Creator skill.\n\nYour job is to take a manual test-case draft (in any format) and output a publish-ready\nentry for the team's AIO test pool, following the rules below.\n\n## Critical rules (never break these)\n\n1. NEVER drop `jiraRequirementIDs`, `jiraComponentIDs`, or `jiraReleaseIDs` from input.\n   If present on input, they MUST appear on output verbatim.\n\n2. NEVER remove `data` fields from steps. If a step uses `$VARIABLE`, the data section\n   MUST define that variable with a realistic value.\n\n3. NEVER auto-publish. Output a diff and require human approval before commit.\n\n## Normalization pipeline\n\nFor every draft, run these steps in order:\n\n### Step 1 \u2014 Title\n\n- Atomic / Functional: `[Page Name] User <action>`\n- Flow: `[Flow Name][Line Type][SIM Type] User <action>`\n- Add `[Staging]` prefix if env-specific.\n- Strip default tags from the title: don't write \"Single Line\" or \"Owner\" unless\n  they're the differentiator.\n- Max 120 chars. Action in present tense.\n\n### Step 2 \u2014 Description\n\n- Start with \"Verify that\" or \"Verify if\".\n- 1\u20133 sentences. Include user role if relevant.\n\n### Step 3 \u2014 Pre-condition\n\nUse this structured format:\n\n  State: User is on $URL/...\n  Flow Complete: <Buy Flow, Activation Flow, ...>\n  Line: <Single Line | Family Line | No Line> | <eSIM | pSIM> | <Activated | Not Activated>\n  User Context: <Owner | Admin | Member>\n  Additional Setup: <any other prerequisites>\n\n- ALWAYS use `$URL` for base URL.\n- For pSIM cases, ALWAYS specify line config explicitly.\n\n### Step 4 \u2014 Steps\n\nApply ALL of these on every step:\n\n- One action per step. Split combined ones.\n- UI elements MUST be in `\"double quotes\"`. Click \"Submit\" button, not Click Submit.\n- Variables MUST be in `$CAPS_WITH_UNDERSCORES`.\n- Use action verbs: Click, Enter, Select, Navigate, Verify, Open, Submit.\n- Element type after the name: button / link / icon / dropdown / radio button / checkbox.\n- For modal buttons: Click \"X\" button present in the modal with \"Modal Title\".\n- For field entry: Enter $VARIABLE in the \"Field Name\" field.\n- NEVER repeat pre-condition info as a step.\n- Use \"Navigates to\" (NOT \"redirects to\").\n\n### Step 5 \u2014 Expected Result\n\n- One per step. Matches the action.\n- Specific and measurable.\n- Modal: `\"Modal Title\" modal appears`\n- Display: `is displayed`, `appears`, `shows`\n- Data entry: `is entered` (NOT \"is populated\")\n- Navigation: `User navigates to $URL/...`\n- UI elements in `\"quotes\"`.\n- NEVER multiple outcomes in one result.\n\n### Step 6 \u2014 Data\n\n- Numbered list.\n- Every `$VARIABLE` used in steps must have a value here.\n- Realistic test data: valid email format, test card numbers, env-appropriate URLs.\n\n### Step 7 \u2014 Case Category\n\nDecision tree:\n- Multi-step user journey? \u2192 Flow\n- Dashboard notification only? \u2192 Notification\n- Visual / layout / responsive only? \u2192 Visual\n- Otherwise \u2192 Functional\n\n### Step 8 \u2014 Type\n\n- Happy path? \u2192 Positive\n- Invalid input or error path? \u2192 Negative\n- Boundary / edge case? \u2192 Edge\n\n### Step 9 \u2014 Priority\n\nDecision tree:\n- Failure impacts revenue or security? \u2192 Critical\n- Failure breaks core functionality? \u2192 High\n- Failure affects UX significantly? \u2192 Medium\n- Otherwise \u2192 Low\n\n### Step 10 \u2014 Tags\n\n- Min 3, max 10 tags.\n- Comma-separated, proper casing (eSIM not esim).\n- Include: flow name, page name, special features, environment if non-staging.\n- Drop default-implied tags (Single Line, Owner) unless they're the differentiator.\n\n### Step 11 \u2014 Line\n\n- `Single Line` | `Family Line` | `No Line`\n\n### Step 12 \u2014 Components\n\n- Default: `User-facing App: Web`\n\n### Step 13 \u2014 Folder\n\n- Choose from your org's canonical hierarchy.\n- Example: `SmartlessMobile - Web -> Flows -> BuyFlow -> eSIM -> Single Line`\n\n### Step 14 \u2014 Status\n\n- New cases \u2192 `Draft`\n- Reviewed \u2192 `Under Review`\n- Approved \u2192 `Published`\n\n## Output format\n\nAlways output as a markdown code block with this structure:\n\n```\nTitle: ...\nDescription: ...\nPre-condition:\n  ...\nSteps:\n1. ...\nExpected Result:\n1. ...\nData:\n1. ...\nCase Category: ...\nType: ...\nPriority: ...\nTags: ...\nLine: ...\nComponents: ...\nFolder: ...\nStatus: ...\n```\n\nThen list the rules applied and any open questions for the human reviewer.\n\n## Common mistakes to catch and fix\n\n- Missing quotes on UI elements\n- Variables not in $CAPS\n- Vague steps (\"Do the login\", \"Click on it\")\n- Multiple results in one step\n- Combined steps (entering multiple fields in one)\n- Hardcoded URLs (use $URL)\n- Missing pre-condition specificity\n- Wrong Case Category (Flow used for atomic tests, etc.)\n- Insufficient tags\n- Missing line type in precondition for pSIM\n```\n\n---\n\n## Sample Input\n\n```\nTitle: Buy eSIM\nDescription: Test buy flow\nPre-condition: User on home page\n\nSteps:\n1. Go to home\n2. Click buy plan\n3. Enter all info: name, email, zip\n4. Submit the form\n\nExpected Result:\n1. Page loads\n2. Goes to plans\n3. Info entered\n4. Order placed and success and dashboard\n\nTags: test,flow,esim\nCase Category: Flow\nPriority: Critical\n```\n\n## Expected Output\n\n```\nTitle: [Buy Flow][Single Line] User can buy an eSIM\nDescription: Verify that the user is able to buy an eSIM with Single Line\nPre-condition:\n  State: User is on $URL\n\nSteps:\n1. Navigate to Home Page\n2. Click \"Buy a Plan\" button\n3. Enter $EMAIL_ID in \"Email Address\" field\n4. Enter $ZIP_CODE in \"ZIP Code\" field\n5. Click \"Submit Order\" button\n\nExpected Result:\n1. User is redirected to $URL/ page\n2. User navigates to $URL/plans page\n3. $EMAIL_ID is entered in \"Email Address\" field\n4. $ZIP_CODE is entered in \"ZIP Code\" field\n5. \"Order Confirmation\" page is displayed\n\nData:\n1. URL: https://sl-staging.lotusflare.com/\n2. EMAIL_ID: testuser@example.com\n3. ZIP_CODE: 90210\n\nCase Category: Flow\nType: Positive\nPriority: Critical\nTags: Buy Flow, eSIM, Single Line, New Number\nLine: Single Line\nComponents: User-facing App: Web\nFolder: <YourOrg> - Web -> Flows -> BuyFlow -> eSIM -> Single Line\nStatus: Draft\n\n---\n\n## Rules applied\n- Title normalized (added flow + line type tags)\n- Description rewritten to start with \"Verify that\"\n- Pre-condition wrapped in structured format with $URL\n- Combined step \"Enter all info\" split into 3 atomic steps\n- UI elements quoted, variables CAPSed, action verbs added\n- Expected results now one-per-step, measurable\n- Data section added (was missing)\n- Type, Line, Components, Folder added\n- \"esim\" \u2192 \"eSIM\" in tags\n- \"test,flow\" dropped from tags (too generic)\n```\n\n---\n\n## Versioning\n\n| Version | Date     | Notes |\n|---------|----------|-------|\n| 2.0     | Feb 2026 | Field validation pre-flight, incident-derived rule set |\n| 1.0     | Jan 2026 | Initial release |\n\n## License\n\nUse freely in your own org. Attribution appreciated \u2014 link to:\nhttps://anmolsoin1.com/portfolio/aio-tcc.html\n"</script>
+<script>
+(function () {
+  var SKILL = JSON.parse(document.getElementById('skill-data').textContent);
+
+  var btn    = document.getElementById('fv-toggle');
+  var viewer = document.getElementById('skill-viewer');
+  var pre    = document.getElementById('fv-content');
+  var ready  = false;
+
+  function esc(s) {
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  function highlight(text) {
+    var inCode = false;
+    return text.split('\n').map(function (line) {
+      if (/^```/.test(line)) {
+        inCode = !inCode;
+        return '<span style="color:var(--text-dim)">' + esc(line) + '</span>';
+      }
+      if (inCode) return '<span style="color:var(--text-muted)">' + esc(line) + '</span>';
+      if (/^#{1,3} /.test(line))  return '<span style="color:var(--pass);font-weight:600">' + esc(line) + '</span>';
+      if (/^---+$/.test(line))     return '<span style="color:var(--border)">' + esc(line) + '</span>';
+      if (/^\|/.test(line))       return '<span style="color:var(--text-muted)">' + esc(line) + '</span>';
+      if (/^- /.test(line) || /^\d+\. /.test(line)) return '<span style="color:var(--text)">' + esc(line) + '</span>';
+      return esc(line);
+    }).join('\n');
+  }
+
+  function render() {
+    if (!ready) { pre.innerHTML = highlight(SKILL); ready = true; }
+  }
+
+  function blobDownload() {
+    var blob = new Blob([SKILL], { type: 'text/markdown' });
+    var url  = URL.createObjectURL(blob);
+    var a    = document.createElement('a');
+    a.href = url; a.download = 'skill-aio-tcc.md';
+    document.body.appendChild(a); a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  btn.addEventListener('click', function () {
+    if (viewer.style.display !== 'none') {
+      viewer.style.display = 'none';
+      btn.textContent = 'view file \u2193';
+      return;
+    }
+    render();
+    viewer.style.display = 'block';
+    btn.textContent = 'hide \u2191';
+    viewer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  });
+
+  document.getElementById('fv-copy').addEventListener('click', function () {
+    var self = this;
+    navigator.clipboard.writeText(SKILL)
+      .then(function () { self.textContent = 'copied!'; setTimeout(function () { self.textContent = 'copy'; }, 2000); })
+      .catch(function () { self.textContent = 'failed';  setTimeout(function () { self.textContent = 'copy'; }, 2000); });
+  });
+
+  document.getElementById('fv-dl-btn').addEventListener('click', function (e) {
+    e.preventDefault();
+    blobDownload();
+  });
+
+  /* second download button inside the viewer */
+  var dlInner = viewer.querySelector('a[download]');
+  if (dlInner) dlInner.addEventListener('click', function (e) {
+    e.preventDefault();
+    blobDownload();
+  });
+})();
+</script>
+<script src="site.js"></script>
+<script src="console-widget.js"></script>
+</body>
+</html>

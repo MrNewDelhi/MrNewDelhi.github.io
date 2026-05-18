@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<title>Self-Healing Framework · Anmol</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&display=swap" />
+<link rel="stylesheet" href="styles.css" />
+
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-logo" title="Try tapping me 7 times">
+      <span class="dot"></span>
+      <span>anmol<span style="color: var(--pass)">.</span>qa</span>
+    </div>
+    <div class="nav-links">
+      <a href="index.html">home</a>
+      <a href="work.html">work</a>
+      <a href="visual-diff.html">visual diff</a>
+      <a href="aio-tcc.html">aio tcc</a>
+      <a href="writing.html">writing</a>
+      <a href="about.html">about</a>
+    </div>
+    <div class="nav-status">
+      <span class="dot"></span>
+      <span>all systems · operational</span>
+    </div>
+  </div>
+</nav>
+
+<section class="block" style="padding-top:64px;padding-bottom:40px">
+  <div class="wrap">
+    <div class="section-index">case study · /self-healing · open source</div>
+    <h1 class="h1" style="max-width: 880px; margin-bottom: 12px">Self-healing locator framework<span style="color:var(--pass)">.</span></h1>
+    <p class="lead" style="margin: 0; max-width: 720px;">A multi-model Appium framework that re-identifies elements at runtime when their locators break &mdash; across DOM heuristics and vision models. Built at L&amp;T Technology Services, deployed in production for two T-Mobile US MVNEs.</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:24px">
+      <span class="badge badge-pass">production · LTTS</span>
+      <span class="badge badge-info">appium</span>
+      <span class="badge badge-info">java</span>
+      <span class="badge badge-info">multi-model</span>
+      <span class="badge badge-muted">iOS + Android</span>
+      <span class="badge badge-muted">open source</span>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px">
+      <a class="btn btn-primary" href="https://github.com/MrNewDelhi/self-healing-locator-framework" target="_blank">↗ github.com/MrNewDelhi/self-healing-locator-framework</a>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 01 · the problem</div>
+        <h2>Locator maintenance is the boring tax on mobile automation.</h2>
+      </div>
+    </div>
+    <div class="prose">
+      <p>Every UI change ships with a quiet bill: half a sprint of "fix the broken selectors." Multiply by two MVNE clients on two platforms (iOS + Android) on a weekly release cadence, and the team's #1 toil source is "what did <code>findByXpath</code> miss this week."</p>
+      <p>Existing tools were single-track: either pure DOM heuristics (brittle when the structure changes) or pure vision models (slow, expensive, drift-prone). Neither was good enough alone.</p>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 02 · approach</div>
+        <h2>Cascade. Cheap heuristics first. Expensive models last.</h2>
+      </div>
+    </div>
+    <ul class="spec-list">
+      <li><div><h4>Resolver tier 0 · the original locator</h4><p>Always tried first. If it works, the spec proceeds. Free.</p></div></li>
+      <li><div><h4>Resolver tier 1 · DOM heuristics</h4><p>Walk neighbors of the cached locator. Try the same element by accessibility label, by class+text, by sibling-relative path. Sub-100ms. Catches ~70% of breakages.</p></div></li>
+      <li><div><h4>Resolver tier 2 · text + visual hash</h4><p>If tier 1 fails, run an OCR pass on the screen, find the element by its expected text, hash the visual region, cache for next run. ~500ms.</p></div></li>
+      <li><div><h4>Resolver tier 3 · vision model</h4><p>Last resort. Pass the screen + the original element's expected role to a multimodal model, ask "where is the X?" 2-3s.</p></div></li>
+      <li><div><h4>Healing · update the cached locator</h4><p>When any tier 1+ resolver succeeds, update the locator cache so the next run hits tier 0 again. Drift recovers itself.</p></div></li>
+      <li><div><h4>Telemetry</h4><p>Every healing event logs: which tier rescued it, how long it took, the new locator. Surfaces "this element is breaking weekly" patterns the team can fix at the source.</p></div></li>
+    </ul>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 03 · results</div>
+        <h2>What changed after this shipped.</h2>
+      </div>
+    </div>
+    <div class="grid grid-3">
+      <div class="card"><div class="card-meta">locator maintenance time</div><div style="font-size:32px;font-weight:700;color:var(--text-strong);line-height:1"><span style="color:var(--fail)">~14h/wk</span> <span style="color:var(--text-dim)">→</span> <span style="color:var(--pass)">&lt;2h/wk</span></div><div class="muted" style="margin-top:8px;font-size:14px">Avg across the 6-engineer pod.</div></div>
+      <div class="card"><div class="card-meta">healing rate</div><div style="font-size:32px;font-weight:700;color:var(--text-strong);line-height:1"><span style="color:var(--pass)">93%</span></div><div class="muted" style="margin-top:8px;font-size:14px">Of locator breakages resolved before the spec failed.</div></div>
+      <div class="card"><div class="card-meta">tier-3 share</div><div style="font-size:32px;font-weight:700;color:var(--text-strong);line-height:1"><span style="color:var(--info)">6%</span></div><div class="muted" style="margin-top:8px;font-size:14px">Vision model only invoked when cheaper tiers failed. Kept the bill small.</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="prose">
+      <h2>Lessons</h2>
+      <ul>
+        <li><strong>Cascade beats monolith.</strong> The same instinct from CPU caches applies here.</li>
+        <li><strong>Always heal back to the cheap tier.</strong> If you update the cache after every tier 2+ win, the suite gets faster as it runs, not slower.</li>
+        <li><strong>Surface the recurring breakers.</strong> Healing makes the test suite robust, but the <em>app</em> still has unstable selectors. The telemetry let us fix the actual source.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer class="site-foot">
+  <div class="foot-grid">
+    <div class="foot-col">
+      <h4>// Anmol</h4>
+      <p style="color:var(--text-muted);max-width:340px;font-size:14px;line-height:1.6;margin:0">QA Engineer building deterministic test systems for AI-era products. Available for the right team.</p>
+    </div>
+    <div class="foot-col">
+      <h4>// pages</h4>
+      <ul>
+        <li><a href="index.html">home</a></li>
+        <li><a href="work.html">work</a></li>
+        <li><a href="visual-diff.html">visual diff</a></li>
+        <li><a href="aio-tcc.html">aio tcc</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>// outbound</h4>
+      <ul>
+        <li><a href="writing.html">writing</a></li>
+        <li><a href="https://medium.com/@anmolsoin1">medium</a></li>
+        <li><a href="https://linkedin.com/in/mrnewdelhi">linkedin</a></li>
+        <li><a href="https://github.com/MrNewDelhi">github</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>// contact</h4>
+      <ul>
+        <li><a href="mailto:anmolsoin1@gmail.com">anmolsoin1@gmail.com</a></li>
+        <li><a href="about.html">about</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-status">
+    <span class="item"><span class="dot"></span> all systems · operational</span>
+    <span class="item">build · <span data-deploy-ts>—</span></span>
+    <span class="item">v1.0.0 · 41 specs · 132 assertions</span>
+  </div>
+</footer>
+<script src="site.js"></script>
+<script src="console-widget.js"></script>
+</body>
+</html>

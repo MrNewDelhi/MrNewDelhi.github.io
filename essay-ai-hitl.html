@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<title>AI HITL Essay · Anmol</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&display=swap" />
+<link rel="stylesheet" href="styles.css" />
+
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-logo" title="Try tapping me 7 times">
+      <span class="dot"></span>
+      <span>anmol<span style="color: var(--pass)">.</span>qa</span>
+    </div>
+    <div class="nav-links">
+      <a href="index.html">home</a>
+      <a href="work.html">work</a>
+      <a href="visual-diff.html">visual diff</a>
+      <a href="aio-tcc.html">aio tcc</a>
+      <a href="writing.html">writing</a>
+      <a href="about.html">about</a>
+    </div>
+    <div class="nav-status">
+      <span class="dot"></span>
+      <span>all systems · operational</span>
+    </div>
+  </div>
+</nav>
+
+<section class="block" style="padding-top:64px;padding-bottom:40px">
+  <div class="wrap-narrow">
+    <div class="section-index">essay · /ai-hitl</div>
+    <h1 class="h1" style="margin-bottom: 12px">AI accelerates. Humans still decide.<span style="color:var(--pass)">.</span></h1>
+    <p class="lead" style="margin: 0;">
+      Notes on why every agent I ship has a human-in-the-loop boundary &mdash; and why the cost calculus for autonomous AI is often worse than it looks.
+    </p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:24px">
+      <span class="badge badge-info">essay</span>
+      <span class="badge badge-muted">7 min</span>
+      <span class="badge badge-muted">QA · AI</span>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap-narrow">
+    <div class="prose">
+      <p>AI can dramatically speed up QA, development, and operations. Anyone who's worked with the recent generation of models can feel it. But that speed surfaces something easy to miss:</p>
+
+      <blockquote>AI hallucinates. And when left fully autonomous, it can confidently optimize the wrong thing, create unnecessary complexity, or even introduce new bugs while trying to "improve" the system.</blockquote>
+
+      <p>That's why Human-in-the-Loop review is critical.</p>
+
+      <h2>What AI is good at</h2>
+      <ul>
+        <li>Accelerating repetitive work</li>
+        <li>Generating ideas and drafts</li>
+        <li>Scaling execution</li>
+      </ul>
+
+      <h2>What humans are still on the hook for</h2>
+      <ul>
+        <li>Prioritization</li>
+        <li>Business context</li>
+        <li>Risk understanding</li>
+        <li>Final decision-making</li>
+        <li>Knowing what actually matters to the user</li>
+      </ul>
+
+      <h2>The cost trap</h2>
+      <p>Sometimes the compute / token cost of uncontrolled AI workflows exceeds the value they generate. In some cases, the operational burn becomes <em>more expensive</em> than the manual effort it was meant to replace.</p>
+      <p>I've seen this firsthand &mdash; an agent that scored best on the accuracy rubric was costing 3x the runner-up because it kept loop-retrying on edge cases. Without runtime cost logging, that would've shipped to prod and quietly burned the budget for months.</p>
+
+      <h2>The Pradeep tweet that landed</h2>
+      <p>Pradeep Shinde recently wrote a sharp satirical piece about agents writing test cases, reviewing PRs, attending standups, and rejecting each other's builds. In his version:</p>
+
+      <blockquote>"Yesterday one agent raised a defect against another agent for not following coding standards. By evening, three more agents joined the RCA call and created a Jira epic called 'Strategic Alignment for Autonomous Failure Prevention.' Meanwhile the actual bug is still in production."</blockquote>
+
+      <p>It's a joke. But it's close enough to reality to be uncomfortable.</p>
+
+      <h2>The pattern that works</h2>
+      <p>Every agent I've shipped follows the same rule: <strong>the agent assists, the human decides.</strong></p>
+      <ul>
+        <li>The <a href="case-multimodal-triage.html" style="color: var(--pass)">multimodal triage pipeline</a> adds a Jira comment. It never closes tickets.</li>
+        <li>The <a href="case-slack-bots.html" style="color: var(--pass)">Slack RCA bot</a> summarizes Sentry + Victoria + GitHub. It never reverts a commit.</li>
+        <li>The <a href="aio-tcc.html" style="color: var(--pass)">AIO Test Case Creator</a> normalizes a draft. The QA author approves before publish.</li>
+        <li>The <a href="case-codex-browser.html" style="color: var(--pass)">Codex browser rollout</a> defaults to "always ask" for new domains.</li>
+      </ul>
+
+      <h2>The future is not "AI replacing humans"</h2>
+      <p>It's humans building controlled, reviewed, and responsible AI systems. Balance is key.</p>
+
+      <hr>
+      <p class="muted" style="font-family:var(--font-mono);font-size:12.5px">// reposted on linkedin · february 2026 · <a href="https://linkedin.com/in/mrnewdelhi" style="color:var(--pass)">linkedin.com/in/mrnewdelhi</a></p>
+    </div>
+  </div>
+</section>
+
+<footer class="site-foot">
+  <div class="foot-grid">
+    <div class="foot-col">
+      <h4>// Anmol</h4>
+      <p style="color:var(--text-muted);max-width:340px;font-size:14px;line-height:1.6;margin:0">QA Engineer building deterministic test systems for AI-era products. Available for the right team.</p>
+    </div>
+    <div class="foot-col">
+      <h4>// pages</h4>
+      <ul>
+        <li><a href="index.html">home</a></li>
+        <li><a href="work.html">work</a></li>
+        <li><a href="visual-diff.html">visual diff</a></li>
+        <li><a href="aio-tcc.html">aio tcc</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>// outbound</h4>
+      <ul>
+        <li><a href="writing.html">writing</a></li>
+        <li><a href="https://medium.com/@anmolsoin1">medium</a></li>
+        <li><a href="https://linkedin.com/in/mrnewdelhi">linkedin</a></li>
+        <li><a href="https://github.com/MrNewDelhi">github</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>// contact</h4>
+      <ul>
+        <li><a href="mailto:anmolsoin1@gmail.com">anmolsoin1@gmail.com</a></li>
+        <li><a href="about.html">about</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-status">
+    <span class="item"><span class="dot"></span> all systems · operational</span>
+    <span class="item">build · <span data-deploy-ts>—</span></span>
+    <span class="item">v1.0.0 · 41 specs · 132 assertions</span>
+  </div>
+</footer>
+<script src="site.js"></script>
+<script src="console-widget.js"></script>
+</body>
+</html>

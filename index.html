@@ -1,0 +1,531 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<title>Anmol · QA Engineer</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="QA Engineer building deterministic test systems for AI-era products. T-Mobile US MVNEs. Playwright, Appium, MCP-based agents." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&display=swap" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- ================== NAV ================== -->
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-logo" title="Try tapping me 7 times">
+      <span class="dot"></span>
+      <span>anmol<span style="color: var(--pass)">.</span>qa</span>
+    </div>
+    <div class="nav-links">
+      <a href="index.html" aria-current="page">home</a>
+      <a href="work.html">work</a>
+      <a href="visual-diff.html">visual diff</a>
+      <a href="aio-tcc.html">aio tcc</a>
+      <a href="writing.html">writing</a>
+      <a href="about.html">about</a>
+    </div>
+    <div class="nav-status">
+      <span class="dot"></span>
+      <span>all systems · operational</span>
+    </div>
+  </div>
+</nav>
+
+<!-- ================== HERO ================== -->
+<section class="hero">
+  <div class="wrap">
+    <div class="lead-block">
+      <div>
+        <div class="eyebrow" style="margin-bottom: 20px">QA Engineer · Delhi, India · 2.5y · open to <em style="font-family:var(--font-serif);color:var(--pass);font-style:italic">AI-first</em> roles</div>
+        <h1 class="display">
+          I build <span class="accent">deterministic</span> test systems for <em>AI-era</em> products.<span class="cursor"></span>
+        </h1>
+        <p class="lead">
+          Telecom-grade reliability with agent-shaped tooling. Currently keeping a T-Mobile US MVNE (Smartless Mobile) green for Lotusflare. Previously led a 6-engineer mobile-automation pod for L&amp;T Technology Services.
+        </p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="work.html">view work →</a>
+          <a class="btn" href="mailto:anmolsoin1@gmail.com">get in touch</a>
+          <a class="btn" href="#" onclick="window.__toggleShortcuts();return false;">
+            <span class="kbd" style="background:transparent;border-color:var(--text-muted)">?</span>
+            <span>shortcuts</span>
+          </a>
+        </div>
+      </div>
+
+      <div>
+        <div class="terminal-frame" style="margin-top: 10px">
+          <div class="terminal-bar">
+            <div class="lights"><span></span><span></span><span></span></div>
+            <div class="title">anmol@portfolio: ~</div>
+            <div class="meta">zsh · 80×24</div>
+          </div>
+          <div class="terminal-body">
+            <div><span class="terminal-prompt">$</span> whoami</div>
+            <div style="margin-top:4px">
+              <span class="terminal-key">name:</span> Anmol<br>
+              <span class="terminal-key">role:</span> QA Engineer<br>
+              <span class="terminal-key">stack:</span> Playwright · Appium · MCP · Codex · Gemini 3<br>
+              <span class="terminal-key">at:</span> Lotusflare · ex&nbsp;L&amp;T<br>
+              <span class="terminal-key">based:</span> Delhi, India
+            </div>
+            <div style="margin-top:14px"><span class="terminal-prompt">$</span> open console &amp; type <span style="color:var(--pass)">help()</span></div>
+            <div style="margin-top:14px"><span class="terminal-prompt">$</span> <span class="cursor"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================== STATS ================== -->
+<section class="block" style="padding-top:24px">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 01 · impact</div>
+        <h2>The numbers, in one row.</h2>
+      </div>
+      <div class="meta">2.5y rolling · L&amp;T → Lotusflare</div>
+    </div>
+
+    <div class="stat-strip">
+      <div class="stat-cell">
+        <div class="num"><span class="accent">3×</span> faster</div>
+        <div class="lbl">weekly regression · 3d → 1d</div>
+      </div>
+      <div class="stat-cell">
+        <div class="num">500<span class="accent">+</span></div>
+        <div class="lbl">test cases automated</div>
+      </div>
+      <div class="stat-cell">
+        <div class="num">6</div>
+        <div class="lbl">QA engineers led · iOS/Android/web</div>
+      </div>
+      <div class="stat-cell">
+        <div class="num">2</div>
+        <div class="lbl">T-Mobile US MVNEs shipped</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================== FEATURED WORK ================== -->
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 02 · featured work</div>
+        <h2>Selected case studies.</h2>
+        <p>Tools, frameworks, and AI agents I built (or rebuilt) to remove manual toil from QA.</p>
+      </div>
+      <div class="meta"><a href="work.html">all case studies →</a></div>
+    </div>
+
+    <div class="grid grid-2">
+
+      <!-- Featured 1: Visual Diff Analyzer -->
+      <a href="visual-diff.html" class="card card-featured linkable" style="grid-column: 1 / -1">
+        <div class="card-head">
+          <div>
+            <div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap">
+              <span class="badge badge-pass">tool · shipped</span>
+              <span class="badge badge-muted">visual regression</span>
+              <span class="badge badge-muted">playwright</span>
+            </div>
+            <div class="card-title">Visual Diff Analyzer</div>
+            <div class="muted" style="margin-top:8px;max-width:560px">
+              Pixel-level diff with semantic grouping, layered over Playwright screenshots. Built to catch the silent CSS regressions a CMS-driven site ships every other release.
+            </div>
+          </div>
+          <div class="card-meta">/visual-diff</div>
+        </div>
+
+        <div class="vd-frame" style="margin-top: 20px">
+          <div class="vd-toolbar">
+            <span>visual-diff · run-204 · smartless.com/plans</span>
+            <div class="seg">
+              <button class="active">side-by-side</button>
+              <button>onion-skin</button>
+              <button>flicker</button>
+            </div>
+            <span style="margin-left:auto" class="badge badge-fail">1 region flagged</span>
+          </div>
+          <div class="vd-canvas">
+            <div class="vd-side left">
+              <div class="lbl">baseline · v0.42.1</div>
+              <div class="vd-shot">
+                <div class="mock-h"></div>
+                <div class="mock-line ml-1"></div>
+                <div class="mock-line ml-2"></div>
+                <div class="mock-line ml-3"></div>
+                <div class="mock-line ml-4"></div>
+                <div class="mock-line ml-5"></div>
+                <div class="btn"></div>
+              </div>
+            </div>
+            <div class="vd-side right">
+              <div class="lbl">candidate · v0.42.2</div>
+              <div class="vd-shot diff-flagged">
+                <div class="mock-h"></div>
+                <div class="mock-line ml-1"></div>
+                <div class="mock-line ml-2"></div>
+                <div class="mock-line ml-3"></div>
+                <div class="mock-line ml-4"></div>
+                <div class="mock-line ml-5"></div>
+                <div class="btn"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-foot">
+          <span class="muted">read case study</span>
+          <span class="arrow">→</span>
+        </div>
+      </a>
+
+      <!-- Featured 2: Multimodal Triage -->
+      <a href="case-multimodal-triage.html" class="card linkable">
+        <div class="card-head">
+          <div>
+            <div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap">
+              <span class="badge badge-pass">agent · shipped</span>
+              <span class="badge badge-muted">gemini 3</span>
+              <span class="badge badge-muted">JAM MCP</span>
+            </div>
+            <div class="card-title">Multimodal Ticket Triage</div>
+          </div>
+          <div class="card-meta">/multimodal-triage</div>
+        </div>
+        <div class="card-body">
+          Gemini 3 pipeline: epic → linked tickets → video attachment → step extraction → Playwright MCP replay → RCA via Sentry + Victoria + GitHub MCP. Comment-only on prod. Adapts to HAR / solo-ticket / description-only.
+        </div>
+        <div class="card-foot">
+          <span class="muted">read case study</span>
+          <span class="arrow">→</span>
+        </div>
+      </a>
+
+      <!-- Featured 3: AIO TCC -->
+      <a href="aio-tcc.html" class="card linkable">
+        <div class="card-head">
+          <div>
+            <div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap">
+              <span class="badge badge-pass">skill · shipped</span>
+              <span class="badge badge-muted">LLM</span>
+              <span class="badge badge-muted">downloadable</span>
+            </div>
+            <div class="card-title">AIO Test Case Creator</div>
+          </div>
+          <div class="card-meta">/aio-tcc</div>
+        </div>
+        <div class="card-body">
+          An LLM skill that normalizes manual test-case drafts against a 1,891-case rulebook before they hit the AIO pool. Downloadable .md skill bundled — drop it into Claude Project / Custom GPT / Codex.
+        </div>
+        <div class="card-foot">
+          <span class="muted">read skill</span>
+          <span class="arrow">→</span>
+        </div>
+      </a>
+
+      <!-- Featured 4: ADB MCP (open source) -->
+      <a href="case-adb-mcp.html" class="card linkable">
+        <div class="card-head">
+          <div>
+            <div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap">
+              <span class="badge badge-pass">open source</span>
+              <span class="badge badge-muted">MCP server</span>
+              <span class="badge badge-muted">38 tools</span>
+            </div>
+            <div class="card-title">ADB MCP</div>
+          </div>
+          <div class="card-meta">↗ MrNewDelhi/adb-mcp</div>
+        </div>
+        <div class="card-body">
+          Open-source MCP server for Android Debug Bridge. 38 Zod-validated tools across devices, shell, packages, files, screenshots, logs, intents, settings. LLM skill bundled. Built during LTTS.
+        </div>
+        <div class="card-foot">
+          <span class="muted">read case study</span>
+          <span class="arrow">→</span>
+        </div>
+      </a>
+
+      <!-- Featured 5: Self-Healing Framework -->
+      <a href="case-self-healing.html" class="card linkable">
+        <div class="card-head">
+          <div>
+            <div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap">
+              <span class="badge badge-pass">production · LTTS</span>
+              <span class="badge badge-muted">appium</span>
+              <span class="badge badge-muted">open source</span>
+            </div>
+            <div class="card-title">Self-Healing Locator Framework</div>
+          </div>
+          <div class="card-meta">↗ MrNewDelhi/self-healing-locator-framework</div>
+        </div>
+        <div class="card-body">
+          Multi-model architecture that re-identifies elements at runtime across DOM heuristics + vision models. Built at L&amp;T, deployed in production for two T-Mobile US MVNEs. Open-sourced.
+        </div>
+        <div class="card-foot">
+          <span class="muted">read case study</span>
+          <span class="arrow">→</span>
+        </div>
+      </a>
+
+      <!-- Featured 6: Codex Browser -->
+      <a href="case-codex-browser.html" class="card linkable">
+        <div class="card-head">
+          <div>
+            <div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap">
+              <span class="badge badge-pass">production · lotusflare</span>
+              <span class="badge badge-muted">codex</span>
+              <span class="badge badge-muted">security</span>
+            </div>
+            <div class="card-title">Codex In-Browser, Safely</div>
+          </div>
+          <div class="card-meta">/codex-browser</div>
+        </div>
+        <div class="card-body">
+          How I rolled Codex's built-in browser to manual QA and non-tech teammates with a permissions posture security could live with. Always-ask, narrow allowed domains, short-lived sessions.
+        </div>
+        <div class="card-foot">
+          <span class="muted">read case study</span>
+          <span class="arrow">→</span>
+        </div>
+      </a>
+
+      <!-- Featured 7: Slack Bots -->
+      <a href="case-slack-bots.html" class="card linkable">
+        <div class="card-head">
+          <div>
+            <div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap">
+              <span class="badge badge-pass">agent · shipped</span>
+              <span class="badge badge-muted">chatgpt enterprise</span>
+              <span class="badge badge-muted">slack</span>
+            </div>
+            <div class="card-title">Slack Bots for the QA Stack</div>
+          </div>
+          <div class="card-meta">/slack-bots</div>
+        </div>
+        <div class="card-body">
+          Two ChatGPT Enterprise bots on connectors / MCP / skills. One for triage (Sentry+Victoria+GitHub grounded). One for test-case creation. Both identity-scoped.
+        </div>
+        <div class="card-foot">
+          <span class="muted">read case study</span>
+          <span class="arrow">→</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================== WRITING TEASER ================== -->
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 03 · writing</div>
+        <h2>Notes from the QA console.</h2>
+        <p>Industry POV and lessons from production. Long-form on Medium.</p>
+      </div>
+      <div class="meta"><a href="writing.html">all posts →</a></div>
+    </div>
+
+    <div class="grid grid-3">
+      <a href="writing.html#post-pinned" class="card linkable">
+        <div class="card-meta" style="margin-bottom:8px">essay · 7 min read · medium</div>
+        <div class="card-title" style="font-size:17px;margin-bottom:8px">Pro tip: Teach your LLMs the business, not the trivia</div>
+        <div class="card-body">Use memory / skills for stable business context. RAG for fresh truth. The goal: help the LLM understand what makes the product work.</div>
+        <div class="card-foot"><span class="muted">read on medium</span><span class="arrow">→</span></div>
+      </a>
+      <a href="essay-ai-hitl.html" class="card linkable">
+        <div class="card-meta" style="margin-bottom:8px">essay · 7 min read</div>
+        <div class="card-title" style="font-size:17px;margin-bottom:8px">AI accelerates. Humans still decide.</div>
+        <div class="card-body">Why every agent I ship has a HITL boundary. And why the cost calculus for autonomous AI is often worse than it looks.</div>
+        <div class="card-foot"><span class="muted">read essay</span><span class="arrow">→</span></div>
+      </a>
+      <a href="https://www.linkedin.com/posts/mrnewdelhi_we-introduced-ai-agents-to-speed-up-qa-automation-activity-7461622694837579778-NXQD" class="card linkable" target="_blank">
+        <div class="card-meta" style="margin-bottom:8px">linkedin · repost · commentary</div>
+        <div class="card-title" style="font-size:17px;margin-bottom:8px">We introduced AI agents to speed up QA automation</div>
+        <div class="card-body">What AI-accelerated QA actually looks like in a production MVNE — the parts that worked, and the parts that didn't.</div>
+        <div class="card-foot"><span class="muted">read on linkedin</span><span class="arrow">→</span></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ================== TECH STRIP ================== -->
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 04 · the stack</div>
+        <h2>Working surface.</h2>
+        <p>Things I'd reach for on a project today.</p>
+      </div>
+      <div class="meta">type <code style="font-family:var(--font-mono);color:var(--pass)">stack()</code> in console</div>
+    </div>
+
+    <div class="grid grid-2">
+      <div class="card">
+        <div class="card-meta" style="margin-bottom: 12px">AI for QA</div>
+        <div>
+          <span class="tag">MCP</span>
+          <span class="tag">Codex</span>
+          <span class="tag">ChatGPT Enterprise</span>
+          <span class="tag">Gemini 3 multimodal</span>
+          <span class="tag">Browser Use</span>
+          <span class="tag">Computer Use</span>
+          <span class="tag">JAM MCP</span>
+          <span class="tag">LLM evaluation</span>
+          <span class="tag">AI security hooks</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-meta" style="margin-bottom: 12px">Test automation</div>
+        <div>
+          <span class="tag">Playwright</span>
+          <span class="tag">Selenium</span>
+          <span class="tag">Appium (iOS+Android)</span>
+          <span class="tag">Reflect.run</span>
+          <span class="tag">self-healing locators</span>
+          <span class="tag">POM</span>
+          <span class="tag">BrowserStack</span>
+          <span class="tag">visual regression</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-meta" style="margin-bottom: 12px">CI/CD &amp; infra</div>
+        <div>
+          <span class="tag">GitHub Actions</span>
+          <span class="tag">self-hosted runners</span>
+          <span class="tag">Jenkins</span>
+          <span class="tag">Docker</span>
+          <span class="tag">MITM hooks</span>
+          <span class="tag">Tailscale</span>
+          <span class="tag">PostgreSQL</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-meta" style="margin-bottom: 12px">Observability &amp; test mgmt</div>
+        <div>
+          <span class="tag">Victoria Logs</span>
+          <span class="tag">Sentry</span>
+          <span class="tag">Lighthouse</span>
+          <span class="tag">Jira</span>
+          <span class="tag">AIO</span>
+          <span class="tag">Xray</span>
+          <span class="tag">Zephyr</span>
+          <span class="tag">TestRail</span>
+          <span class="tag">Allure</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================== ABOUT TEASER ================== -->
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 05 · who I am</div>
+        <h2>QA Engineer · Delhi, India · 2.5y.</h2>
+      </div>
+      <div class="meta"><a href="about.html">full bio →</a></div>
+    </div>
+
+    <div class="grid grid-2">
+      <div class="prose" style="font-size:15.5px">
+        <p>I'm Anmol — currently QA Engineer at Lotusflare working on a T-Mobile US MVNE (Smartless Mobile). Before that I led a 6-engineer iOS/Android/web automation pod at L&amp;T Technology Services, covering two T-Mobile MVNE clients.</p>
+        <p>I gravitate toward the problems where QA stops looking like QA — building agents, designing test-data infrastructure, defining evaluation rubrics for LLMs, getting deterministic CI from non-deterministic upstream. The kind of work that doesn't have a Stack Overflow answer.</p>
+        <p>If you're at an AI-first company and need someone to make your release flow boring in the good way, <a href="mailto:anmolsoin1@gmail.com" style="color:var(--pass)">say hi</a>.</p>
+      </div>
+
+      <div class="terminal-frame">
+        <div class="terminal-bar">
+          <div class="lights"><span></span><span></span><span></span></div>
+          <div class="title">expect(anmol).toShip()</div>
+          <div class="meta">jest</div>
+        </div>
+        <div class="terminal-body">
+<pre style="margin:0;font-family:inherit;font-size:13px;color:var(--text);line-height:1.6;white-space:pre-wrap"><span class="terminal-comment">// passed in production · 2024–present</span>
+
+describe(<span style="color:var(--pass)">'anmol'</span>, () => {
+  it(<span style="color:var(--pass)">'ships AI tooling for QA'</span>, () => {
+    <span class="terminal-key">expect</span>(stack).toContain(<span style="color:var(--pass)">'MCP'</span>);
+    <span class="terminal-key">expect</span>(agents).toBeProduction();
+    <span class="terminal-key">expect</span>(toil).toHaveBeenReducedBy(<span style="color:var(--info)">0.67</span>);
+  });
+
+  it(<span style="color:var(--pass)">'leads QA pods'</span>, () => {
+    <span class="terminal-key">expect</span>(team.size).toBeGreaterThanOrEqual(<span style="color:var(--info)">6</span>);
+    <span class="terminal-key">expect</span>(careerGrowth).toBeOwnedByLead();
+  });
+
+  it(<span style="color:var(--pass)">'survives outages'</span>, () => {
+    <span class="terminal-key">expect</span>(outages).toBe(<span style="color:var(--info)">2</span>);
+    <span class="terminal-key">expect</span>(suite.color).toBe(<span style="color:var(--pass)">'green'</span>);
+  });
+});
+
+<span class="terminal-comment">// ✓ 3 passed · 0 failed · time: 2.5y</span></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================== FOOTER ================== -->
+<footer class="site-foot">
+  <div class="foot-grid">
+    <div class="foot-col">
+      <h4>// Anmol</h4>
+      <p style="color:var(--text-muted);max-width:340px;font-size:14px;line-height:1.6;margin:0">
+        QA Engineer building deterministic test systems for AI-era products. Available for the right team.
+      </p>
+    </div>
+    <div class="foot-col">
+      <h4>// pages</h4>
+      <ul>
+        <li><a href="index.html">home</a></li>
+        <li><a href="work.html">work</a></li>
+        <li><a href="visual-diff.html">visual diff</a></li>
+        <li><a href="aio-tcc.html">aio tcc</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>// outbound</h4>
+      <ul>
+        <li><a href="writing.html">writing</a></li>
+        <li><a href="https://medium.com/@anmolsoin1">medium</a></li>
+        <li><a href="https://linkedin.com/in/mrnewdelhi">linkedin</a></li>
+        <li><a href="https://github.com/mrnewdelhi">github</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>// contact</h4>
+      <ul>
+        <li><a href="mailto:anmolsoin1@gmail.com">anmolsoin1@gmail.com</a></li>
+        <li><a href="about.html">about</a></li>
+        <li><a href="404.html" style="color:var(--text-dim)">404</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-status">
+    <span class="item"><span class="dot"></span> all systems · operational</span>
+    <span class="item">build · <span data-deploy-ts>—</span></span>
+    <span class="item">v1.0.0 · 41 specs · 132 assertions</span>
+  </div>
+</footer>
+
+<script src="site.js"></script>
+<script src="console-widget.js"></script>
+</body>
+</html>

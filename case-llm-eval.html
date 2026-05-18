@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<title>LLM Evaluation Rubrics · Anmol</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&display=swap" />
+<link rel="stylesheet" href="styles.css" />
+
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-logo" title="Try tapping me 7 times">
+      <span class="dot"></span>
+      <span>anmol<span style="color: var(--pass)">.</span>qa</span>
+    </div>
+    <div class="nav-links">
+      <a href="index.html">home</a>
+      <a href="work.html">work</a>
+      <a href="visual-diff.html">visual diff</a>
+      <a href="aio-tcc.html">aio tcc</a>
+      <a href="writing.html">writing</a>
+      <a href="about.html">about</a>
+    </div>
+    <div class="nav-status">
+      <span class="dot"></span>
+      <span>all systems · operational</span>
+    </div>
+  </div>
+</nav>
+
+<section class="block" style="padding-top:64px;padding-bottom:40px">
+  <div class="wrap">
+    <div class="section-index">case study · /llm-eval</div>
+    <h1 class="h1" style="max-width: 880px; margin-bottom: 12px">LLM evaluation rubrics<span style="color:var(--pass)">.</span></h1>
+    <p class="lead" style="margin: 0; max-width: 760px;">How I picked the models behind the QA agent stack. Browser-action accuracy, tool-call correctness, minimum tool calls, cost per task, and token usage &mdash; logged via runtime hooks. Eight model families compared.</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:24px">
+      <span class="badge badge-pass">production · lotusflare</span>
+      <span class="badge badge-info">model evaluation</span>
+      <span class="badge badge-info">cost &amp; tokens</span>
+      <span class="badge badge-muted">runtime hooks</span>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 01 · the rubric</div>
+        <h2>Four metrics, weighted by use case.</h2>
+      </div>
+    </div>
+    <ul class="spec-list">
+      <li><div><h4>Browser-action accuracy</h4><p>Given a UI task, does the agent click the right thing? Scored on a held-out suite of 50 tasks per agent surface.</p></div></li>
+      <li><div><h4>Tool-call correctness</h4><p>When the agent has access to typed MCP tools, does it pick the right one with the right args? Catches "hallucinated shell commands" before they run.</p></div></li>
+      <li><div><h4>Minimum tool calls</h4><p>Penalize agents that explore by trial-and-error. The right model gets to the answer in fewer calls, which scales cost.</p></div></li>
+      <li><div><h4>Cost per task</h4><p>Real dollars on the eval suite. Includes input + output tokens, all retries, and any vision-token costs.</p></div></li>
+    </ul>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 02 · model families compared</div>
+        <h2>What we tested.</h2>
+        <p>US-based and US-accessible LLMs. The list shifted over the year &mdash; this is the latest cut.</p>
+      </div>
+    </div>
+    <div class="grid grid-3">
+      <div class="card"><div class="card-meta">openai</div><div class="card-title" style="font-size:17px;margin-top:6px">ChatGPT / GPT family</div><div class="card-body" style="margin-top:8px">Strong tool-call discipline, slightly higher cost per task.</div></div>
+      <div class="card"><div class="card-meta">anthropic</div><div class="card-title" style="font-size:17px;margin-top:6px">Claude family</div><div class="card-body" style="margin-top:8px">Best minimum-tool-call score. Reliable for RCA-style summarization.</div></div>
+      <div class="card"><div class="card-meta">google</div><div class="card-title" style="font-size:17px;margin-top:6px">Gemini (incl. Gemini 3)</div><div class="card-body" style="margin-top:8px">Multimodal lead &mdash; the only practical choice for the video-to-steps triage pipeline.</div></div>
+      <div class="card"><div class="card-meta">meta</div><div class="card-title" style="font-size:17px;margin-top:6px">Llama family</div><div class="card-body" style="margin-top:8px">Strong open-weights option for cost-sensitive batch tasks. Self-hostable.</div></div>
+      <div class="card"><div class="card-meta">mistral</div><div class="card-title" style="font-size:17px;margin-top:6px">Mistral</div><div class="card-body" style="margin-top:8px">Good cost / latency tradeoff for non-critical routing tasks.</div></div>
+      <div class="card"><div class="card-meta">nvidia</div><div class="card-title" style="font-size:17px;margin-top:6px">Nemotron</div><div class="card-body" style="margin-top:8px">Strong reasoning, good cost on NVIDIA infra if you're already there.</div></div>
+      <div class="card"><div class="card-meta">liquid ai</div><div class="card-title" style="font-size:17px;margin-top:6px">Liquid</div><div class="card-body" style="margin-top:8px">Promising for small-context fast routing. Watched for production-readiness.</div></div>
+      <div class="card"><div class="card-meta">+ stacks</div><div class="card-title" style="font-size:17px;margin-top:6px">ChatGPT Enterprise, GitHub Copilot org-MCP, Codex</div><div class="card-body" style="margin-top:8px">Wrappers and deployment surfaces also compared — same model can score differently based on how the org wraps it.</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 03 · cost &amp; tool-call logging</div>
+        <h2>Hooks for the truth.</h2>
+      </div>
+    </div>
+    <div class="prose">
+      <p>The published model cards lie a little. Or rather, they tell the truth about <em>idealized</em> cost &mdash; not your cost. Your cost includes retries, tool-call loops the agent runs when it's unsure, vision tokens when the model auto-decides to look at a screenshot.</p>
+      <p>So I wired runtime hooks at the agent runtime layer:</p>
+      <ul>
+        <li>Every tool call logged with model, input-token count, output-token count.</li>
+        <li>Every retry counted separately.</li>
+        <li>Every "decided to look at an attached image" charged at vision token rate.</li>
+        <li>Per-task aggregated cost surfaced in the evaluation dashboard.</li>
+      </ul>
+      <p>That's how you find out the agent that <em>scored</em> best on accuracy was actually costing 3x the runner-up because it kept loop-retrying on edge cases. Made the model picks easier.</p>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 04 · picks</div>
+        <h2>What we use, by use case.</h2>
+      </div>
+    </div>
+    <div class="grid grid-2">
+      <div class="card"><div class="card-meta">multimodal triage</div><div class="card-title" style="font-size:17px;margin-top:6px">Gemini 3</div><div class="card-body" style="margin-top:8px">Only practical choice for video → steps extraction.</div></div>
+      <div class="card"><div class="card-meta">RCA &amp; summarization</div><div class="card-title" style="font-size:17px;margin-top:6px">Claude (Slack RCA agent)</div><div class="card-body" style="margin-top:8px">Minimum tool calls, clean prose, low hallucination.</div></div>
+      <div class="card"><div class="card-meta">browser tasks</div><div class="card-title" style="font-size:17px;margin-top:6px">ChatGPT / Codex</div><div class="card-body" style="margin-top:8px">Tool-call discipline. Built-in browser surface.</div></div>
+      <div class="card"><div class="card-meta">batch normalization</div><div class="card-title" style="font-size:17px;margin-top:6px">Llama (self-hosted)</div><div class="card-body" style="margin-top:8px">Best cost/quality for the AIO TCC bulk-relinting work.</div></div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-foot">
+  <div class="foot-grid">
+    <div class="foot-col">
+      <h4>// Anmol</h4>
+      <p style="color:var(--text-muted);max-width:340px;font-size:14px;line-height:1.6;margin:0">QA Engineer building deterministic test systems for AI-era products. Available for the right team.</p>
+    </div>
+    <div class="foot-col">
+      <h4>// pages</h4>
+      <ul>
+        <li><a href="index.html">home</a></li>
+        <li><a href="work.html">work</a></li>
+        <li><a href="visual-diff.html">visual diff</a></li>
+        <li><a href="aio-tcc.html">aio tcc</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>// outbound</h4>
+      <ul>
+        <li><a href="writing.html">writing</a></li>
+        <li><a href="https://medium.com/@anmolsoin1">medium</a></li>
+        <li><a href="https://linkedin.com/in/mrnewdelhi">linkedin</a></li>
+        <li><a href="https://github.com/MrNewDelhi">github</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>// contact</h4>
+      <ul>
+        <li><a href="mailto:anmolsoin1@gmail.com">anmolsoin1@gmail.com</a></li>
+        <li><a href="about.html">about</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-status">
+    <span class="item"><span class="dot"></span> all systems · operational</span>
+    <span class="item">build · <span data-deploy-ts>—</span></span>
+    <span class="item">v1.0.0 · 41 specs · 132 assertions</span>
+  </div>
+</footer>
+<script src="site.js"></script>
+<script src="console-widget.js"></script>
+</body>
+</html>

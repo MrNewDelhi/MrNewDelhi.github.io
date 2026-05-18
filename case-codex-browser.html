@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<title>Codex Browser · Anmol</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&display=swap" />
+<link rel="stylesheet" href="styles.css" />
+
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-logo" title="Try tapping me 7 times">
+      <span class="dot"></span>
+      <span>anmol<span style="color: var(--pass)">.</span>qa</span>
+    </div>
+    <div class="nav-links">
+      <a href="index.html">home</a>
+      <a href="work.html">work</a>
+      <a href="visual-diff.html">visual diff</a>
+      <a href="aio-tcc.html">aio tcc</a>
+      <a href="writing.html">writing</a>
+      <a href="about.html">about</a>
+    </div>
+    <div class="nav-status">
+      <span class="dot"></span>
+      <span>all systems · operational</span>
+    </div>
+  </div>
+</nav>
+
+<section class="block" style="padding-top:64px;padding-bottom:40px">
+  <div class="wrap">
+    <div class="section-index">case study · /codex-browser</div>
+    <h1 class="h1" style="max-width: 880px; margin-bottom: 12px">Codex in-browser, safely<span style="color:var(--pass)">.</span></h1>
+    <p class="lead" style="margin: 0; max-width: 760px;">How I rolled out Codex's built-in browser to manual QA and non-technical teammates with a permissions posture they (and security) could actually live with. The setting they see, and the policy underneath.</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:24px">
+      <span class="badge badge-pass">production · lotusflare</span>
+      <span class="badge badge-info">codex</span>
+      <span class="badge badge-info">browser security</span>
+      <span class="badge badge-muted">manual QA enablement</span>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 01 · the surface</div>
+        <h2>What the user sees.</h2>
+      </div>
+    </div>
+    <div class="card" style="padding: 0; overflow: hidden">
+      <img src="assets/codex-browser-settings.png" alt="Codex browser settings panel: toggles for browser, browsing data, annotation screenshots, approval, blocked / allowed domains" style="display:block;width:100%">
+    </div>
+    <p class="muted" style="font-family:var(--font-mono);font-size:12.5px;margin-top:10px">// Codex's built-in browser settings · what every QA / PM gets when they enable it</p>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 02 · the policy underneath</div>
+        <h2>How we wired security.</h2>
+      </div>
+    </div>
+    <ul class="spec-list">
+      <li><div><h4>Approval: always ask</h4><p>Every new domain triggers a prompt. The agent never silently opens an arbitrary site. For a non-technical user, that "is it ok to open X?" gate is the difference between a tool and a risk.</p></div></li>
+      <li><div><h4>Allowed domains · narrow</h4><p>Pre-staged the company's own apps, AIO, Jira, the staging URLs. Everything else needs approval. New URLs surface a one-click "add to allowed" — but only the user can confirm.</p></div></li>
+      <li><div><h4>Blocked domains · explicit</h4><p>Tenants with sensitive surfaces (billing portals, admin tools, anything keyed for personal data) get pre-blocked at the org level. Codex never tries.</p></div></li>
+      <li><div><h4>Annotation screenshots: always on</h4><p>Costs more plan tokens, gains the user fidelity. For QA workflows that's worth it &mdash; the agent sees exactly what the user sees.</p></div></li>
+      <li><div><h4>Data: short-lived</h4><p>Clear browsing data on every session boundary. No persistent cookies, no remembered sessions. The agent re-authenticates explicitly each time.</p></div></li>
+    </ul>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 03 · use cases</div>
+        <h2>What this unlocks for non-technical teammates.</h2>
+      </div>
+    </div>
+    <div class="grid grid-2">
+      <div class="card"><div class="card-meta" style="margin-bottom:10px">manual QA</div><div class="card-title" style="font-size:17px">"Take me through the buy flow and tell me what broke."</div><div class="card-body" style="margin-top:8px">Codex opens the app, walks the journey, annotates each step, surfaces anomalies. The manual tester reviews the run instead of executing 200 steps by hand.</div></div>
+      <div class="card"><div class="card-meta" style="margin-bottom:10px">PMs &amp; designers</div><div class="card-title" style="font-size:17px">"What does the current state of the activation flow look like?"</div><div class="card-body" style="margin-top:8px">No need to install dev tools. Codex captures the flow visually with prose annotations. PMs review in Slack.</div></div>
+      <div class="card"><div class="card-meta" style="margin-bottom:10px">customer support</div><div class="card-title" style="font-size:17px">"Try to reproduce ticket SC-9412."</div><div class="card-body" style="margin-top:8px">CS pastes the ticket. Codex opens the relevant URL, attempts the repro, returns "repros / doesn't repro" with screenshots — feeds into the multimodal triage pipeline.</div></div>
+      <div class="card"><div class="card-meta" style="margin-bottom:10px">debugging</div><div class="card-title" style="font-size:17px">"Compare staging and pre-prod plans pages side-by-side."</div><div class="card-body" style="margin-top:8px">Codex opens both URLs in sequence (allowed-listed), screenshots, hands off to the visual diff analyzer.</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="prose">
+      <h2>What I learned rolling this out</h2>
+      <ul>
+        <li><strong>"Always ask" is the underrated default.</strong> Friction-as-a-feature. Non-technical users actually <em>want</em> the gate &mdash; it teaches them what the agent is about to do.</li>
+        <li><strong>Allowed domains scale with usage.</strong> Started narrow, added domains as they came up. Most teams stabilized at ~12 allowed domains after two weeks.</li>
+        <li><strong>The settings panel is the trust surface.</strong> When QA could see "annotation screenshots: always include" and "approval: always ask," they trusted the tool faster than any onboarding doc could've taught.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer class="site-foot">
+  <div class="foot-grid">
+    <div class="foot-col">
+      <h4>// Anmol</h4>
+      <p style="color:var(--text-muted);max-width:340px;font-size:14px;line-height:1.6;margin:0">QA Engineer building deterministic test systems for AI-era products. Available for the right team.</p>
+    </div>
+    <div class="foot-col">
+      <h4>// pages</h4>
+      <ul>
+        <li><a href="index.html">home</a></li>
+        <li><a href="work.html">work</a></li>
+        <li><a href="visual-diff.html">visual diff</a></li>
+        <li><a href="aio-tcc.html">aio tcc</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>// outbound</h4>
+      <ul>
+        <li><a href="writing.html">writing</a></li>
+        <li><a href="https://medium.com/@anmolsoin1">medium</a></li>
+        <li><a href="https://linkedin.com/in/mrnewdelhi">linkedin</a></li>
+        <li><a href="https://github.com/MrNewDelhi">github</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>// contact</h4>
+      <ul>
+        <li><a href="mailto:anmolsoin1@gmail.com">anmolsoin1@gmail.com</a></li>
+        <li><a href="about.html">about</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-status">
+    <span class="item"><span class="dot"></span> all systems · operational</span>
+    <span class="item">build · <span data-deploy-ts>—</span></span>
+    <span class="item">v1.0.0 · 41 specs · 132 assertions</span>
+  </div>
+</footer>
+<script src="site.js"></script>
+<script src="console-widget.js"></script>
+</body>
+</html>

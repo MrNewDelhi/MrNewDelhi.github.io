@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<title>Writing · Anmol</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&display=swap" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-logo" title="Try tapping me 7 times">
+      <span class="dot"></span>
+      <span>anmol<span style="color: var(--pass)">.</span>qa</span>
+    </div>
+    <div class="nav-links">
+      <a href="index.html">home</a>
+      <a href="work.html">work</a>
+      <a href="visual-diff.html">visual diff</a>
+      <a href="aio-tcc.html">aio tcc</a>
+      <a href="writing.html" aria-current="page">writing</a>
+      <a href="about.html">about</a>
+    </div>
+    <div class="nav-status">
+      <span class="dot"></span>
+      <span>all systems · operational</span>
+    </div>
+  </div>
+</nav>
+
+<section class="block" style="padding-top:64px;padding-bottom:24px">
+  <div class="wrap">
+    <div class="section-index">/writing</div>
+    <h1 class="h1" style="max-width: 880px; margin-bottom: 12px">
+      Notes from the QA console<span style="color:var(--pass)">.</span>
+    </h1>
+    <p class="lead" style="margin: 0; max-width: 720px;">
+      Industry POV and lessons from production. Most pieces live on Medium and cross-link back here for the case-study version.
+    </p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:24px">
+      <a class="btn btn-primary" href="https://medium.com/@anmolsoin1" target="_blank">read on medium →</a>
+      <span class="btn" style="cursor:default">rss · coming soon</span>
+    </div>
+  </div>
+</section>
+
+<section class="block" style="padding-top: 24px">
+  <div class="wrap">
+
+    <article class="card" style="margin-bottom: 16px" id="post-pinned">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
+        <span class="badge badge-pass">pinned · medium</span>
+        <span class="badge badge-muted">essay</span>
+        <span class="badge badge-muted">7 min</span>
+      </div>
+      <h2 class="h2" style="margin-bottom:8px">Pro tip: Teach your LLMs the business, not the trivia</h2>
+      <p class="muted">
+        Don&#39;t fill LLM memory with "what I ate" reminders. Use it for stable business context: business rules, product constraints, key flows, eligibility logic, decision boundaries. RAG is for fresh source-backed knowledge. Memory / skills are for durable product understanding.
+      </p>
+      <div class="card-foot">
+        <span class="muted">medium · @anmolsoin1</span>
+        <a href="https://medium.com/@anmolsoin1/pro-tip-teach-your-llms-the-business-not-the-trivia-22921fa7532c" class="arrow" target="_blank">→</a>
+      </div>
+    </article>
+
+    <article class="card" style="margin-bottom: 16px" id="post-ai-agents-qa">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
+        <span class="badge badge-pass">linkedin · repost</span>
+        <span class="badge badge-muted">4 min read</span>
+        <span class="badge badge-muted">2025</span>
+      </div>
+      <h2 class="h2" style="margin-bottom:8px">We introduced AI agents to speed up QA automation</h2>
+      <p class="muted">
+        Reposted with commentary on how AI agents changed the QA automation workflow — the parts that worked, the parts that didn&#39;t, and what "AI-accelerated QA" actually looks like in a production MVNE.
+      </p>
+      <div class="card-foot">
+        <span class="muted">linkedin · @mrnewdelhi</span>
+        <a href="https://www.linkedin.com/posts/mrnewdelhi_we-introduced-ai-agents-to-speed-up-qa-automation-activity-7461622694837579778-NXQD" class="arrow" target="_blank">→</a>
+      </div>
+    </article>
+
+    <article class="card" style="margin-bottom: 16px" id="post-hitl">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
+        <span class="badge badge-info">essay</span>
+        <span class="badge badge-muted">7 min</span>
+        <span class="badge badge-muted">Feb 2026</span>
+      </div>
+      <h2 class="h2" style="margin-bottom:8px">AI accelerates. Humans still decide.</h2>
+      <p class="muted">
+        Notes on why every agent I ship has a human-in-the-loop boundary — and why the cost calculus for autonomous AI is often worse than it looks. Reposted on LinkedIn from Pradeep Shinde&#39;s sharp satire on agents-on-agents.
+      </p>
+      <div class="card-foot">
+        <span class="muted">on this site · also on linkedin</span>
+        <a href="essay-ai-hitl.html" class="arrow">→</a>
+      </div>
+    </article>
+
+    <article class="card" style="margin-bottom: 16px" id="post-2">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
+        <span class="badge badge-pass">case study</span>
+        <span class="badge badge-muted">12 min</span>
+        <span class="badge badge-muted">Jan 2026</span>
+      </div>
+      <h2 class="h2" style="margin-bottom:8px">Surviving two prod outages with a mock harness</h2>
+      <p class="muted">
+        What I'd do again, and what I'd never do again. The mock-at-the-edge pattern, when it works, and when it papers over a real architecture problem.
+      </p>
+      <div class="card-foot">
+        <span class="muted">medium · @anmolsoin1</span>
+        <a href="https://medium.com/@anmolsoin1" class="arrow">→</a>
+      </div>
+    </article>
+
+    <article class="card" style="margin-bottom: 16px" id="post-3">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
+        <span class="badge badge-warn">build log</span>
+        <span class="badge badge-muted">6 min</span>
+        <span class="badge badge-muted">Dec 2025</span>
+      </div>
+      <h2 class="h2" style="margin-bottom:8px">A 200-line Postgres service replaced 4 hours/week</h2>
+      <p class="muted">
+        How a tiny test-data account pool became the most-loved internal tool on the QA team — and the design choices that made it sticky.
+      </p>
+      <div class="card-foot">
+        <span class="muted">medium · @anmolsoin1</span>
+        <a href="https://medium.com/@anmolsoin1" class="arrow">→</a>
+      </div>
+    </article>
+
+    <article class="card" style="margin-bottom: 16px" id="post-4">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
+        <span class="badge badge-info">essay</span>
+        <span class="badge badge-muted">10 min</span>
+        <span class="badge badge-muted">Nov 2025</span>
+      </div>
+      <h2 class="h2" style="margin-bottom:8px">Locator maintenance is the boring tax on mobile automation</h2>
+      <p class="muted">
+        The case for a multi-model self-healing framework. Why DOM heuristics alone aren't enough, and what changed when we layered a vision model in.
+      </p>
+      <div class="card-foot">
+        <span class="muted">medium · @anmolsoin1</span>
+        <a href="https://medium.com/@anmolsoin1" class="arrow">→</a>
+      </div>
+    </article>
+
+    <article class="card" style="margin-bottom: 16px" id="post-5">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
+        <span class="badge badge-pass">case study</span>
+        <span class="badge badge-muted">9 min</span>
+        <span class="badge badge-muted">Oct 2025</span>
+      </div>
+      <h2 class="h2" style="margin-bottom:8px">Triaging customer tickets with video + Gemini 3</h2>
+      <p class="muted">
+        The customer sent a 4-minute screen recording and a one-line Jira ticket. How a multimodal pipeline turned that into actionable repro steps with structured metadata.
+      </p>
+      <div class="card-foot">
+        <span class="muted">medium · @anmolsoin1</span>
+        <a href="https://medium.com/@anmolsoin1" class="arrow">→</a>
+      </div>
+    </article>
+
+    <p class="muted text-center" style="margin-top: 32px; font-family: var(--font-mono); font-size: 13px">
+      // links updated as posts publish on medium · <a href="https://medium.com/@anmolsoin1" style="color:var(--pass)" target="_blank">medium.com/@anmolsoin1</a>
+    </p>
+  </div>
+</section>
+
+<footer class="site-foot">
+  <div class="foot-grid">
+    <div class="foot-col">
+      <h4>// Anmol</h4>
+      <p style="color:var(--text-muted);max-width:340px;font-size:14px;line-height:1.6;margin:0">
+        QA Engineer building deterministic test systems for AI-era products. Available for the right team.
+      </p>
+    </div>
+    <div class="foot-col">
+      <h4>// pages</h4>
+      <ul>
+        <li><a href="index.html">home</a></li>
+        <li><a href="work.html">work</a></li>
+        <li><a href="visual-diff.html">visual diff</a></li>
+        <li><a href="aio-tcc.html">aio tcc</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>// outbound</h4>
+      <ul>
+        <li><a href="writing.html">writing</a></li>
+        <li><a href="https://medium.com/@anmolsoin1">medium</a></li>
+        <li><a href="https://linkedin.com/in/mrnewdelhi">linkedin</a></li>
+        <li><a href="https://github.com/mrnewdelhi">github</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>// contact</h4>
+      <ul>
+        <li><a href="mailto:anmolsoin1@gmail.com">anmolsoin1@gmail.com</a></li>
+        <li><a href="about.html">about</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-status">
+    <span class="item"><span class="dot"></span> all systems · operational</span>
+    <span class="item">build · <span data-deploy-ts>—</span></span>
+    <span class="item">v1.0.0 · 41 specs · 132 assertions</span>
+  </div>
+</footer>
+
+<script src="site.js"></script>
+<script src="console-widget.js"></script>
+</body>
+</html>

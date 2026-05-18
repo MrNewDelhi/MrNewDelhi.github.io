@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<title>Mailosaur MCP · Anmol</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&display=swap" />
+<link rel="stylesheet" href="styles.css" />
+
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-logo" title="Try tapping me 7 times">
+      <span class="dot"></span>
+      <span>anmol<span style="color: var(--pass)">.</span>qa</span>
+    </div>
+    <div class="nav-links">
+      <a href="index.html">home</a>
+      <a href="work.html">work</a>
+      <a href="visual-diff.html">visual diff</a>
+      <a href="aio-tcc.html">aio tcc</a>
+      <a href="writing.html">writing</a>
+      <a href="about.html">about</a>
+    </div>
+    <div class="nav-status">
+      <span class="dot"></span>
+      <span>all systems · operational</span>
+    </div>
+  </div>
+</nav>
+
+<section class="block" style="padding-top:64px;padding-bottom:40px">
+  <div class="wrap">
+    <div class="section-index">case study · /mailosaur-mcp</div>
+    <h1 class="h1" style="max-width: 880px; margin-bottom: 12px">Mailosaur MCP<span style="color:var(--pass)">.</span></h1>
+    <p class="lead" style="margin: 0; max-width: 760px;">An MCP tool for email testing that wraps Mailosaur's API. Made automation specs &mdash; and AI agents &mdash; able to assert against transactional emails (OTPs, order confirmations, password resets) without writing per-spec polling glue. Built during Lotusflare.</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:24px">
+      <span class="badge badge-pass">shipped · lotusflare</span>
+      <span class="badge badge-info">MCP tool</span>
+      <span class="badge badge-info">mailosaur → gmail</span>
+      <span class="badge badge-muted">node · typescript</span>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px">
+      <a class="btn btn-primary" href="https://github.com/MrNewDelhi/mailosaur-mcp" target="_blank">↗ github.com/MrNewDelhi/mailosaur-mcp</a>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 01 · the problem</div>
+        <h2>Every spec was rewriting email-polling glue.</h2>
+      </div>
+    </div>
+    <div class="prose">
+      <p>Mailosaur is great. But you don't want every automation spec writing its own "poll for an OTP email, parse it, extract the code, return it." That's a pattern.</p>
+      <p>And once we started running AI agents (Codex / browser-use harnesses), the cost of <em>not</em> having a clean tool for this became obvious &mdash; agents kept hallucinating shell commands to grep through stdout.</p>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 02 · tools exposed</div>
+        <h2>The MCP surface.</h2>
+      </div>
+    </div>
+    <ul class="spec-list">
+      <li><div><h4>wait_for_email</h4><p>Wait for an email matching filters (to, subject, body regex) with a configurable timeout. Returns the full message or times out cleanly.</p></div></li>
+      <li><div><h4>extract_otp</h4><p>Wait, then regex out a 4–8 digit code. The default pattern works for most transactional templates.</p></div></li>
+      <li><div><h4>extract_link</h4><p>Wait, then return the first (or named) link from the email body. Handy for password resets and activation flows.</p></div></li>
+      <li><div><h4>delete_messages</h4><p>Clear the test inbox before a run so flaky leftovers don't poison the next spec.</p></div></li>
+      <li><div><h4>list_inbox</h4><p>For debugging &mdash; show the agent what's actually in the inbox when a wait fails.</p></div></li>
+    </ul>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 03 · usage</div>
+        <h2>What a Playwright spec calls.</h2>
+      </div>
+    </div>
+    <pre class="code"><span class="c">// before · per-spec polling glue</span>
+<span class="k">const</span> message = <span class="k">await</span> mailosaur.messages.search({
+  server: SERVER_ID,
+  sentTo: email,
+  timeout: <span class="m">30000</span>,
+  errorOnTimeout: <span class="m">true</span>,
+});
+<span class="k">const</span> otp = message.html.codes[<span class="m">0</span>].value;
+
+<span class="c">// after · one tool call from anywhere (spec or agent)</span>
+<span class="k">const</span> otp = <span class="k">await</span> mcp.call(<span class="s">'mailosaur.extract_otp'</span>, { to: email, timeout: <span class="m">30000</span> });</pre>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 04 · the migration</div>
+        <h2>Then we replaced Mailosaur entirely.</h2>
+      </div>
+    </div>
+    <div class="prose">
+      <p>The MCP layer's quiet win: once it abstracted Mailosaur behind a tool, swapping the backend was a small change. We migrated email testing to a budget-friendly Gmail + Google Groups setup &mdash; same MCP surface, team-wide inbox visibility, lower bill.</p>
+      <p>The specs didn't change. The agents didn't notice. That's the whole pitch.</p>
+    </div>
+  </div>
+</section>
+
+<footer class="site-foot">
+  <div class="foot-grid">
+    <div class="foot-col">
+      <h4>// Anmol</h4>
+      <p style="color:var(--text-muted);max-width:340px;font-size:14px;line-height:1.6;margin:0">QA Engineer building deterministic test systems for AI-era products. Available for the right team.</p>
+    </div>
+    <div class="foot-col">
+      <h4>// pages</h4>
+      <ul>
+        <li><a href="index.html">home</a></li>
+        <li><a href="work.html">work</a></li>
+        <li><a href="visual-diff.html">visual diff</a></li>
+        <li><a href="aio-tcc.html">aio tcc</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>// outbound</h4>
+      <ul>
+        <li><a href="writing.html">writing</a></li>
+        <li><a href="https://medium.com/@anmolsoin1">medium</a></li>
+        <li><a href="https://linkedin.com/in/mrnewdelhi">linkedin</a></li>
+        <li><a href="https://github.com/MrNewDelhi">github</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>// contact</h4>
+      <ul>
+        <li><a href="mailto:anmolsoin1@gmail.com">anmolsoin1@gmail.com</a></li>
+        <li><a href="about.html">about</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-status">
+    <span class="item"><span class="dot"></span> all systems · operational</span>
+    <span class="item">build · <span data-deploy-ts>—</span></span>
+    <span class="item">v1.0.0 · 41 specs · 132 assertions</span>
+  </div>
+</footer>
+<script src="site.js"></script>
+<script src="console-widget.js"></script>
+</body>
+</html>

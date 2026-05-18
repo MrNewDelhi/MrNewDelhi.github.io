@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<title>Skeleton Loader Handling · Anmol</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&display=swap" />
+<link rel="stylesheet" href="styles.css" />
+
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-logo" title="Try tapping me 7 times">
+      <span class="dot"></span>
+      <span>anmol<span style="color: var(--pass)">.</span>qa</span>
+    </div>
+    <div class="nav-links">
+      <a href="index.html">home</a>
+      <a href="work.html">work</a>
+      <a href="visual-diff.html">visual diff</a>
+      <a href="aio-tcc.html">aio tcc</a>
+      <a href="writing.html">writing</a>
+      <a href="about.html">about</a>
+    </div>
+    <div class="nav-status">
+      <span class="dot"></span>
+      <span>all systems · operational</span>
+    </div>
+  </div>
+</nav>
+
+<section class="block" style="padding-top:64px;padding-bottom:40px">
+  <div class="wrap">
+    <div class="section-index">case study · /skeleton-loader</div>
+    <h1 class="h1" style="max-width: 880px; margin-bottom: 12px">Stabilizing through skeletons<span style="color:var(--pass)">.</span></h1>
+    <p class="lead" style="margin: 0; max-width: 760px;">A small but high-impact pattern: don't take a screenshot until the page is actually done loading. Reduced flaky visual tests by roughly half on the Visual Diff Analyzer. Spec-style writeup of the wait-for-stable pattern.</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:24px">
+      <span class="badge badge-pass">production · lotusflare</span>
+      <span class="badge badge-info">playwright</span>
+      <span class="badge badge-muted">stabilization pattern</span>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="prose">
+      <h2>The trap</h2>
+      <p>You add a visual regression test. It passes. Tomorrow it fails. Today the screenshot has skeleton tiles. Yesterday it had the real content. Same URL, same browser, same viewport.</p>
+      <p>That's not bug detection. That's a race between the screenshot trigger and the network. And it makes visual regression worthless &mdash; the team stops trusting the suite.</p>
+      <h2>The pattern</h2>
+      <p>Wait for <em>structural</em> stability before capturing. Not just <code>networkidle</code>. Specifically:</p>
+      <ol>
+        <li><strong>Skeleton elements gone.</strong> Watch the DOM for any element with <code>[data-skeleton]</code>, <code>[aria-busy="true"]</code>, or a shimmer-effect class. Wait until none are present for two consecutive RAFs.</li>
+        <li><strong>Spinners and indeterminate loaders settled.</strong> Same pattern with role-based selectors (<code>[role="progressbar"]</code>).</li>
+        <li><strong>Layout stable.</strong> Compute the bounding box of the main content container at frame N and N+1. Total shift &lt; 1px in both dimensions.</li>
+        <li><strong>Bounded network idle.</strong> Network idle as a check, but capped at 5s so an analytics ping doesn't keep the spec waiting forever.</li>
+      </ol>
+      <h2>The escape hatch</h2>
+      <p>Some pages are <em>intentionally</em> animated (a live chat counter, a price ticker). The helper takes an <code>ignoreSelectors</code> argument so the analyzer can know "this part will always be moving — capture anyway."</p>
+      <h2>Result</h2>
+      <p>Once shipped: flaky visual-regression runs dropped by ~50% with no other change. The team started trusting the suite, which is the whole game.</p>
+    </div>
+
+<pre class="code"><span class="c">// helpers/wait-for-stable.ts</span>
+<span class="k">export async function</span> waitForStable(page, opts = {}) {
+  <span class="k">const</span> { ignoreSelectors = [], maxWaitMs = <span class="m">10000</span>, stableFrames = <span class="m">2</span> } = opts;
+  <span class="k">const</span> start = Date.now();
+
+  <span class="c">// 1) wait for skeletons + loaders</span>
+  <span class="k">await</span> page.waitForFunction(() =&gt; {
+    <span class="k">const</span> sels = [<span class="s">'[data-skeleton]'</span>, <span class="s">'[aria-busy="true"]'</span>, <span class="s">'.skeleton'</span>, <span class="s">'[role="progressbar"]'</span>];
+    <span class="k">return</span> !sels.some(s =&gt; document.querySelector(s));
+  }, { timeout: maxWaitMs });
+
+  <span class="c">// 2) layout stability over N frames</span>
+  <span class="k">let</span> stable = <span class="m">0</span>, lastRect = null;
+  <span class="k">while</span> (stable &lt; stableFrames &amp;&amp; Date.now() - start &lt; maxWaitMs) {
+    <span class="k">const</span> rect = <span class="k">await</span> page.evaluate(() =&gt; document.body.getBoundingClientRect().toJSON());
+    <span class="k">if</span> (lastRect &amp;&amp; Math.abs(rect.height - lastRect.height) &lt; <span class="m">1</span>) stable++; <span class="k">else</span> stable = <span class="m">0</span>;
+    lastRect = rect;
+    <span class="k">await</span> page.waitForTimeout(<span class="m">16</span>);
+  }
+
+  <span class="c">// 3) bounded network idle</span>
+  <span class="k">await</span> page.waitForLoadState(<span class="s">'networkidle'</span>, { timeout: <span class="m">5000</span> }).catch(() =&gt; {});
+}</pre>
+  </div>
+</section>
+
+<footer class="site-foot">
+  <div class="foot-grid">
+    <div class="foot-col">
+      <h4>// Anmol</h4>
+      <p style="color:var(--text-muted);max-width:340px;font-size:14px;line-height:1.6;margin:0">QA Engineer building deterministic test systems for AI-era products. Available for the right team.</p>
+    </div>
+    <div class="foot-col">
+      <h4>// pages</h4>
+      <ul>
+        <li><a href="index.html">home</a></li>
+        <li><a href="work.html">work</a></li>
+        <li><a href="visual-diff.html">visual diff</a></li>
+        <li><a href="aio-tcc.html">aio tcc</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>// outbound</h4>
+      <ul>
+        <li><a href="writing.html">writing</a></li>
+        <li><a href="https://medium.com/@anmolsoin1">medium</a></li>
+        <li><a href="https://linkedin.com/in/mrnewdelhi">linkedin</a></li>
+        <li><a href="https://github.com/MrNewDelhi">github</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>// contact</h4>
+      <ul>
+        <li><a href="mailto:anmolsoin1@gmail.com">anmolsoin1@gmail.com</a></li>
+        <li><a href="about.html">about</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-status">
+    <span class="item"><span class="dot"></span> all systems · operational</span>
+    <span class="item">build · <span data-deploy-ts>—</span></span>
+    <span class="item">v1.0.0 · 41 specs · 132 assertions</span>
+  </div>
+</footer>
+<script src="site.js"></script>
+<script src="console-widget.js"></script>
+</body>
+</html>

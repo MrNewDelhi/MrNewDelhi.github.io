@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<title>ADB MCP · Anmol</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&display=swap" />
+<link rel="stylesheet" href="styles.css" />
+
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-logo" title="Try tapping me 7 times">
+      <span class="dot"></span>
+      <span>anmol<span style="color: var(--pass)">.</span>qa</span>
+    </div>
+    <div class="nav-links">
+      <a href="index.html">home</a>
+      <a href="work.html">work</a>
+      <a href="visual-diff.html">visual diff</a>
+      <a href="aio-tcc.html">aio tcc</a>
+      <a href="writing.html">writing</a>
+      <a href="about.html">about</a>
+    </div>
+    <div class="nav-status">
+      <span class="dot"></span>
+      <span>all systems · operational</span>
+    </div>
+  </div>
+</nav>
+
+<section class="block" style="padding-top:64px;padding-bottom:40px">
+  <div class="wrap">
+    <div class="section-index">case study · /adb-mcp · open source</div>
+    <h1 class="h1" style="max-width: 880px; margin-bottom: 12px">ADB MCP<span style="color:var(--pass)">.</span></h1>
+    <p class="lead" style="margin: 0; max-width: 720px;">An open-source MCP server that gives AI assistants and MCP clients structured access to Android Debug Bridge through typed, validated tools. Built during my time at L&amp;T to drive Android QA workflows from agents instead of raw shell glue.</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:24px">
+      <span class="badge badge-pass">open source</span>
+      <span class="badge badge-info">MCP server</span>
+      <span class="badge badge-info">38 tools</span>
+      <span class="badge badge-info">zod schemas</span>
+      <span class="badge badge-muted">node · typescript</span>
+      <span class="badge badge-muted">LTTS</span>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px">
+      <a class="btn btn-primary" href="https://github.com/MrNewDelhi/adb-mcp" target="_blank">↗ github.com/MrNewDelhi/adb-mcp</a>
+      <a class="btn" href="https://github.com/MrNewDelhi/adb-mcp#readme" target="_blank">readme</a>
+      <a class="btn" href="https://www.linkedin.com/posts/mrnewdelhi_built-an-open-source-mcp-server-for-android-share-7460617635471290368-kxR_" target="_blank">↗ linkedin post</a>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 01 · what's in it</div>
+        <h2>38 ADB tools, schema-validated.</h2>
+      </div>
+    </div>
+    <div class="grid grid-3">
+      <div class="card"><div class="card-meta">devices</div><div class="card-body" style="margin-top:8px">list, connect, disconnect, reboot, IP setup over WiFi</div></div>
+      <div class="card"><div class="card-meta">shell</div><div class="card-body" style="margin-top:8px">arbitrary commands, with structured stdout/stderr</div></div>
+      <div class="card"><div class="card-meta">packages</div><div class="card-body" style="margin-top:8px">install, uninstall, list, info, clear data, force-stop</div></div>
+      <div class="card"><div class="card-meta">files</div><div class="card-body" style="margin-top:8px">push, pull, ls, rm, mkdir on /sdcard</div></div>
+      <div class="card"><div class="card-meta">screenshots</div><div class="card-body" style="margin-top:8px">capture full or partial, save to host</div></div>
+      <div class="card"><div class="card-meta">logs &amp; bugreports</div><div class="card-body" style="margin-top:8px">logcat with filters, bugreport zip generation</div></div>
+      <div class="card"><div class="card-meta">intents</div><div class="card-body" style="margin-top:8px">start activities, send broadcasts, deep-links</div></div>
+      <div class="card"><div class="card-meta">settings</div><div class="card-body" style="margin-top:8px">global / system / secure read &amp; write</div></div>
+      <div class="card"><div class="card-meta">+ more</div><div class="card-body" style="margin-top:8px">input (tap, swipe, text), screen recording, dumpsys, am, pm</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 02 · why</div>
+        <h2>Stop turning Android workflows into shell glue.</h2>
+      </div>
+    </div>
+    <div class="prose">
+      <p>Every Android QA project ends up with a folder full of <code>run-on-device-X.sh</code>, <code>install-and-test.sh</code>, <code>capture-bugreport.sh</code>. Each engineer writes their own. Each is fragile in a different way.</p>
+      <p>This puts an MCP layer in front of ADB so any agent (Codex, Claude, Cursor, custom) can:</p>
+      <ul>
+        <li>Call a typed, validated tool instead of guessing at shell flags.</li>
+        <li>Get structured output back instead of stdout to grep.</li>
+        <li>Use MCP resources and prompt templates for common debugging flows.</li>
+        <li>Drive emulators and physical devices the same way (USB or WiFi).</li>
+      </ul>
+      <p>What this unlocks for QA: AI-driven bug triage that opens the app, taps through a flow, captures logcat + screenshot + bugreport, and writes the structured artifact back to the ticket. All from one tool.</p>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 03 · safety surface</div>
+        <h2>Schemas keep agents from drifting.</h2>
+      </div>
+    </div>
+    <pre class="code"><span class="c">// example tool: install_apk</span>
+<span class="k">const</span> installApkSchema = z.object({
+  deviceId: z.string().regex(<span class="s">/^[A-Za-z0-9-_:.]+$/</span>),
+  apkPath:  z.string().refine(p =&gt; existsSync(p), <span class="s">'apk not found'</span>),
+  reinstall: z.boolean().default(<span class="m">true</span>),
+  grantAllPermissions: z.boolean().default(<span class="m">false</span>),
+});
+
+<span class="k">export const</span> installApk = {
+  name: <span class="s">'install_apk'</span>,
+  description: <span class="s">'Install an APK on a specific device with optional reinstall and permission grants.'</span>,
+  inputSchema: installApkSchema,
+  handler: <span class="k">async</span> (args) =&gt; { <span class="c">/* run adb install -r -g */</span> }
+};</pre>
+    <p class="muted" style="font-family:var(--font-mono);font-size:12.5px">// every tool has a Zod schema · agents can't pass garbage in · errors are structured, not raw exit codes</p>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 04 · skill included</div>
+        <h2>LLM skill bundled in the repo.</h2>
+      </div>
+    </div>
+    <div class="prose">
+      <p>The repo ships with a companion LLM skill (Markdown) that teaches an agent how to use the 38 tools coherently &mdash; "to triage a bug, first list devices, then install the apk, then drive the repro flow, then capture logcat + screenshot." Drop it into Claude Projects, Custom GPTs, Codex skills, or any MCP client that supports skill files.</p>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 05 · related</div>
+        <h2>Adjacent.</h2>
+      </div>
+    </div>
+    <div class="grid grid-3">
+      <a href="case-self-healing.html" class="card linkable"><div class="card-title" style="font-size:17px;margin-bottom:8px">Self-Healing Framework</div><div class="card-body">The Appium framework this MCP supplements for mobile QA.</div><div class="card-foot"><span class="muted">read</span><span class="arrow">→</span></div></a>
+      <a href="case-mailosaur-mcp.html" class="card linkable"><div class="card-title" style="font-size:17px;margin-bottom:8px">Mailosaur MCP</div><div class="card-body">Another QA-flavored MCP server I built during Lotusflare.</div><div class="card-foot"><span class="muted">read</span><span class="arrow">→</span></div></a>
+      <a href="case-multimodal-triage.html" class="card linkable"><div class="card-title" style="font-size:17px;margin-bottom:8px">Multimodal Triage</div><div class="card-body">The agent pipeline that ADB MCP feeds into for mobile reproductions.</div><div class="card-foot"><span class="muted">read</span><span class="arrow">→</span></div></a>
+    </div>
+  </div>
+</section>
+
+<footer class="site-foot">
+  <div class="foot-grid">
+    <div class="foot-col">
+      <h4>// Anmol</h4>
+      <p style="color:var(--text-muted);max-width:340px;font-size:14px;line-height:1.6;margin:0">QA Engineer building deterministic test systems for AI-era products. Available for the right team.</p>
+    </div>
+    <div class="foot-col">
+      <h4>// pages</h4>
+      <ul>
+        <li><a href="index.html">home</a></li>
+        <li><a href="work.html">work</a></li>
+        <li><a href="visual-diff.html">visual diff</a></li>
+        <li><a href="aio-tcc.html">aio tcc</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>// outbound</h4>
+      <ul>
+        <li><a href="writing.html">writing</a></li>
+        <li><a href="https://medium.com/@anmolsoin1">medium</a></li>
+        <li><a href="https://linkedin.com/in/mrnewdelhi">linkedin</a></li>
+        <li><a href="https://github.com/MrNewDelhi">github</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>// contact</h4>
+      <ul>
+        <li><a href="mailto:anmolsoin1@gmail.com">anmolsoin1@gmail.com</a></li>
+        <li><a href="about.html">about</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-status">
+    <span class="item"><span class="dot"></span> all systems · operational</span>
+    <span class="item">build · <span data-deploy-ts>—</span></span>
+    <span class="item">v1.0.0 · 41 specs · 132 assertions</span>
+  </div>
+</footer>
+<script src="site.js"></script>
+<script src="console-widget.js"></script>
+</body>
+</html>

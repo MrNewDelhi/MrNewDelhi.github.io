@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<title>Multimodal Ticket Triage · Anmol</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&display=swap" />
+<link rel="stylesheet" href="styles.css" />
+<style>
+  /* Architecture diagram styles, scoped to this page */
+  .arch {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    padding: 28px;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    overflow-x: auto;
+  }
+  .arch-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+  .arch-stage {
+    display: grid;
+    grid-template-columns: 24px 180px 1fr;
+    gap: 14px;
+    align-items: start;
+  }
+  .arch-num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--pass);
+    padding-top: 12px;
+  }
+  .arch-box {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--pass);
+    border-radius: var(--r-sm);
+    padding: 10px 14px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-strong);
+  }
+  .arch-box .small { color: var(--text-muted); font-size: 11px; font-weight: 400; margin-top: 2px; display:block;}
+  .arch-detail {
+    padding-top: 10px;
+    font-family: var(--font-sans);
+    color: var(--text-muted);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .arch-detail code {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    background: var(--bg);
+    color: var(--pass);
+    padding: 1px 5px;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+  }
+  .arch-arrow {
+    text-align: center;
+    color: var(--text-dim);
+    font-family: var(--font-mono);
+    margin: -6px 0;
+    grid-column: 1 / -1;
+  }
+  .branch {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    padding: 18px 20px;
+    border-left: 3px solid var(--warn);
+  }
+  .branch-head {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--warn);
+    margin-bottom: 6px;
+  }
+  .branch .when {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .branch .what {
+    color: var(--text-muted);
+    font-size: 14px;
+    line-height: 1.55;
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-logo" title="Try tapping me 7 times">
+      <span class="dot"></span>
+      <span>anmol<span style="color: var(--pass)">.</span>qa</span>
+    </div>
+    <div class="nav-links">
+      <a href="index.html">home</a>
+      <a href="work.html">work</a>
+      <a href="visual-diff.html">visual diff</a>
+      <a href="aio-tcc.html">aio tcc</a>
+      <a href="writing.html">writing</a>
+      <a href="about.html">about</a>
+    </div>
+    <div class="nav-status">
+      <span class="dot"></span>
+      <span>all systems · operational</span>
+    </div>
+  </div>
+</nav>
+
+<section class="block" style="padding-top:64px;padding-bottom:40px">
+  <div class="wrap">
+    <div class="section-index">case study · /multimodal-triage</div>
+    <h1 class="h1" style="max-width: 880px; margin-bottom: 12px">
+      Multimodal ticket triage<span style="color:var(--pass)">.</span>
+    </h1>
+    <p class="lead" style="margin: 0; max-width: 760px;">
+      A Gemini 3 pipeline that takes a Jira epic (or a single ticket) with a video attachment + a one-line summary, extracts repro steps, validates them via Playwright MCP, and adds a fully-grounded RCA comment back on the ticket. The whole point is to <em>assist</em> &mdash; the agent never fixes prod, it only writes down what it sees.
+    </p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:24px">
+      <span class="badge badge-pass">shipped</span>
+      <span class="badge badge-info">gemini 3 multimodal</span>
+      <span class="badge badge-info">playwright MCP</span>
+      <span class="badge badge-info">JAM MCP</span>
+      <span class="badge badge-muted">sentry · victoria logs · github</span>
+      <span class="badge badge-muted">JIRA API</span>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 01 · the input</div>
+        <h2>Customers send video and one line.</h2>
+      </div>
+    </div>
+    <div class="prose">
+      <p>The customer support flow looks like this:</p>
+      <ol>
+        <li>A customer hits something weird.</li>
+        <li>They screen-record. They write a one-line summary in Jira.</li>
+        <li>The CS team gets the ticket. They have to: watch the video, transcribe the steps, file the proper bug.</li>
+        <li>That's where wrong information gets in &mdash; "user tapped X" when they actually tapped Y, missed a step, summarized too aggressively.</li>
+      </ol>
+      <p>So we built the agent to do steps 3 and 4. It watches the video, extracts the steps, replays them, and writes them back as a Jira comment. CS still drives. The agent just stops typos.</p>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 02 · architecture</div>
+        <h2>The pipeline.</h2>
+        <p>Starts at a Jira epic (or a single ticket — the pipeline adapts). Ends with a grounded RCA comment back on the ticket.</p>
+      </div>
+    </div>
+
+    <div class="arch">
+
+      <div class="arch-stage">
+        <div class="arch-num">01</div>
+        <div class="arch-box">Jira API · fetch input
+          <span class="small">epic or single ticket</span></div>
+        <div class="arch-detail">
+          If the input is an epic, expand it into the list of child tickets. If it's a single ticket, skip this expansion layer entirely &mdash; <code>adapt to available context</code>.
+        </div>
+      </div>
+      <div class="arch-arrow">↓</div>
+
+      <div class="arch-stage">
+        <div class="arch-num">02</div>
+        <div class="arch-box">Per-ticket fetch
+          <span class="small">attachment URLs + description</span></div>
+        <div class="arch-detail">
+          Pull all attachments and the description. Branch by attachment type: <code>video</code>, <code>.har</code>, or text-only.
+        </div>
+      </div>
+      <div class="arch-arrow">↓</div>
+
+      <div class="arch-stage">
+        <div class="arch-num">03</div>
+        <div class="arch-box">Gemini 3 multimodal
+          <span class="small">video → steps</span></div>
+        <div class="arch-detail">
+          For video tickets: pass the attachment + the description to Gemini 3 with a prompt asking for canonical Jira steps. Output is a structured list (one action per step).
+        </div>
+      </div>
+      <div class="arch-arrow">↓</div>
+
+      <div class="arch-stage">
+        <div class="arch-num">04</div>
+        <div class="arch-box">Playwright MCP
+          <span class="small">execute &amp; validate steps</span></div>
+        <div class="arch-detail">
+          Run the extracted steps against the staging / pre-prod environment via Playwright MCP. Capture screenshots at each step and a final reproduce flag (<code>reproduces</code> / <code>cannot reproduce</code> / <code>blocked</code>).
+        </div>
+      </div>
+      <div class="arch-arrow">↓</div>
+
+      <div class="arch-stage">
+        <div class="arch-num">05</div>
+        <div class="arch-box">Grounded RCA
+          <span class="small">sentry · victoria logs · github MCP</span></div>
+        <div class="arch-detail">
+          Cross-reference the reproduced behavior with Sentry events, Victoria Logs, and GitHub MCP (recent commits to the affected component). Look for a single, well-bounded code change that explains the regression.
+        </div>
+      </div>
+      <div class="arch-arrow">↓</div>
+
+      <div class="arch-stage">
+        <div class="arch-num">06</div>
+        <div class="arch-box">Write back to Jira
+          <span class="small">comment only — never autonomous actions</span></div>
+        <div class="arch-detail">
+          Post a structured comment with: extracted steps, repro result, suspected commit / Sentry event, and confidence level. The human reviews and either uses it as-is or rejects.
+          <br><br>
+          <strong style="color: var(--warn)">Hard constraint:</strong> the agent <em>never</em> writes to prod. If the issue affects production, it stops at "add the comment" and explicitly flags the human-needed bit.
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 03 · adaptability</div>
+        <h2>How it handles the input variations.</h2>
+        <p>The point isn't to fill the process gap. It's to assist the existing process to adapt situationally.</p>
+      </div>
+    </div>
+
+    <div class="grid grid-2">
+
+      <div class="branch">
+        <div class="branch-head">branch A · standard path</div>
+        <div class="when">Input: <strong>Epic with linked tickets, each ticket has a video</strong></div>
+        <div class="what">
+          Full pipeline. Fan out to each linked ticket, run video → steps → Playwright → RCA → comment for each.
+        </div>
+      </div>
+
+      <div class="branch">
+        <div class="branch-head">branch B · solo ticket</div>
+        <div class="when">Input: <strong>Single Jira ticket sent directly (not via epic)</strong></div>
+        <div class="what">
+          Skips the epic-expansion layer entirely. Treats the one ticket as the unit of work. <code>adapt to available context</code>.
+        </div>
+      </div>
+
+      <div class="branch">
+        <div class="branch-head">branch C · HAR file</div>
+        <div class="when">Input: <strong>Ticket has an attached .har</strong></div>
+        <div class="what">
+          Skips the video → steps extraction. Goes straight to logs (Victoria + Sentry) and GitHub commits via MCP for the RCA. Faster path when network evidence is already on the ticket.
+        </div>
+      </div>
+
+      <div class="branch">
+        <div class="branch-head">branch D · description-only</div>
+        <div class="when">Input: <strong>Text description, no video, no HAR</strong></div>
+        <div class="what">
+          Reads the description for repro pointers. Searches Sentry for similar patterns by error signature. Falls back to a "needs more info" comment if nothing matches.
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 04 · constraints</div>
+        <h2>What it doesn't do.</h2>
+      </div>
+    </div>
+
+    <div class="prose">
+      <ul>
+        <li><strong>Doesn't fix anything.</strong> The agent only adds repro steps + RCA evidence. No PRs, no Jira status changes, no prod traffic.</li>
+        <li><strong>Doesn't act on prod issues.</strong> If the reproduction confirms a live prod bug, the agent escalates by leaving the comment with severity tagged &mdash; a human pages on-call.</li>
+        <li><strong>Doesn't pretend to know.</strong> Confidence level is in the comment. "High confidence: this is commit abc123. Low confidence: similar Sentry pattern but no clear cause." The CS lead knows whether to trust.</li>
+        <li><strong>Doesn't replace CS.</strong> The CS team still owns customer comms, prioritization, and decision-making. The agent removes the "transcribe a 4-minute video into steps" toil.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 05 · rollout</div>
+        <h2>How it scaled across teams.</h2>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>Started as a personal Gemini 3 pipeline I ran from my own AI Studio. Worked. Got copied. Got requested. Eventually wrapped it through <strong>JAM MCP</strong> so any team's customer support / PM could trigger it from a Jam recording with one-click.</p>
+      <p>That's the lift &mdash; one-click ticket-with-video → one-click triaged-with-repro-steps. Across teams, with the same agent.</p>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 06 · related</div>
+        <h2>Adjacent.</h2>
+      </div>
+    </div>
+    <div class="grid grid-3">
+      <a href="case-llm-eval.html" class="card linkable">
+        <div class="card-title" style="font-size:17px;margin-bottom:8px">LLM evaluation rubrics</div>
+        <div class="card-body">How I picked Gemini 3 multimodal for this pipeline over Claude / GPT.</div>
+        <div class="card-foot"><span class="muted">read</span><span class="arrow">→</span></div>
+      </a>
+      <a href="case-slack-bots.html" class="card linkable">
+        <div class="card-title" style="font-size:17px;margin-bottom:8px">Slack bots</div>
+        <div class="card-body">The triage-from-Slack flow that built on this pipeline.</div>
+        <div class="card-foot"><span class="muted">read</span><span class="arrow">→</span></div>
+      </a>
+      <a href="essay-ai-hitl.html" class="card linkable">
+        <div class="card-title" style="font-size:17px;margin-bottom:8px">Why HITL is non-negotiable</div>
+        <div class="card-body">An essay on why I never let this agent take autonomous actions.</div>
+        <div class="card-foot"><span class="muted">read</span><span class="arrow">→</span></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer class="site-foot">
+  <div class="foot-grid">
+    <div class="foot-col">
+      <h4>// Anmol</h4>
+      <p style="color:var(--text-muted);max-width:340px;font-size:14px;line-height:1.6;margin:0">
+        QA Engineer building deterministic test systems for AI-era products. Available for the right team.
+      </p>
+    </div>
+    <div class="foot-col">
+      <h4>// pages</h4>
+      <ul>
+        <li><a href="index.html">home</a></li>
+        <li><a href="work.html">work</a></li>
+        <li><a href="visual-diff.html">visual diff</a></li>
+        <li><a href="aio-tcc.html">aio tcc</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>// outbound</h4>
+      <ul>
+        <li><a href="writing.html">writing</a></li>
+        <li><a href="https://medium.com/@anmolsoin1">medium</a></li>
+        <li><a href="https://linkedin.com/in/mrnewdelhi">linkedin</a></li>
+        <li><a href="https://github.com/MrNewDelhi">github</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>// contact</h4>
+      <ul>
+        <li><a href="mailto:anmolsoin1@gmail.com">anmolsoin1@gmail.com</a></li>
+        <li><a href="about.html">about</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-status">
+    <span class="item"><span class="dot"></span> all systems · operational</span>
+    <span class="item">build · <span data-deploy-ts>—</span></span>
+    <span class="item">v1.0.0 · 41 specs · 132 assertions</span>
+  </div>
+</footer>
+
+<script src="site.js"></script>
+<script src="console-widget.js"></script>
+</body>
+</html>

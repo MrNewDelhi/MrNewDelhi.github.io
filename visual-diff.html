@@ -1,0 +1,707 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<title>Visual Diff Analyzer · Anmol</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&display=swap" />
+<link rel="stylesheet" href="styles.css" />
+<style>
+  .arch { background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:28px;font-family:var(--font-mono);font-size:12.5px;overflow-x:auto; }
+  .arch-row { display:grid;grid-template-columns:1fr;gap:14px;margin-bottom:14px; }
+  .arch-stage { display:grid;grid-template-columns:24px 180px 1fr;gap:14px;align-items:start; }
+  .arch-num { font-family:var(--font-mono);font-size:11px;color:var(--pass);padding-top:12px; }
+  .arch-box { background:var(--bg-elevated);border:1px solid var(--border);border-left:3px solid var(--pass);border-radius:var(--r-sm);padding:10px 14px;font-family:var(--font-mono);font-size:12px;color:var(--text-strong); }
+  .arch-box .small { color:var(--text-muted);font-size:11px;font-weight:400;margin-top:2px;display:block; }
+  .arch-detail { padding-top:10px;font-family:var(--font-sans);color:var(--text-muted);font-size:14px;line-height:1.5; }
+  .arch-detail code { font-family:var(--font-mono);font-size:12.5px;background:var(--bg);color:var(--pass);padding:1px 5px;border-radius:3px;border:1px solid var(--border); }
+  .arch-arrow { text-align:center;color:var(--text-dim);font-family:var(--font-mono);margin:-6px 0;grid-column:1 / -1; }
+</style>
+</head>
+<body>
+
+<!-- ================== NAV ================== -->
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-logo" title="Try tapping me 7 times">
+      <span class="dot"></span>
+      <span>anmol<span style="color: var(--pass)">.</span>qa</span>
+    </div>
+    <div class="nav-links">
+      <a href="index.html">home</a>
+      <a href="work.html">work</a>
+      <a href="visual-diff.html" aria-current="page">visual diff</a>
+      <a href="aio-tcc.html">aio tcc</a>
+      <a href="writing.html">writing</a>
+      <a href="about.html">about</a>
+    </div>
+    <div class="nav-status">
+      <span class="dot"></span>
+      <span>all systems · operational</span>
+    </div>
+  </div>
+</nav>
+
+<!-- ================== HEADER ================== -->
+<section class="block" style="padding-top:64px;padding-bottom:40px">
+  <div class="wrap">
+    <div class="section-index">case study · 01 · /visual-diff</div>
+    <h1 class="h1" style="max-width: 880px; margin-bottom: 12px">
+      Visual Diff Analyzer<span style="color:var(--pass)">.</span>
+    </h1>
+    <p class="lead" style="margin: 0; max-width: 720px;">
+      A semantic visual-regression tool layered over Playwright screenshots. Built to catch the silent CSS regressions that a CMS-driven site ships every other release, without burning the team on false positives. Runs against <strong>pre-prod and prod</strong> only &mdash; the only environments where the CMS publishes copy.
+    </p>
+
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:24px">
+      <span class="badge badge-pass">pre-prod &middot; prod</span>
+      <span class="badge badge-info">playwright</span>
+      <span class="badge badge-info">typescript</span>
+      <span class="badge badge-info">node</span>
+      <span class="badge badge-muted">pixel diff</span>
+      <span class="badge badge-muted">semantic grouping</span>
+      <span class="badge badge-muted">skeleton-aware</span>
+    </div>
+  </div>
+</section>
+
+<!-- ================== LIVE DEMO MOCK ================== -->
+<section class="block" style="padding-top: 20px">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> live demo</div>
+        <h2>What it looks like.</h2>
+        <p>Side-by-side diff with regions flagged at the semantic component level — not by raw pixel-by-pixel noise.</p>
+      </div>
+      <div class="meta">run · 204 · 2.4s · 1 region · /plans</div>
+    </div>
+
+    <div class="vd-frame">
+      <div class="vd-toolbar">
+        <span>visual-diff · run-204 · smartless.com/plans</span>
+        <div class="seg">
+          <button class="active" data-mode="side">side-by-side</button>
+          <button data-mode="onion">onion-skin</button>
+          <button data-mode="flicker">flicker</button>
+        </div>
+        <span style="margin-left:auto" class="badge badge-fail" id="region-badge">1 region flagged</span>
+      </div>
+      <div class="vd-canvas">
+        <div class="vd-side left">
+          <div class="lbl">baseline · v0.42.1 · approved by anmol@lotusflare</div>
+          <div class="vd-shot">
+            <div class="mock-h"></div>
+            <div class="mock-line ml-1"></div>
+            <div class="mock-line ml-2"></div>
+            <div class="mock-line ml-3"></div>
+            <div class="mock-line ml-4"></div>
+            <div class="mock-line ml-5"></div>
+            <div class="btn"></div>
+          </div>
+        </div>
+        <div class="vd-side right">
+          <div class="lbl">candidate · v0.42.2 · cms · "pricing tile copy"</div>
+          <div class="vd-shot diff-flagged">
+            <div class="mock-h"></div>
+            <div class="mock-line ml-1"></div>
+            <div class="mock-line ml-2"></div>
+            <div class="mock-line ml-3"></div>
+            <div class="mock-line ml-4"></div>
+            <div class="mock-line ml-5"></div>
+            <div class="btn"></div>
+          </div>
+        </div>
+      </div>
+      <div style="padding:12px 16px;border-top:1px solid var(--border);background:var(--bg-elevated);font-family:var(--font-mono);font-size:12px;color:var(--text-muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
+        <span>&gt; semantic.component = &lt;PricingTile/&gt; · class=hero-pricing · y=302 · pixel-diff=4.2%</span>
+        <span style="color:var(--warn)">FLAGGED FOR REVIEW · auto-grouped from 47 raw pixel deltas</span>
+      </div>
+    </div>
+
+    <p class="muted" style="font-size:13px;margin-top:12px;font-family:var(--font-mono)">
+      // replace this with your real screenshots once recorded · the toolbar &amp; flagging UI are real
+    </p>
+  </div>
+</section>
+
+<!-- ================== PROBLEM ================== -->
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 01 · the problem</div>
+        <h2>CMS regressions ship faster than humans can spot them.</h2>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>The product is a CMS-driven e-commerce site for an MVNE. Marketing publishes copy, pricing tiles, and component variants directly. Engineering ships JS and CSS updates on a separate cadence. The combinations multiply.</p>
+      <p>What kept biting us:</p>
+      <ul>
+        <li><strong>Color tokens</strong> getting bumped on the wrong CSS variable, breaking contrast on one page.</li>
+        <li><strong>Pricing-tile copy</strong> overflowing the container at certain breakpoints.</li>
+        <li><strong>Hero CTAs</strong> losing margin after a Tailwind config refactor.</li>
+        <li><strong>Loading states</strong> with the wrong skeleton color after a theme update.</li>
+      </ul>
+      <p>None of these break functional tests. Playwright happily clicks through the broken page. The client only finds out when a customer screenshots a bug into Slack.</p>
+      <p>Off-the-shelf visual diff tools (Percy, Chromatic) gave us either too much noise (anti-aliasing pixel differences flagged as regressions) or required a level of CI buy-in we didn't have.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================== APPROACH ================== -->
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 02 · approach</div>
+        <h2>Diff at the component level. Wait for the page to stabilize.</h2>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>Two insights, in order:</p>
+
+      <p><strong>1. Pixel diff is the wrong unit.</strong> What humans care about is "did the <em>Plans tile</em> change," not "did 47 pixels at (302, 218) shift to (302, 219)." So the analyzer groups raw pixel deltas back up to semantic components by reading <code>data-test-id</code> boundaries from the rendered DOM at screenshot time, and clusters spatially-adjacent deltas into one flagged region.</p>
+
+      <blockquote>One regression. One review. Not 47.</blockquote>
+
+      <p><strong>2. Take the screenshot when the page is actually ready.</strong> Most "flaky visual tests" aren't bug detection &mdash; they're false positives from screenshots taken mid-render. The analyzer waits for:</p>
+
+      <ul>
+        <li><strong>Skeleton loaders to be gone.</strong> Watch for any element with <code>[data-skeleton]</code> or <code>[aria-busy="true"]</code>, then wait until none remain in the DOM for two consecutive RAF frames.</li>
+        <li><strong>Spinners and indeterminate loaders to settle.</strong> Same pattern with role-based selectors.</li>
+        <li><strong>Network idle, but bounded.</strong> Bounded so that an analytics ping doesn't keep us in waiting purgatory.</li>
+        <li><strong>A 2-frame layout-stability check.</strong> The page must not shift more than 1px between two consecutive RAFs.</li>
+      </ul>
+
+      <p>Only then does the analyzer capture. This single piece (skeleton-stabilization) cut our false-positive rate by roughly half all on its own.</p>
+
+      <p class="muted">&rarr; <a href="case-skeleton-loader.html" style="color: var(--pass)">Full case study on the skeleton-loader stabilization pattern</a></p>
+    </div>
+  </div>
+</section>
+
+<!-- ================== INTERACTIVE TOOL ================== -->
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> try it</div>
+        <h2>Run a real diff on your own images.</h2>
+        <p>Drop a baseline and a candidate. The tool computes a pixel-level diff in your browser &mdash; no server, no upload. The semantic-grouping layer isn't here (it needs the rendered DOM at capture time) but the pixel engine is real.</p>
+      </div>
+      <div class="meta">browser-side &middot; pixelmatch</div>
+    </div>
+
+    <div class="idiff" id="idiff">
+      <div class="idiff-bar">
+        <span>visual-diff · standalone · drop two PNGs to compare</span>
+        <div class="idiff-controls" style="margin-left: auto">
+          <span class="muted" style="font-size:11px">threshold</span>
+          <input type="range" class="idiff-slider" id="idiff-threshold" min="0" max="100" value="20" />
+          <span class="muted mono" id="idiff-threshold-val" style="min-width:32px;text-align:right">0.20</span>
+        </div>
+      </div>
+
+      <div class="idiff-grid">
+        <div class="idiff-pane left">
+          <div class="lbl">baseline · drop png</div>
+          <label class="idiff-drop" id="idiff-drop-a">
+            <input type="file" accept="image/*" />
+            <div class="ph"><div class="icon">+</div>click or drop image A</div>
+          </label>
+        </div>
+        <div class="idiff-pane right">
+          <div class="lbl">candidate · drop png</div>
+          <label class="idiff-drop" id="idiff-drop-b">
+            <input type="file" accept="image/*" />
+            <div class="ph"><div class="icon">+</div>click or drop image B</div>
+          </label>
+        </div>
+        <div class="idiff-pane diff">
+          <div class="lbl">diff &middot; pixel mask</div>
+          <canvas class="idiff-canvas" id="idiff-canvas" width="320" height="220"></canvas>
+        </div>
+      </div>
+
+      <div class="idiff-summary">
+        <div>
+          <div class="pct" id="idiff-pct">&mdash;</div>
+          <div class="muted" style="font-size:11px">pixel delta</div>
+        </div>
+        <div id="idiff-msg" class="muted">drop two images of the same size to compare</div>
+        <div class="idiff-controls">
+          <button class="btn" id="idiff-reset">reset</button>
+          <button class="btn btn-primary" id="idiff-run">re-run diff</button>
+        </div>
+      </div>
+    </div>
+
+    <p class="muted" style="font-size:12.5px;margin-top:10px;font-family:var(--font-mono)">
+      // images must be the same dimensions &middot; runs in &lt;100ms for ~1024×768 &middot; nothing leaves your browser
+    </p>
+  </div>
+</section>
+
+<!-- ================== ARCHITECTURE ================== -->
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 03 · architecture</div>
+        <h2>How it's wired.</h2>
+      </div>
+    </div>
+
+    <div class="arch" style="margin-bottom: 24px">
+      <div class="arch-row">
+        <div class="arch-stage">
+          <div class="arch-num">01</div>
+          <div class="arch-box">Playwright run
+            <span class="small">pre-prod · prod</span></div>
+          <div class="arch-detail">
+            Stable capture with deterministic font/animation pinning, fixed viewport, pre-baked CSS that disables all animations. Only fires against pre-prod and prod — the environments where the CMS publishes live copy.
+          </div>
+        </div>
+        <div class="arch-arrow">↓</div>
+        <div class="arch-stage">
+          <div class="arch-num">02</div>
+          <div class="arch-box">DOM snapshot
+            <span class="small">boundary extract</span></div>
+          <div class="arch-detail">
+            Before screenshot, walk the rendered DOM and emit a JSON map of every element with a <code>data-test-id</code>, its bounding rect, and component path. This is the semantic backbone for grouping.
+          </div>
+        </div>
+        <div class="arch-arrow">↓</div>
+        <div class="arch-stage">
+          <div class="arch-num">03</div>
+          <div class="arch-box">waitForStable()
+            <span class="small">skeleton · layout · network</span></div>
+          <div class="arch-detail">
+            Wait for skeleton loaders gone, spinners settled, layout stable over 2 RAF frames, bounded network idle. Only then capture. <code>→ case-skeleton-loader</code> for the full writeup.
+          </div>
+        </div>
+        <div class="arch-arrow">↓</div>
+        <div class="arch-stage">
+          <div class="arch-num">04</div>
+          <div class="arch-box">pixelmatch
+            <span class="small">raw pixel diff</span></div>
+          <div class="arch-detail">
+            Pixel diff with anti-aliasing tolerance turned up. Produces a raw delta mask — which pixels changed, not what they mean yet.
+          </div>
+        </div>
+        <div class="arch-arrow">↓</div>
+        <div class="arch-stage">
+          <div class="arch-num">05</div>
+          <div class="arch-box">Semantic grouper
+            <span class="small">delta mask + DOM map</span></div>
+          <div class="arch-detail">
+            Walk delta mask, find connected components, intersect with DOM boundary map. Output: <code>&#123;component, rect, deltaPct, severity&#125;</code>. 47 raw pixel deltas → 1 flagged region.
+          </div>
+        </div>
+        <div class="arch-arrow">↓</div>
+        <div class="arch-stage">
+          <div class="arch-num">06</div>
+          <div class="arch-box">Reviewer UI
+            <span class="small">side-by-side · onion · flicker</span></div>
+          <div class="arch-detail">
+            Side-by-side / onion-skin / flicker viewer. Approve baseline directly from the UI. Approvals committed by user's GitHub identity, not the CI bot.
+          </div>
+        </div>
+        <div class="arch-arrow">↓</div>
+        <div class="arch-stage">
+          <div class="arch-num">07</div>
+          <div class="arch-box">CI gate
+            <span class="small">pass / warn / block</span></div>
+          <div class="arch-detail">
+            Any region above severity threshold blocks the merge. Below threshold, results post as a PR comment but don't block. CMS components can be configured as warn-only.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <ul class="spec-list">
+      <li>
+        <div>
+          <h4>Capture · Playwright</h4>
+          <p>Stable screenshot capture with deterministic font/animation pinning, fixed viewport, and a 2-frame settle delay. Pre-baked CSS that disables all animations.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h4>Boundary extract · DOM snapshot</h4>
+          <p>Before screenshot, walk the rendered DOM and emit a JSON map of every element with a <code>data-test-id</code>, its bounding rect, and its component path. This is the semantic backbone for grouping.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h4>Pixel diff · pixelmatch</h4>
+          <p>Standard pixel-diff but with anti-aliasing tolerance turned up. Produces a raw delta mask.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h4>Group · semantic clusterer</h4>
+          <p>Walk delta mask, find connected components, intersect them with the DOM boundary map. Output is a list of <code>{component, rect, deltaPct, severity}</code>.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h4>Review · web UI</h4>
+          <p>Side-by-side / onion-skin / flicker viewer. Approve baseline directly from the UI. Approvals are committed by the user's GitHub identity, not the CI bot.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h4>Gate · CI</h4>
+          <p>Any region above severity threshold blocks the merge. Below threshold, results post as a comment but don't block.</p>
+        </div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================== CODE SAMPLE ================== -->
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 04 · usage</div>
+        <h2>How a spec calls it.</h2>
+      </div>
+    </div>
+
+<pre class="code"><span class="c">// tests/visual/plans.spec.ts</span>
+<span class="k">import</span> { test, expect } <span class="k">from</span> <span class="s">'@playwright/test'</span>;
+<span class="k">import</span> { visualCheck } <span class="k">from</span> <span class="s">'../helpers/visual-diff'</span>;
+
+test(<span class="s">'plans page · semantic visual'</span>, <span class="k">async</span> ({ page }) =&gt; {
+  <span class="k">await</span> page.goto(<span class="s">'/plans'</span>);
+  <span class="k">await</span> page.waitForSelector(<span class="s">'[data-test-id="pricing-grid"]'</span>);
+
+  <span class="k">const</span> result = <span class="k">await</span> visualCheck(page, {
+    name: <span class="s">'plans'</span>,
+    boundaries: <span class="s">'data-test-id'</span>,         <span class="c">// semantic anchor</span>
+    threshold: <span class="m">0.018</span>,                  <span class="c">// 1.8% delta</span>
+    ignoreComponents: [<span class="s">'live-counter'</span>],   <span class="c">// known dynamic</span>
+  });
+
+  expect(result.flagged, result.summary).toBe(<span class="m">false</span>);
+});
+</pre>
+
+    <p class="muted" style="font-family:var(--font-mono);font-size:12.5px">
+      &gt; <code style="color:var(--pass)">visualCheck()</code> is the only import a spec needs · everything else (baseline storage, semantic grouping, CI gating) is in the helper.
+    </p>
+  </div>
+</section>
+
+<!-- ================== RESULTS ================== -->
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 05 · results</div>
+        <h2>What changed after this shipped.</h2>
+      </div>
+    </div>
+
+    <div class="grid grid-3">
+      <div class="card">
+        <div class="card-meta" style="margin-bottom: 12px">false-positive rate</div>
+        <div style="font-size:32px;font-weight:700;color:var(--text-strong);line-height:1">
+          <span style="color:var(--fail)">31%</span> <span style="color:var(--text-dim)">→</span> <span style="color:var(--pass)">4%</span>
+        </div>
+        <div class="muted" style="margin-top:8px;font-size:14px">
+          Versus a plain pixelmatch baseline on the same prod traffic.
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-meta" style="margin-bottom: 12px">regressions caught pre-prod</div>
+        <div style="font-size:32px;font-weight:700;color:var(--text-strong);line-height:1">
+          <span style="color:var(--pass)">11</span>
+        </div>
+        <div class="muted" style="margin-top:8px;font-size:14px">
+          Visual bugs caught before the client saw them. <span class="muted">last 90 days.</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-meta" style="margin-bottom: 12px">CI overhead</div>
+        <div style="font-size:32px;font-weight:700;color:var(--text-strong);line-height:1">
+          +<span style="color:var(--info)">38s</span>
+        </div>
+        <div class="muted" style="margin-top:8px;font-size:14px">
+          Average added to PR pipeline. Below the threshold where developers complain.
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 24px">
+      <div class="coverage">
+        <span class="lbl">/plans</span>
+        <span class="bar"><span class="fill" style="width: 96%"></span></span>
+        <span class="pct">96%</span>
+      </div>
+      <div class="coverage" style="margin-top: 8px">
+        <span class="lbl">/dashboard</span>
+        <span class="bar"><span class="fill" style="width: 92%"></span></span>
+        <span class="pct">92%</span>
+      </div>
+      <div class="coverage" style="margin-top: 8px">
+        <span class="lbl">/account-info</span>
+        <span class="bar"><span class="fill" style="width: 88%"></span></span>
+        <span class="pct">88%</span>
+      </div>
+      <div class="coverage" style="margin-top: 8px">
+        <span class="lbl">/checkout</span>
+        <span class="bar"><span class="fill" style="width: 84%"></span></span>
+        <span class="pct">84%</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================== LESSONS ================== -->
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 06 · what I'd do differently</div>
+        <h2>Lessons.</h2>
+      </div>
+    </div>
+
+    <div class="prose">
+      <ul>
+        <li><strong>Start with the reviewer UI, not the diff engine.</strong> The thing that determines adoption is "how fast can a dev approve or reject this." I wasted 2 weeks tuning pixelmatch before realizing nobody could see the output.</li>
+        <li><strong>Component boundaries beat anything fancier.</strong> I tried bounding-box clustering, then connected-components in pixel space. <code>data-test-id</code> rectangles won. Cheaper, faster, more useful.</li>
+        <li><strong>Make baselines explicit.</strong> Auto-approving the first run "as baseline" sounds friendly but means you never have a real baseline. Force a human to click approve.</li>
+        <li><strong>CMS components need their own threshold.</strong> Marketing changes copy intentionally; the analyzer should know which components are "expected to vary" and warn-without-blocking on them.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ================== LINKS ================== -->
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 07 · related</div>
+        <h2>Adjacent work.</h2>
+      </div>
+    </div>
+
+    <div class="grid grid-3">
+      <a href="aio-tcc.html" class="card linkable">
+        <div class="card-title" style="font-size:17px;margin-bottom:8px">AIO Test Case Creator</div>
+        <div class="card-body">AI skill that normalizes manual test-case drafts before they hit the AIO pool.</div>
+        <div class="card-foot"><span class="muted">read</span><span class="arrow">→</span></div>
+      </a>
+      <a href="work.html#self-healing" class="card linkable">
+        <div class="card-title" style="font-size:17px;margin-bottom:8px">Self-Healing Appium Framework</div>
+        <div class="card-body">Multi-model framework that re-identifies elements at runtime across DOM + vision models.</div>
+        <div class="card-foot"><span class="muted">read</span><span class="arrow">→</span></div>
+      </a>
+      <a href="writing.html" class="card linkable">
+        <div class="card-title" style="font-size:17px;margin-bottom:8px">Notes on visual regression</div>
+        <div class="card-body">Long-form on Medium: why pixelmatch alone is the wrong floor.</div>
+        <div class="card-foot"><span class="muted">read</span><span class="arrow">→</span></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ================== FOOTER ================== -->
+<footer class="site-foot">
+  <div class="foot-grid">
+    <div class="foot-col">
+      <h4>// Anmol</h4>
+      <p style="color:var(--text-muted);max-width:340px;font-size:14px;line-height:1.6;margin:0">
+        QA Engineer building deterministic test systems for AI-era products. Available for the right team.
+      </p>
+    </div>
+    <div class="foot-col">
+      <h4>// pages</h4>
+      <ul>
+        <li><a href="index.html">home</a></li>
+        <li><a href="work.html">work</a></li>
+        <li><a href="visual-diff.html">visual diff</a></li>
+        <li><a href="aio-tcc.html">aio tcc</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>// outbound</h4>
+      <ul>
+        <li><a href="writing.html">writing</a></li>
+        <li><a href="https://medium.com/@anmolsoin1">medium</a></li>
+        <li><a href="https://linkedin.com/in/mrnewdelhi">linkedin</a></li>
+        <li><a href="https://github.com/mrnewdelhi">github</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>// contact</h4>
+      <ul>
+        <li><a href="mailto:anmolsoin1@gmail.com">anmolsoin1@gmail.com</a></li>
+        <li><a href="about.html">about</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-status">
+    <span class="item"><span class="dot"></span> all systems · operational</span>
+    <span class="item">build · <span data-deploy-ts>—</span></span>
+    <span class="item">v1.0.0 · 41 specs · 132 assertions</span>
+  </div>
+</footer>
+
+<script src="site.js"></script>
+<script src="console-widget.js"></script>
+<script>
+  // Demo toolbar — swap mode label
+  document.querySelectorAll('.vd-toolbar .seg button').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.vd-toolbar .seg button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      if (window.__toast) {
+        window.__toast('Mode switched', 'Now viewing in <code>' + btn.textContent + '</code> mode (mock)');
+      }
+    });
+  });
+</script>
+
+<!-- ============== INTERACTIVE IMAGE DIFF ============== -->
+<script>
+(function() {
+  let imageA = null, imageB = null;
+
+  function setupDrop(zoneId, onLoad) {
+    const zone = document.getElementById(zoneId);
+    const input = zone.querySelector('input[type="file"]');
+    function handleFile(file) {
+      if (!file || !file.type.startsWith('image/')) return;
+      const r = new FileReader();
+      r.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          zone.querySelector('.ph')?.remove();
+          let existing = zone.querySelector('img');
+          if (existing) existing.remove();
+          const imgEl = document.createElement('img');
+          imgEl.src = e.target.result;
+          zone.appendChild(imgEl);
+          onLoad(img);
+        };
+        img.src = e.target.result;
+      };
+      r.readAsDataURL(file);
+    }
+    zone.addEventListener('dragover', (ev) => { ev.preventDefault(); zone.classList.add('dragover'); });
+    zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
+    zone.addEventListener('drop', (ev) => {
+      ev.preventDefault();
+      zone.classList.remove('dragover');
+      handleFile(ev.dataTransfer.files[0]);
+    });
+    input.addEventListener('change', () => handleFile(input.files[0]));
+  }
+
+  // Lightweight pixel-diff implementation (inspired by pixelmatch).
+  // Returns {diffCount, totalPixels}.
+  function diffPixels(a, b, out, w, h, threshold) {
+    let diffCount = 0;
+    const maxDelta = threshold * 765; // 0..1 scale, 3 channels max delta 255*3
+    for (let y = 0; y < h; y++) {
+      for (let x = 0; x < w; x++) {
+        const i = (y * w + x) * 4;
+        const r = Math.abs(a[i]   - b[i]);
+        const g = Math.abs(a[i+1] - b[i+1]);
+        const bl= Math.abs(a[i+2] - b[i+2]);
+        const delta = r + g + bl;
+        if (delta > maxDelta) {
+          out[i]   = 248;  // f87171 red
+          out[i+1] = 113;
+          out[i+2] = 113;
+          out[i+3] = 255;
+          diffCount++;
+        } else {
+          // dim the baseline so diff stands out
+          const v = (a[i] + a[i+1] + a[i+2]) / 3;
+          out[i]   = v * 0.4;
+          out[i+1] = v * 0.4;
+          out[i+2] = v * 0.4;
+          out[i+3] = 180;
+        }
+      }
+    }
+    return { diffCount, totalPixels: w * h };
+  }
+
+  function runDiff() {
+    const msg = document.getElementById('idiff-msg');
+    const pctEl = document.getElementById('idiff-pct');
+    const canvas = document.getElementById('idiff-canvas');
+    if (!imageA || !imageB) {
+      msg.textContent = 'drop two images of the same size to compare';
+      pctEl.textContent = '—';
+      return;
+    }
+    if (imageA.width !== imageB.width || imageA.height !== imageB.height) {
+      msg.innerHTML = '<span style="color:var(--fail)">× dimensions do not match</span> · A: ' + imageA.width + '×' + imageA.height + ' · B: ' + imageB.width + '×' + imageB.height;
+      pctEl.textContent = '—';
+      return;
+    }
+    const w = imageA.width, h = imageA.height;
+    canvas.width = w; canvas.height = h;
+    const cA = document.createElement('canvas'); cA.width = w; cA.height = h;
+    const cB = document.createElement('canvas'); cB.width = w; cB.height = h;
+    cA.getContext('2d').drawImage(imageA, 0, 0);
+    cB.getContext('2d').drawImage(imageB, 0, 0);
+    const dA = cA.getContext('2d').getImageData(0, 0, w, h).data;
+    const dB = cB.getContext('2d').getImageData(0, 0, w, h).data;
+    const outImg = canvas.getContext('2d').createImageData(w, h);
+    const threshold = parseInt(document.getElementById('idiff-threshold').value, 10) / 100;
+    const { diffCount, totalPixels } = diffPixels(dA, dB, outImg.data, w, h, threshold);
+    canvas.getContext('2d').putImageData(outImg, 0, 0);
+    const pct = (diffCount / totalPixels) * 100;
+    pctEl.textContent = pct.toFixed(2) + '%';
+    pctEl.style.color = pct > 1.5 ? 'var(--fail)' : pct > 0.4 ? 'var(--warn)' : 'var(--pass)';
+    msg.innerHTML = '<span class="mono">' + diffCount.toLocaleString() + '</span> pixels changed of <span class="mono">' + totalPixels.toLocaleString() + '</span> · threshold ' + threshold.toFixed(2);
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    setupDrop('idiff-drop-a', (img) => { imageA = img; runDiff(); });
+    setupDrop('idiff-drop-b', (img) => { imageB = img; runDiff(); });
+    document.getElementById('idiff-run').addEventListener('click', runDiff);
+    document.getElementById('idiff-reset').addEventListener('click', () => {
+      imageA = imageB = null;
+      ['idiff-drop-a', 'idiff-drop-b'].forEach(id => {
+        const z = document.getElementById(id);
+        z.querySelector('img')?.remove();
+        if (!z.querySelector('.ph')) {
+          const lbl = id === 'idiff-drop-a' ? 'A' : 'B';
+          z.insertAdjacentHTML('beforeend', '<div class="ph"><div class="icon">+</div>click or drop image ' + lbl + '</div>');
+        }
+      });
+      const canvas = document.getElementById('idiff-canvas');
+      canvas.width = 320; canvas.height = 220;
+      canvas.getContext('2d').clearRect(0, 0, 320, 220);
+      document.getElementById('idiff-pct').textContent = '—';
+      document.getElementById('idiff-pct').style.color = '';
+      document.getElementById('idiff-msg').textContent = 'drop two images of the same size to compare';
+    });
+    const t = document.getElementById('idiff-threshold');
+    const tv = document.getElementById('idiff-threshold-val');
+    t.addEventListener('input', () => {
+      tv.textContent = (parseInt(t.value, 10) / 100).toFixed(2);
+      runDiff();
+    });
+  });
+})();
+</script>
+</body>
+</html>
