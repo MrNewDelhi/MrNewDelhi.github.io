@@ -159,12 +159,14 @@
     console.log('%c  • Wrote the LLM eval rubric in a weekend; it\'s been catching regressions ever since.', css('#e8e6df', '400'));
     console.log('');
     console.log('%ccontact → %canmolsoin1@gmail.com', css('#8b8e95', '400'), css('#93c5fd', '400'));
+    console.log('%cresume  → %cassets/resume/Anmol_Soin_QA_Engineer_Resume.pdf', css('#8b8e95', '400'), css('#93c5fd', '400'));
     return undefined;
   };
 
   window.hire = function() {
     console.log('%cBecause %cyou will save more than you spend.', css('#5eead4'), css('#e8e6df', '400'));
     console.log('%cReach out: %canmolsoin1@gmail.com', css('#8b8e95', '400'), css('#93c5fd', '400'));
+    console.log('%cResume: %cassets/resume/Anmol_Soin_QA_Engineer_Resume.pdf', css('#8b8e95', '400'), css('#93c5fd', '400'));
     return undefined;
   };
 

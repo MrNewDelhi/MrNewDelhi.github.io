@@ -328,6 +328,7 @@
           '  • wrote the LLM eval rubric in a weekend; it\'s been catching regressions ever since',
           '',
           '<span class="c-dim">contact →</span> <span class="c-info">anmolsoin1@gmail.com</span>',
+          '<span class="c-dim">resume  →</span> <span class="c-info">assets/resume/Anmol_Soin_QA_Engineer_Resume.pdf</span>',
         ].join('\n');
       }
     },
