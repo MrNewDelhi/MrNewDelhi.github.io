@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<title>QA Agent Skill · Anmol</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="A production-grade Playwright QA agent skill stack for strict POM-first automation, locator discipline, no-static-wait synchronization, production guards, audits, and AI agent workflows." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&display=swap" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-logo" title="Try tapping me 7 times">
+      <span class="dot"></span>
+      <span>anmol<span style="color: var(--pass)">.</span>qa</span>
+    </div>
+    <div class="nav-links">
+      <a href="index.html">home</a>
+      <a href="work.html">work</a>
+      <a href="visual-diff.html">visual diff</a>
+      <a href="aio-tcc.html">aio tcc</a>
+      <a href="writing.html">writing</a>
+      <a href="about.html">about</a>
+    </div>
+    <div class="nav-status">
+      <span class="dot"></span>
+      <span>all systems · operational</span>
+    </div>
+  </div>
+</nav>
+
+<section class="block" style="padding-top:64px;padding-bottom:40px">
+  <div class="wrap">
+    <div class="section-index">case study · /qa-agent-skill · open source</div>
+    <h1 class="h1" style="max-width: 920px; margin-bottom: 12px">QA Agent Skill<span style="color:var(--pass)">.</span></h1>
+    <p class="lead" style="margin: 0; max-width: 760px;">A production-grade Playwright QA automation skill stack for AI coding agents: strict POM architecture, durable locators, no-static-wait synchronization, production safety, feature flags, mocking, CI observability, and security-aware artifacts.</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:24px">
+      <span class="badge badge-pass">skill stack · open source</span>
+      <span class="badge badge-info">playwright</span>
+      <span class="badge badge-info">23 sub-skills</span>
+      <span class="badge badge-muted">typescript · POM</span>
+      <span class="badge badge-muted">audit scripts</span>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px">
+      <a class="btn btn-primary" href="https://github.com/MrNewDelhi/qa-agent-skill" target="_blank">↗ github.com/MrNewDelhi/qa-agent-skill</a>
+      <a class="btn" href="https://medium.com/@anmolsoin1/i-built-a-production-grade-playwright-qa-agent-skill-stack-here-is-why-it-matters-8dbe8c7bd38f?postPublishedType=repub" target="_blank">↗ medium article</a>
+      <a class="btn" href="https://www.linkedin.com/posts/mrnewdelhi_qaautomation-playwright-aiagents-share-7462577879827111936-HBJD?utm_source=share&utm_medium=member_desktop&amp;rcm=ACoAACmx_FsBGgjxIZqUmKuF1IpAV37hYIRdzbI" target="_blank">↗ linkedin post</a>
+    </div>
+  </div>
+</section>
+
+<section class="block" style="padding-top:24px">
+  <div class="wrap">
+    <img src="assets/medium-cover-qa-agent-playwright.png" alt="Editorial cover for the Playwright QA agent skill stack" style="width:100%;border:1px solid var(--border);border-radius:var(--r-md);box-shadow:0 24px 80px rgba(0,0,0,0.32)" />
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 01 · operating model</div>
+        <h2>Durable automation, not throwaway scripts.</h2>
+      </div>
+    </div>
+    <div class="grid grid-3">
+      <div class="card"><div class="card-meta">entrypoint</div><div class="card-title" style="font-size:17px;margin-top:6px">One global qa-agent skill</div><div class="card-body" style="margin-top:8px">Agents start from a single index, grep first, then load only the sub-skill and references needed for the task.</div></div>
+      <div class="card"><div class="card-meta">architecture</div><div class="card-title" style="font-size:17px;margin-top:6px">Strict POM-first framework</div><div class="card-body" style="margin-top:8px">Specs express business intent. Page objects, components, fixtures, config, and utilities own the implementation details.</div></div>
+      <div class="card"><div class="card-meta">enforcement</div><div class="card-title" style="font-size:17px;margin-top:6px">Contracts plus audits</div><div class="card-body" style="margin-top:8px">Shell audits catch static waits, forbidden locators, force clicks, focused tests, and production guard bypasses.</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 02 · hard contracts</div>
+        <h2>What the agent is not allowed to ship.</h2>
+      </div>
+    </div>
+    <div class="prose">
+      <ul>
+        <li>No static waits in final code.</li>
+        <li>No <code>networkidle</code> waits in tests.</li>
+        <li>No text, placeholder, label, role-name, XPath, or DOM-chain locators in final framework code.</li>
+        <li>No raw selectors in specs.</li>
+        <li>No destructive production testing by default.</li>
+        <li>No secrets in committed files, traces, HARs, screenshots, videos, or logs.</li>
+        <li>No accepting generated Playwright code until it is hardened into the framework style.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 03 · what's inside</div>
+        <h2>Twenty-three indexed sub-skills.</h2>
+      </div>
+    </div>
+    <div class="grid grid-3">
+      <div class="card"><div class="card-meta">core framework</div><div class="card-body" style="margin-top:8px">Project init, POM architecture, test authoring, data fixtures, feature flags, and environment guards.</div></div>
+      <div class="card"><div class="card-meta">reliability</div><div class="card-body" style="margin-top:8px">Locator contract, synchronization waits, flake prevention, fast automation, CI observability, and maintenance governance.</div></div>
+      <div class="card"><div class="card-meta">agent safety</div><div class="card-body" style="margin-top:8px">Auth credentials, MCP/CLI guidance, codegen hardening, repo research, review audit, and artifact hygiene.</div></div>
+      <div class="card"><div class="card-meta">coverage</div><div class="card-body" style="margin-top:8px">API testing, mocking, accessibility, visual baselines, mobile emulation, and Playwright feature selection.</div></div>
+      <div class="card"><div class="card-meta">template</div><div class="card-body" style="margin-top:8px">A TypeScript Playwright POM scaffold with fixtures, env config, page objects, docs, and audit scripts.</div></div>
+      <div class="card"><div class="card-meta">philosophy</div><div class="card-body" style="margin-top:8px">The skill teaches an agent when fast code is useful and when fast code becomes automation debt.</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 04 · install surface</div>
+        <h2>It ships with a scaffold and audits.</h2>
+      </div>
+    </div>
+    <pre class="code"><span class="c"># create a new strict Playwright POM project</span>
+<span class="k">bash</span> bin/init-playwright-pom-project.sh /path/to/new-project
+
+<span class="c"># audit an existing repo before calling it production-ready</span>
+<span class="k">bash</span> bin/audit-forbidden-patterns.sh /path/to/repo
+<span class="k">bash</span> bin/static-wait-audit.sh /path/to/repo
+<span class="k">bash</span> bin/locator-audit.sh /path/to/repo
+<span class="k">bash</span> bin/prod-guard-audit.sh /path/to/repo</pre>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 05 · launch post</div>
+        <h2>LinkedIn announcement.</h2>
+      </div>
+      <div class="meta"><a href="https://www.linkedin.com/posts/mrnewdelhi_qaautomation-playwright-aiagents-share-7462577879827111936-HBJD?utm_source=share&utm_medium=member_desktop&amp;rcm=ACoAACmx_FsBGgjxIZqUmKuF1IpAV37hYIRdzbI" target="_blank">open on linkedin →</a></div>
+    </div>
+    <div class="embed-split">
+      <div class="prose">
+        <p>The launch post frames the core idea: most automation fails when it treats QA as script generation. This repo turns Playwright work into a governed skill system an AI agent can follow, audit, and improve.</p>
+        <p>For recruiters and engineering teams, this is the proof point I want visible: I do not just write tests. I encode QA engineering judgment into reusable systems.</p>
+      </div>
+      <div class="card" style="padding:10px;overflow:hidden">
+        <iframe src="https://www.linkedin.com/embed/feed/update/urn:li:share:7462577879827111936?collapsed=1" height="1334" width="504" frameborder="0" allowfullscreen="" title="Embedded post" style="width:100%;max-width:504px;display:block;margin:0 auto;border:0"></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="title">
+        <div class="section-label"><span class="marker">//</span> 06 · related</div>
+        <h2>Adjacent work.</h2>
+      </div>
+    </div>
+    <div class="grid grid-3">
+      <a href="aio-tcc.html" class="card linkable"><div class="card-title" style="font-size:17px;margin-bottom:8px">AIO Test Case Creator</div><div class="card-body">Another skill-style QA system, focused on normalizing manual test-case intake.</div><div class="card-foot"><span class="muted">read</span><span class="arrow">→</span></div></a>
+      <a href="case-llm-eval.html" class="card linkable"><div class="card-title" style="font-size:17px;margin-bottom:8px">LLM Evaluation Rubrics</div><div class="card-body">The model-selection and tool-call evaluation layer behind AI-assisted QA workflows.</div><div class="card-foot"><span class="muted">read</span><span class="arrow">→</span></div></a>
+      <a href="case-codex-browser.html" class="card linkable"><div class="card-title" style="font-size:17px;margin-bottom:8px">Codex In-Browser, Safely</div><div class="card-body">The safety posture for letting teammates use browser-capable AI agents.</div><div class="card-foot"><span class="muted">read</span><span class="arrow">→</span></div></a>
+    </div>
+  </div>
+</section>
+
+<footer class="site-foot">
+  <div class="foot-grid">
+    <div class="foot-col">
+      <h4>// Anmol</h4>
+      <p style="color:var(--text-muted);max-width:340px;font-size:14px;line-height:1.6;margin:0">QA Engineer building deterministic test systems for AI-era products. Available for the right team.</p>
+    </div>
+    <div class="foot-col">
+      <h4>// pages</h4>
+      <ul>
+        <li><a href="index.html">home</a></li>
+        <li><a href="work.html">work</a></li>
+        <li><a href="visual-diff.html">visual diff</a></li>
+        <li><a href="aio-tcc.html">aio tcc</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>// outbound</h4>
+      <ul>
+        <li><a href="writing.html">writing</a></li>
+        <li><a href="https://medium.com/@anmolsoin1">medium</a></li>
+        <li><a href="https://linkedin.com/in/mrnewdelhi">linkedin</a></li>
+        <li><a href="https://github.com/MrNewDelhi">github</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>// contact</h4>
+      <ul>
+        <li><a href="mailto:anmolsoin1@gmail.com">anmolsoin1@gmail.com</a></li>
+        <li><a href="assets/resume/Anmol_Soin_QA_Engineer_Resume.pdf">resume</a></li>
+        <li><a href="about.html">about</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-status">
+    <span class="item"><span class="dot"></span> all systems · operational</span>
+    <span class="item">build · <span data-deploy-ts>—</span></span>
+    <span class="item">v1.0.0 · 41 specs · 132 assertions</span>
+  </div>
+</footer>
+<script src="site.js"></script>
+<script src="console-widget.js"></script>
+</body>
+</html>

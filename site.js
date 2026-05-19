@@ -203,6 +203,7 @@
     'a': 'about.html',
     'r': 'writing.html',
     't': 'aio-tcc.html',
+    'q': 'case-qa-agent-skill.html',
   };
   document.addEventListener('keydown', (e) => {
     // Don't intercept while typing in input fields
@@ -248,6 +249,7 @@
       ['g w',        'Go to Work'],
       ['g v',        'Go to Visual Diff Analyzer'],
       ['g t',        'Go to AIO Test Case Creator'],
+      ['g q',        'Go to QA Agent Skill'],
       ['g r',        'Go to Writing'],
       ['g a',        'Go to About'],
       ['↑↑↓↓←→←→ba', '???'],

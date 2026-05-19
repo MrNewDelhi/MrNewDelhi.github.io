@@ -20,6 +20,10 @@
     'aio-tcc':   'aio-tcc.html',
     writing:     'writing.html',
     about:       'about.html',
+    qa:          'case-qa-agent-skill.html',
+    'qa-agent':  'case-qa-agent-skill.html',
+    'qa-agent-skill': 'case-qa-agent-skill.html',
+    'case-qa-agent-skill': 'case-qa-agent-skill.html',
     triage:      'case-multimodal-triage.html',
     multimodal:  'case-multimodal-triage.html',
     'multimodal-triage': 'case-multimodal-triage.html',
@@ -171,7 +175,7 @@
         '  CI/CD &amp; Infra       <span class="c-pass">96%</span>  <span class="c-dim">███████████████████░  </span> production',
         '  Leadership          <span class="c-pass">88%</span>  <span class="c-dim">█████████████████░░░  </span> active',
         '',
-        '  <span class="c-dim">type</span> <span class="c-pass">open work</span> <span class="c-dim">to see all 12 case studies</span>',
+        '  <span class="c-dim">type</span> <span class="c-pass">open work</span> <span class="c-dim">to see all 14 case studies</span>',
       ].join('\n')
     },
     stack: {
@@ -196,6 +200,7 @@
     ls: {
       desc: 'List all case studies',
       run: () => [
+        '<span class="c-pass">qa-agent-skill</span>      <span class="c-dim">Playwright QA agent skill stack · 23 sub-skills</span>',
         '<span class="c-pass">visual-diff</span>          <span class="c-dim">Visual Diff Analyzer — semantic pixel diff</span>',
         '<span class="c-pass">aio-tcc</span>              <span class="c-dim">AIO Test Case Creator skill</span>',
         '<span class="c-pass">multimodal-triage</span>    <span class="c-dim">Gemini 3 ticket triage pipeline</span>',
