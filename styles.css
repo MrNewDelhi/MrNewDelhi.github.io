@@ -474,17 +474,8 @@ section.block:first-of-type { padding-top: 40px; }
 .grid-2 { grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); }
 .grid-3 { grid-template-columns: repeat(3, 1fr); }
 @media (max-width: 900px) {
+  .grid-2 { grid-template-columns: 1fr; }
   .grid-3 { grid-template-columns: 1fr; }
-}
-
-.embed-split {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(280px, 540px);
-  gap: 24px;
-  align-items: start;
-}
-@media (max-width: 900px) {
-  .embed-split { grid-template-columns: 1fr; }
 }
 
 /* =====================================================
