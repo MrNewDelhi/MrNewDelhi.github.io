@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<title>Scalable Automation Design Patterns · Anmol</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="Six design patterns for automation that survives unstable UIs, config drift, and production unpredictability — anchored to the Scoped Action Pattern." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&display=swap" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-logo" title="Try tapping me 7 times">
+      <span class="dot"></span>
+      <span>anmol<span style="color: var(--pass)">.</span>qa</span>
+    </div>
+    <div class="nav-links">
+      <a href="index.html">home</a>
+      <a href="work.html">work</a>
+      <a href="visual-diff.html">visual diff</a>
+      <a href="aio-tcc.html">aio tcc</a>
+      <a href="writing.html" aria-current="page">writing</a>
+      <a href="about.html">about</a>
+    </div>
+    <div class="nav-status">
+      <span class="dot"></span>
+      <span>all systems · operational</span>
+    </div>
+  </div>
+</nav>
+
+<!-- ================== HEADER ================== -->
+<section class="block" style="padding-top:64px;padding-bottom:40px">
+  <div class="wrap-narrow">
+    <div class="section-index">article · /scalable-automation</div>
+    <h1 class="h1" style="margin-bottom: 14px">
+      Scalable Automation: Design Patterns for Unreliable Interfaces<span style="color:var(--pass)">.</span>
+    </h1>
+    <p class="lead" style="margin: 0; max-width: 680px;">
+      Six production-hardened patterns for automation that grows with the application &mdash; not one that breaks when the application does.
+    </p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:20px">
+      <span class="badge badge-pass">medium · linkedin</span>
+      <span class="badge badge-muted">article</span>
+      <span class="badge badge-muted">11 min</span>
+      <span class="badge badge-muted">automation · design patterns</span>
+      <span class="badge badge-muted">May 2026</span>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:20px">
+      <a class="btn btn-primary" href="https://medium.com/@anmolsoin1/scalable-automation-design-patterns-for-unreliable-interfaces-0eb653f53fca" target="_blank">read on medium →</a>
+      <a class="btn" href="https://www.linkedin.com/posts/mrnewdelhi_scalable-automation-design-patterns-for-share-7465052868413206528-z0uH/" target="_blank">view on linkedin →</a>
+      <a class="btn" href="writing.html">← all writing</a>
+    </div>
+  </div>
+</section>
+
+<!-- ================== ARTICLE ================== -->
+<section class="block">
+  <div class="wrap-narrow">
+    <div class="prose">
+
+      <h2>The core problem</h2>
+      <p>The fundamental issue with failed automation is simple: <strong>scripts assume perfect preconditions</strong>. They assume the element is in position 3, that the next button is always there, that the form has the same fields it did last month. Production environments don't hold up that contract.</p>
+      <p>UIs change. Configurations drift. Permissions vary. The list that was 4 items long is now 7. The "next" button moves inside a shadow DOM. The form conditionally renders a field based on a flag that just flipped. Automation written for the happy path fails silently &mdash; or loudly, in CI, at the worst possible moment.</p>
+
+      <blockquote>Your script should grow with the application, not break when it does.</blockquote>
+
+      <h2>Foundation: the Scoped Action Pattern</h2>
+      <p>The mental model that survives production is deliberately sequential. Before you touch anything, you anchor to a known context:</p>
+
+    </div>
+
+    <!-- Terminal-style pattern block -->
+    <div class="terminal-frame" style="margin:28px 0;max-width:720px">
+      <div class="terminal-bar">
+        <div class="lights"><span></span><span></span><span></span></div>
+        <div class="title">scoped-action-pattern · mental-model</div>
+        <div class="meta">automation · core</div>
+      </div>
+      <div class="terminal-body" style="line-height:2">
+        <div><span class="terminal-prompt">1</span> <span style="color:var(--info)">Find Container</span>    <span class="terminal-comment">// anchor to a known context first</span></div>
+        <div><span class="terminal-prompt">2</span> <span style="color:var(--info)">Find Items</span>        <span class="terminal-comment">// scope the search within that container</span></div>
+        <div><span class="terminal-prompt">3</span> <span style="color:var(--info)">Select Item</span>       <span class="terminal-comment">// match by content, attribute, or position</span></div>
+        <div><span class="terminal-prompt">4</span> <span style="color:var(--info)">Scope Action</span>      <span class="terminal-comment">// act only within the matched context</span></div>
+        <div><span class="terminal-prompt">5</span> <span style="color:var(--pass)">Handle Errors</span>     <span class="terminal-comment">// fail loudly with full diagnostic context</span></div>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>Anchoring to a container before selecting children prevents the most common silent failure in list-heavy UIs: targeting an element in the wrong section because the global query matched two places.</p>
+
+      <h2>Pattern 1 · List Container</h2>
+      <p>Used for cards, rows, tables, and feeds. Find the container, iterate through its items with a matching function, then act only on matched elements. The implementation wraps the whole thing in retry logic with exponential backoff &mdash; because list renders are often asynchronous and timing is the first thing that lies to you.</p>
+      <p>The critical rule is never query globally for something that lives inside a list. <code>$$('.card')</code> matches every card on the page. <code>container.$$('.card')</code> matches only yours.</p>
+
+      <h2>Pattern 2 · Index-Based Selection with Fallback</h2>
+      <p>Targeting by position is legitimate when the list order is deterministic. But list composition changes &mdash; items get added, reordered, filtered. Index-based selection needs a fallback: if position 3 doesn't match what you expect (text, data attribute, sibling content), try secondary matching criteria before failing.</p>
+      <p>Hard-coded indices with no fallback are a test that's one CMS update away from failing silently and passing the wrong assertion.</p>
+
+      <h2>Pattern 3 · Pagination with Resilience</h2>
+      <p>Walking paginated results requires timeout guards at every step. Handle the case where the "next" button is absent (last page), the case where it's present but disabled, and the case where the page count is indeterminate. Cap iteration at a configurable maximum. Without the guard, a stale next-button selector produces an infinite loop that blocks your CI runner until the job times out.</p>
+
+      <h2>Pattern 4 · Robust Form Filling</h2>
+      <p>Forms are the most fragile surface in automation because they're the surface product teams modify most often. Treat every field as potentially absent: try the primary selector, fall back to alternatives, skip gracefully if the field is optional. Validate state after filling &mdash; a field that accepted input but failed silent validation is a bug your test just missed.</p>
+
+      <h2>Pattern 5 · Element Waiting</h2>
+      <p>Static waits are a lie you tell your CI. Replace them entirely: wait for visibility, then enabled state, then position stability. If all three strategies fail, throw a diagnostic error that names what you waited for, how long, and what the DOM looked like when you gave up. "Timed out after 5000ms" without context is useless. "Timed out waiting for #submit-btn to become enabled; last observed state: disabled, aria-busy: true" is actionable.</p>
+
+      <h2>Pattern 6 · Table Navigation</h2>
+      <p>Find rows by matching multiple column values rather than a single selector or index. Support partial matching. Scope the query to the table element first &mdash; especially critical when the page renders multiple tables (a data table, a filter summary table, a totals row). Without scoping, you're gambling on which match wins.</p>
+
+      <h2>Anti-patterns to drop</h2>
+      <ul>
+        <li><strong>Global element queries</strong> &mdash; <code>$$('.row')</code> matches hidden rows, rows in other components, rows the user isn't supposed to see. Scope everything.</li>
+        <li><strong>Hard-coded indices</strong> &mdash; position assumptions break the moment list composition changes. Always pair with a fallback match.</li>
+        <li><strong>Fire-and-forget actions</strong> &mdash; clicking "submit" and moving on without verifying the side effect means your test can pass while the feature is broken. Verify that actions produce observable change.</li>
+        <li><strong>Static waits</strong> &mdash; <code>await page.waitForTimeout(3000)</code> is hope-based testing. Replace with condition-based waiting.</li>
+      </ul>
+
+      <h2>Key takeaways</h2>
+      <ol>
+        <li>Always anchor to a known container before selecting children</li>
+        <li>Never target nested elements globally</li>
+        <li>Validate assumptions about current UI state before acting on it</li>
+        <li>Design for paginated datasets and list growth from day one</li>
+        <li>Throw diagnostic errors, not generic timeouts</li>
+        <li>Use timeout guards on any loop that could run indefinitely</li>
+        <li>Implement multiple fallback strategies so a single selector change doesn't kill a suite</li>
+      </ol>
+
+      <hr>
+      <p class="muted" style="font-family:var(--font-mono);font-size:12.5px">
+        // published on medium · may 2026 ·
+        <a href="https://medium.com/@anmolsoin1/scalable-automation-design-patterns-for-unreliable-interfaces-0eb653f53fca" style="color:var(--pass)" target="_blank">medium.com/@anmolsoin1</a>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ================== LINKEDIN EMBED ================== -->
+<section class="block">
+  <div class="wrap-narrow">
+    <div class="section-index">// linkedin</div>
+    <h2 class="h2" style="margin-bottom:6px;color:var(--text-strong)">Shared on LinkedIn</h2>
+    <p class="muted" style="font-size:14px;margin-bottom:24px">Read the post and discussion thread on LinkedIn.</p>
+
+    <div style="display:flex;justify-content:center">
+      <div style="width:100%;max-width:504px;border:1px solid var(--border);border-radius:var(--r-md);overflow:hidden;background:var(--surface)">
+        <iframe
+          src="https://www.linkedin.com/embed/feed/update/urn:li:share:7465052868413206528"
+          height="862"
+          width="504"
+          frameborder="0"
+          allowfullscreen=""
+          title="Embedded post — Scalable Automation: Design Patterns for Unreliable Interfaces"
+          style="display:block;width:100%;border:none"
+          loading="lazy"
+        ></iframe>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:20px">
+      <a class="btn" href="https://www.linkedin.com/posts/mrnewdelhi_scalable-automation-design-patterns-for-share-7465052868413206528-z0uH/" target="_blank">open on linkedin →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ================== RELATED WRITING ================== -->
+<section class="block">
+  <div class="wrap-narrow">
+    <div class="section-index">// related reading</div>
+    <h2 class="h2" style="margin-bottom:20px;color:var(--text-strong)">More writing</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px">
+
+      <a href="essay-ai-hitl.html" class="card linkable">
+        <div class="card-meta" style="margin-bottom:8px">essay · 7 min read</div>
+        <div class="card-title" style="font-size:17px;margin-bottom:8px">AI accelerates. Humans still decide.</div>
+        <div class="card-body">Why every agent I ship has a HITL boundary &mdash; and why the cost calculus for autonomous AI is often worse than it looks.</div>
+        <div class="card-foot"><span class="muted">read essay</span><span class="arrow">→</span></div>
+      </a>
+
+      <a href="case-qa-agent-skill.html" class="card linkable">
+        <div class="card-meta" style="margin-bottom:8px">case study · playwright</div>
+        <div class="card-title" style="font-size:17px;margin-bottom:8px">Production-grade Playwright QA agent skill stack</div>
+        <div class="card-body">Strict POM architecture, locator contracts, no static waits, production guards, and security-aware artifacts for AI coding agents.</div>
+        <div class="card-foot"><span class="muted">read case study</span><span class="arrow">→</span></div>
+      </a>
+
+      <a href="writing.html" class="card linkable">
+        <div class="card-meta" style="margin-bottom:8px">all writing</div>
+        <div class="card-title" style="font-size:17px;margin-bottom:8px">Notes from the QA console</div>
+        <div class="card-body">Industry POV and lessons from production. Most pieces live on Medium and cross-link back here.</div>
+        <div class="card-foot"><span class="muted">browse all posts</span><span class="arrow">→</span></div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================== FOOTER ================== -->
+<footer class="site-foot">
+  <div class="foot-grid">
+    <div class="foot-col">
+      <h4>// Anmol</h4>
+      <p style="color:var(--text-muted);max-width:340px;font-size:14px;line-height:1.6;margin:0">QA Engineer building deterministic test systems for AI-era products. Available for the right team.</p>
+    </div>
+    <div class="foot-col">
+      <h4>// pages</h4>
+      <ul>
+        <li><a href="index.html">home</a></li>
+        <li><a href="work.html">work</a></li>
+        <li><a href="visual-diff.html">visual diff</a></li>
+        <li><a href="aio-tcc.html">aio tcc</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>// outbound</h4>
+      <ul>
+        <li><a href="writing.html">writing</a></li>
+        <li><a href="https://medium.com/@anmolsoin1">medium</a></li>
+        <li><a href="https://linkedin.com/in/mrnewdelhi">linkedin</a></li>
+        <li><a href="https://github.com/MrNewDelhi">github</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>// contact</h4>
+      <ul>
+        <li><a href="mailto:anmolsoin1@gmail.com">anmolsoin1@gmail.com</a></li>
+        <li><a href="about.html">about</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-status">
+    <span class="item"><span class="dot"></span> all systems · operational</span>
+    <span class="item">build · <span data-deploy-ts>—</span></span>
+    <span class="item">v1.0.0 · 41 specs · 132 assertions</span>
+  </div>
+</footer>
+
+<script src="site.js"></script>
+<script src="console-widget.js"></script>
+</body>
+</html>

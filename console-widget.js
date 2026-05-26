@@ -55,6 +55,10 @@
     'case-bot-detection': 'case-bot-detection.html',
     hitl:        'essay-ai-hitl.html',
     'ai-hitl':   'essay-ai-hitl.html',
+    'essay-ai-hitl': 'essay-ai-hitl.html',
+    'scalable-automation': 'essay-scalable-automation.html',
+    'essay-scalable-automation': 'essay-scalable-automation.html',
+    scalable:    'essay-scalable-automation.html',
   };
 
   const COMMANDS = {
@@ -198,9 +202,10 @@
       }
     },
     ls: {
-      desc: 'List all case studies',
+      desc: 'List all case studies and writing',
       run: () => [
-        '<span class="c-pass">qa-agent-skill</span>      <span class="c-dim">Playwright QA agent skill stack · 23 sub-skills</span>',
+        '<span class="c-dim">── case studies ─────────────────────────────</span>',
+        '<span class="c-pass">qa-agent-skill</span>       <span class="c-dim">Playwright QA agent skill stack · 23 sub-skills</span>',
         '<span class="c-pass">visual-diff</span>          <span class="c-dim">Visual Diff Analyzer — semantic pixel diff</span>',
         '<span class="c-pass">aio-tcc</span>              <span class="c-dim">AIO Test Case Creator skill</span>',
         '<span class="c-pass">multimodal-triage</span>    <span class="c-dim">Gemini 3 ticket triage pipeline</span>',
@@ -214,7 +219,11 @@
         '<span class="c-pass">bot-detection</span>        <span class="c-dim">Bot-detection bypass for prod smoke</span>',
         '<span class="c-pass">caffeinate</span>           <span class="c-dim">CaffeinateBar macOS menu bar utility</span>',
         '',
-        '<span class="c-dim">usage:</span> <span class="c-pass">open</span> &lt;name&gt;  or just  <span class="c-pass">open work</span>',
+        '<span class="c-dim">── writing ──────────────────────────────────</span>',
+        '<span class="c-info">scalable-automation</span>  <span class="c-dim">Design patterns for unreliable interfaces · medium · linkedin</span>',
+        '<span class="c-info">hitl</span>                 <span class="c-dim">AI accelerates. Humans still decide. · essay</span>',
+        '',
+        '<span class="c-dim">usage:</span> <span class="c-pass">open</span> &lt;name&gt;  or just  <span class="c-pass">open work</span>  /  <span class="c-pass">open writing</span>',
       ].join('\n')
     },
     open: {
@@ -381,6 +390,9 @@
           'Test data is infrastructure. Treat it like infrastructure.',
           'If your CI passes but prod breaks, your CI is lying to you.',
           'The second time you write the same test helper, extract it. The first time, don\'t.',
+          'Scripts assume perfect preconditions. Production never provides them. Build for the mess.',
+          'Anchor to a container before selecting children. Never query globally for something that lives in a list.',
+          'Static waits are hope-based testing. Wait for state, not for time.',
         ];
         return '<span class="c-dim">' + fortunes[Math.floor(Math.random() * fortunes.length)] + '</span>';
       }
@@ -468,7 +480,7 @@
         '  <span class="c-strong">Anmol Soin</span>  <span class="c-dim">·  QA Engineer  ·  Lotusflare</span>',
         '',
         '  <span class="c-pass">help</span>    <span class="c-dim">→  all commands</span>',
-        '  <span class="c-pass">ls</span>      <span class="c-dim">→  browse 12 case studies</span>',
+        '  <span class="c-pass">ls</span>      <span class="c-dim">→  browse 13 case studies + 2 essays</span>',
         '  <span class="c-pass">whoami</span>  <span class="c-dim">→  who is anmol</span>',
         '  <span class="c-pass">hire</span>    <span class="c-dim">→  the roi case</span>',
         '<span class="c-dim">────────────────────────────────────────────</span>',
