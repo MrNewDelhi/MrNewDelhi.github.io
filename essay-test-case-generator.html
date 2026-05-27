@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<title>Test Case Generator · Architecture Proposal · Anmol</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="A solution-architect view of an LLM-powered test case generator: multi-source ingestion, staged human gates, guardrails, coverage matrix, episodic memory, and direct TCM import." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&display=swap" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-logo" title="Try tapping me 7 times">
+      <span class="dot"></span>
+      <span>anmol<span style="color: var(--pass)">.</span>qa</span>
+    </div>
+    <div class="nav-links">
+      <a href="index.html">home</a>
+      <a href="work.html">work</a>
+      <a href="visual-diff.html">visual diff</a>
+      <a href="aio-tcc.html">aio tcc</a>
+      <a href="writing.html" aria-current="page">writing</a>
+      <a href="about.html">about</a>
+    </div>
+    <div class="nav-status">
+      <span class="dot"></span>
+      <span>all systems · operational</span>
+    </div>
+  </div>
+</nav>
+
+<!-- ================== HERO ================== -->
+<section class="block" style="padding-top:64px;padding-bottom:48px">
+  <div class="wrap-narrow">
+    <div class="section-index">idea · /test-case-generator</div>
+    <h1 class="h1" style="margin-bottom:16px;max-width:780px">
+      A test case generator that earns its way past every human gate<span style="color:var(--pass)">.</span>
+    </h1>
+    <p class="lead" style="margin:0;max-width:660px;color:var(--text-muted)">
+      Most LLM test-case generators dump 50 generic cases from a Jira blurb and call it done. This is the architecture I'd build instead: multi-source ingestion, staged approvals, business-aware mapping, explicit coverage guardrails, and a path back into the test management tool that doesn't bypass the human.
+    </p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:24px">
+      <span class="badge badge-pass">medium · linkedin</span>
+      <span class="badge badge-info">idea post</span>
+      <span class="badge badge-muted">solution architecture</span>
+      <span class="badge badge-muted">Gen AI · LLM pipelines</span>
+      <span class="badge badge-muted">May 2026</span>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:20px">
+      <a class="btn btn-primary" href="https://medium.com/@anmolsoin1/stop-wiring-an-llm-to-a-jira-ticket-a-solution-architects-view-of-test-case-generation-7a1784f6955c" target="_blank">read full article on medium →</a>
+      <a class="btn" href="https://linkedin.com/in/mrnewdelhi" target="_blank">discuss on linkedin →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ================== STATUS / TL;DR ================== -->
+<section class="block" style="padding-top:0;padding-bottom:48px">
+  <div class="wrap-narrow">
+
+    <div class="prose" style="max-width:100%">
+      <blockquote style="font-size:18px;font-style:normal;color:var(--text);border-left-color:var(--pass)">
+        "Cheap to generate test cases. Expensive to generate the <em style="color:var(--text-strong);font-family:var(--font-serif)">right</em> ones. The whole architecture exists to bend that ratio."
+      </blockquote>
+    </div>
+
+    <!-- Stat strip: what this design optimises for -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--r-md);overflow:hidden;margin-top:32px">
+      <div style="background:var(--surface);padding:24px">
+        <div style="font-size:28px;font-weight:700;color:var(--pass);line-height:1;margin-bottom:8px">3</div>
+        <div style="font-family:var(--font-mono);font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted)">human-approval gates between raw requirement and a test case landing in the TCM</div>
+      </div>
+      <div style="background:var(--surface);padding:24px">
+        <div style="font-size:28px;font-weight:700;color:var(--warn);line-height:1;margin-bottom:8px">3×</div>
+        <div style="font-family:var(--font-mono);font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted)">coverage axes enforced — positive, negative, edge — never assumed</div>
+      </div>
+      <div style="background:var(--surface);padding:24px">
+        <div style="font-size:28px;font-weight:700;color:var(--info);line-height:1;margin-bottom:8px">1</div>
+        <div style="font-family:var(--font-mono);font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted)">business-skill layer so the LLM stops re-learning the product on every run</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================== THE PROBLEM ================== -->
+<section class="block" style="padding-top:24px;padding-bottom:24px">
+  <div class="wrap-narrow">
+    <div class="section-index">// the problem</div>
+    <h2 class="h2" style="margin-bottom:14px;color:var(--text-strong)">"Generate test cases for this Jira ticket" is the wrong API</h2>
+    <div class="prose" style="max-width:100%">
+      <p>
+        Every off-the-shelf test-case generator I have evaluated starts in the same place: paste a story, get a list. It is fast, it is impressive in a demo, and it is wrong for a real product. The failure modes are predictable.
+      </p>
+      <ul>
+        <li><strong>No business context.</strong> The LLM does not know what an MVNE is, what an eSIM activation flow looks like, or which states the order can legally transition through. It writes English that sounds like a test case.</li>
+        <li><strong>Single-source.</strong> The Jira description is the least informative artifact. The Confluence spec, the Figma flow, and the existing test library are where the real intent lives.</li>
+        <li><strong>One coverage axis.</strong> Ask an LLM for test cases and you get five happy paths. Ask for negative cases and you lose the happy paths. There is no built-in obligation to return a full matrix.</li>
+        <li><strong>No gate, no audit.</strong> Output goes straight into a Google Doc or, worse, straight into the TCM. The human reviewer has no anchor point to push back on.</li>
+        <li><strong>Expensive.</strong> Every run re-ingests the same Confluence pages, re-summarises the same product glossary, re-pays for the same context tokens.</li>
+      </ul>
+      <p>
+        The fix is not a better prompt. The fix is treating this as a <strong>pipeline with explicit stages, explicit gates, and a memory layer</strong> — the same shape you would design for any production data system. That is the proposal below.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ================== ARCHITECTURE OVERVIEW ================== -->
+<section class="block" style="padding-top:24px;padding-bottom:24px">
+  <div class="wrap-narrow">
+    <div class="section-index">// architecture</div>
+    <h2 class="h2" style="margin-bottom:14px;color:var(--text-strong)">The pipeline, end to end</h2>
+    <p style="color:var(--text-muted);font-size:14.5px;margin-bottom:24px">
+      Three approval gates. One knowledge base. One business-skill layer that the whole pipeline reads from. Generation is cheap; gates are where the human spends attention.
+    </p>
+
+    <div class="terminal-frame">
+      <div class="terminal-bar">
+        <div class="lights"><span></span><span></span><span></span></div>
+        <div class="title">test-case-generator · pipeline</div>
+      </div>
+      <div class="terminal-body" style="padding:18px 22px;line-height:1.85;font-size:12.5px">
+<div><span style="color:var(--text-dim)">┌─ </span><span style="color:var(--info)">SOURCES</span><span style="color:var(--text-dim)"> ──────────────────────────────────────────────┐</span></div>
+<div><span style="color:var(--text-dim)">│ </span><span style="color:var(--pass)">Jira</span> · <span style="color:var(--pass)">Confluence</span> · <span style="color:var(--pass)">Figma</span> · <span style="color:var(--pass)">existing TCM</span> · <span style="color:var(--pass)">specs</span><span style="color:var(--text-dim)">     │</span></div>
+<div><span style="color:var(--text-dim)">└──────────────────────────────────────────────────────────┘</span></div>
+<div><span style="color:var(--text-dim)">           │  raw download · hash · audit log</span></div>
+<div><span style="color:var(--text-dim)">           ▼</span></div>
+<div><span style="color:var(--text-dim)">┌─ </span><span style="color:var(--info)">INGEST + NORMALIZE</span><span style="color:var(--text-dim)"> ──────────────────────────────────┐</span></div>
+<div><span style="color:var(--text-dim)">│ </span>normalize · chunk · summarise · embed · cache<span style="color:var(--text-dim)">              │</span></div>
+<div><span style="color:var(--text-dim)">└──────────────────────────────────────────────────────────┘</span></div>
+<div><span style="color:var(--text-dim)">           │  reads from ▶ </span><span style="color:var(--warn)">Knowledge Base</span> + <span style="color:var(--warn)">Business Skill</span></div>
+<div><span style="color:var(--text-dim)">           ▼</span></div>
+<div><span style="color:var(--text-dim)">┌─ </span><span style="color:var(--info)">STAGE 1 · REQUIREMENT MAPPING</span><span style="color:var(--text-dim)"> ───────────────────┐</span></div>
+<div><span style="color:var(--text-dim)">│ </span>"what does this story actually ask for?"<span style="color:var(--text-dim)">                   │</span></div>
+<div><span style="color:var(--text-dim)">└──────────────────────────────────────────────────────────┘</span></div>
+<div><span style="color:var(--pass)">           ◆ HUMAN GATE 1 — approve mapping</span></div>
+<div><span style="color:var(--text-dim)">           ▼</span></div>
+<div><span style="color:var(--text-dim)">┌─ </span><span style="color:var(--info)">STAGE 2 · BLUEPRINT</span><span style="color:var(--text-dim)"> ─────────────────────────────────┐</span></div>
+<div><span style="color:var(--text-dim)">│ </span>test titles + descriptions only · coverage matrix check<span style="color:var(--text-dim)">    │</span></div>
+<div><span style="color:var(--text-dim)">└──────────────────────────────────────────────────────────┘</span></div>
+<div><span style="color:var(--pass)">           ◆ HUMAN GATE 2 — approve blueprint + confidence</span></div>
+<div><span style="color:var(--text-dim)">           ▼</span></div>
+<div><span style="color:var(--text-dim)">┌─ </span><span style="color:var(--info)">STAGE 3 · STEP GENERATION</span><span style="color:var(--text-dim)"> ───────────────────────┐</span></div>
+<div><span style="color:var(--text-dim)">│ </span>steps · expected results · data · preconditions<span style="color:var(--text-dim)">            │</span></div>
+<div><span style="color:var(--text-dim)">└──────────────────────────────────────────────────────────┘</span></div>
+<div><span style="color:var(--pass)">           ◆ HUMAN GATE 3 — approve final case set</span></div>
+<div><span style="color:var(--text-dim)">           ▼</span></div>
+<div><span style="color:var(--text-dim)">┌─ </span><span style="color:var(--info)">DEDUP + IMPORT</span><span style="color:var(--text-dim)"> ──────────────────────────────────────┐</span></div>
+<div><span style="color:var(--text-dim)">│ </span>similarity check vs TCM · push to <span style="color:var(--pass)">AIO / Xray / Zephyr</span><span style="color:var(--text-dim)">      │</span></div>
+<div><span style="color:var(--text-dim)">└──────────────────────────────────────────────────────────┘</span></div>
+<div><span style="color:var(--text-dim)">           │  writes back to ▶ </span><span style="color:var(--warn)">Episodic Memory</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================== STAGE BREAKDOWN ================== -->
+<section class="block" style="padding-top:24px">
+  <div class="wrap-narrow">
+    <div class="section-index">// stages</div>
+    <h2 class="h2" style="margin-bottom:20px;color:var(--text-strong)">What each stage actually does</h2>
+
+    <div style="display:grid;gap:16px">
+
+      <!-- Stage 0 · Ingest -->
+      <div class="card" style="border-left:3px solid var(--info)">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:12px">
+          <div>
+            <div style="font-family:var(--font-mono);font-size:11px;color:var(--info);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px">Stage 00 · Ingest</div>
+            <div style="font-size:18px;font-weight:600;color:var(--text-strong)">Multi-source pull, with a paper trail</div>
+          </div>
+          <span class="badge badge-info">deterministic</span>
+        </div>
+        <p style="color:var(--text-muted);font-size:14.5px;line-height:1.65;margin:0 0 12px">
+          Connectors for <strong>Jira</strong>, <strong>Confluence</strong>, <strong>Figma</strong>, and the existing <strong>TCM</strong> pull raw artefacts on demand. Every fetch is hashed and logged through a pre/post hook so we can answer "which version of the spec produced this test set?" months later. Nothing in this stage talks to an LLM — it is a boring data layer, and that is the point.
+        </p>
+        <p style="color:var(--text-muted);font-size:14.5px;line-height:1.65;margin:0">
+          Normalisation strips Jira/Confluence formatting noise. Chunking respects semantic boundaries (sections, Figma frames, acceptance criteria), not arbitrary token windows. Summaries are written once and cached; the same Confluence page should never get re-summarised three times in a week.
+        </p>
+      </div>
+
+      <!-- KB + Business Skill -->
+      <div class="card" style="border-left:3px solid var(--warn)">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:12px">
+          <div>
+            <div style="font-family:var(--font-mono);font-size:11px;color:var(--warn);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px">Cross-cutting · Memory</div>
+            <div style="font-size:18px;font-weight:600;color:var(--text-strong)">Knowledge Base + Business Skill</div>
+          </div>
+          <span class="badge badge-warn">durable</span>
+        </div>
+        <p style="color:var(--text-muted);font-size:14.5px;line-height:1.65;margin:0 0 12px">
+          The <strong>knowledge base</strong> is RAG-style: source-backed, refreshable, citation-aware. It holds the things that change — current pricing rules, current state machines, current API contracts.
+        </p>
+        <p style="color:var(--text-muted);font-size:14.5px;line-height:1.65;margin:0">
+          The <strong>business skill</strong> is the opposite: stable, hand-curated product literacy. What an order is, what an activation is, which flows are eligibility-gated, which ones never can be. The LLM reads it the same way a new QA hire reads onboarding docs — once, before doing anything useful. This is the layer that <a href="https://medium.com/@anmolsoin1/pro-tip-teach-your-llms-the-business-not-the-trivia-22921fa7532c" target="_blank">"teach your LLMs the business, not the trivia"</a> is really about.
+        </p>
+      </div>
+
+      <!-- Stage 1 · Mapping -->
+      <div class="card" style="border-left:3px solid var(--pass)">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:12px">
+          <div>
+            <div style="font-family:var(--font-mono);font-size:11px;color:var(--pass);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px">Stage 01 · Mapping</div>
+            <div style="font-size:18px;font-weight:600;color:var(--text-strong)">Requirement mapping · Gate 1</div>
+          </div>
+          <span class="badge badge-pass">first human gate</span>
+        </div>
+        <p style="color:var(--text-muted);font-size:14.5px;line-height:1.65;margin:0 0 12px">
+          The LLM produces a structured list: "this story implies the following testable requirements, mapped to these sources, with these unknowns." It is not yet writing test cases. It is showing its reading of the story.
+        </p>
+        <p style="color:var(--text-muted);font-size:14.5px;line-height:1.65;margin:0">
+          The human reviewer can edit, delete, or add requirements inline. The interface writes those edits back into the KB so future runs on adjacent stories inherit the correction. <strong>This is the highest-leverage gate</strong> — every later stage is downstream of getting this right.
+        </p>
+      </div>
+
+      <!-- Stage 2 · Blueprint -->
+      <div class="card" style="border-left:3px solid var(--pass)">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:12px">
+          <div>
+            <div style="font-family:var(--font-mono);font-size:11px;color:var(--pass);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px">Stage 02 · Blueprint</div>
+            <div style="font-size:18px;font-weight:600;color:var(--text-strong)">Titles + descriptions only · Gate 2</div>
+          </div>
+          <span class="badge badge-pass">second human gate</span>
+        </div>
+        <p style="color:var(--text-muted);font-size:14.5px;line-height:1.65;margin:0 0 12px">
+          Cheap output, expensive review. The model emits only the <em style="font-family:var(--font-serif);color:var(--text)">title</em> and <em style="font-family:var(--font-serif);color:var(--text)">one-line intent</em> for each proposed case, alongside a confidence score and a coverage tag (positive / negative / edge / regression). No steps yet — steps at this stage are a waste of tokens because the human will rewrite half of them anyway.
+        </p>
+        <p style="color:var(--text-muted);font-size:14.5px;line-height:1.65;margin:0">
+          The interface lets the reviewer reorder, drop, edit, or add titles, and shows the coverage matrix live. <strong>If any axis is empty, the gate refuses to advance.</strong>
+        </p>
+      </div>
+
+      <!-- Stage 3 · Steps -->
+      <div class="card" style="border-left:3px solid var(--pass)">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:12px">
+          <div>
+            <div style="font-family:var(--font-mono);font-size:11px;color:var(--pass);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px">Stage 03 · Steps</div>
+            <div style="font-size:18px;font-weight:600;color:var(--text-strong)">Step generation · Gate 3</div>
+          </div>
+          <span class="badge badge-pass">third human gate</span>
+        </div>
+        <p style="color:var(--text-muted);font-size:14.5px;line-height:1.65;margin:0">
+          Only the blueprint that survived Gate 2 gets expanded. Steps, expected results, preconditions, test data references — formatted to the team's house style (enforced by a formatter guardrail, not by hope). The final gate is a normal QA review: the reviewer reads what they will own.
+        </p>
+      </div>
+
+      <!-- Stage 4 · Import -->
+      <div class="card" style="border-left:3px solid var(--info)">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:12px">
+          <div>
+            <div style="font-family:var(--font-mono);font-size:11px;color:var(--info);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px">Stage 04 · Import</div>
+            <div style="font-size:18px;font-weight:600;color:var(--text-strong)">Dedup + push to TCM</div>
+          </div>
+          <span class="badge badge-info">side-effect stage</span>
+        </div>
+        <p style="color:var(--text-muted);font-size:14.5px;line-height:1.65;margin:0">
+          Before anything lands in <strong>AIO / Xray / Zephyr / TestRail</strong>, the dedup step embeds the new cases and compares them against the existing TCM corpus. Anything above a similarity threshold gets flagged for the human to merge, supersede, or skip. The import itself is a one-click action — but only one click, because the rest of the pipeline already earned the trust.
+        </p>
+      </div>
+
+    </div>
+
+    <!-- Mid-essay CTA to Medium -->
+    <div style="margin-top:32px;padding:28px 28px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap">
+      <div>
+        <div style="font-size:16px;font-weight:600;color:var(--text-strong);margin-bottom:4px">The full essay walks each stage with worked examples.</div>
+        <div style="font-size:14px;color:var(--text-muted)">Guardrails, two-memory model, coverage matrix, episodic feedback — on Medium.</div>
+      </div>
+      <a class="btn btn-primary" style="white-space:nowrap" href="https://medium.com/@anmolsoin1/stop-wiring-an-llm-to-a-jira-ticket-a-solution-architects-view-of-test-case-generation-7a1784f6955c" target="_blank">read on medium →</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ================== GUARDRAILS ================== -->
+<section class="block" style="padding-top:48px;padding-bottom:24px">
+  <div class="wrap-narrow">
+    <div class="section-index">// guardrails</div>
+    <h2 class="h2" style="margin-bottom:14px;color:var(--text-strong)">The guardrails that make this safe to leave running</h2>
+    <p style="color:var(--text-muted);font-size:14.5px;margin-bottom:24px">
+      Generation gets boring fast. Guardrails are where the engineering lives.
+    </p>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px">
+
+      <div class="card">
+        <div style="font-family:var(--font-mono);font-size:11px;color:var(--pass);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px">G1 · coverage matrix</div>
+        <div style="font-size:15px;font-weight:600;color:var(--text-strong);margin-bottom:6px">Full coverage, not the LLM's favourite axis</div>
+        <p style="color:var(--text-muted);font-size:13.5px;line-height:1.6;margin:0">
+          An LLM asked for "test cases" tends to return all-positive, or all-negative if you nudge it. The pipeline asks for each axis separately — <strong>positive</strong>, <strong>negative</strong>, <strong>edge</strong>, <strong>regression</strong> — and refuses to advance Gate 2 if any axis is empty. Coverage is a contract, not a vibe.
+        </p>
+      </div>
+
+      <div class="card">
+        <div style="font-family:var(--font-mono);font-size:11px;color:var(--pass);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px">G2 · confidence</div>
+        <div style="font-size:15px;font-weight:600;color:var(--text-strong);margin-bottom:6px">Confidence is surfaced, not hidden</div>
+        <p style="color:var(--text-muted);font-size:13.5px;line-height:1.6;margin:0">
+          Every output carries a confidence score and a source citation. Low-confidence items get a visual badge in the UI; the human is allowed to disagree, but only by clicking through a "yes I read this carefully" affordance. No silent approvals.
+        </p>
+      </div>
+
+      <div class="card">
+        <div style="font-family:var(--font-mono);font-size:11px;color:var(--pass);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px">G3 · format</div>
+        <div style="font-size:15px;font-weight:600;color:var(--text-strong);margin-bottom:6px">Schema enforcement, not prompt hope</div>
+        <p style="color:var(--text-muted);font-size:13.5px;line-height:1.6;margin:0">
+          Step output is validated against the team's TCM schema before it ever reaches the reviewer. Missing expected results, malformed step IDs, or non-existent test data references fail closed — the LLM is asked to repair, not the human.
+        </p>
+      </div>
+
+      <div class="card">
+        <div style="font-family:var(--font-mono);font-size:11px;color:var(--pass);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px">G4 · dedup</div>
+        <div style="font-size:15px;font-weight:600;color:var(--text-strong);margin-bottom:6px">Stop creating cases that already exist</div>
+        <p style="color:var(--text-muted);font-size:13.5px;line-height:1.6;margin:0">
+          Embeddings against the existing TCM catch near-duplicates before import. Reviewer sees the existing case, the proposed case, and a diff; the action is <em style="font-family:var(--font-serif);color:var(--text)">merge / supersede / skip</em>, never blind insert.
+        </p>
+      </div>
+
+      <div class="card">
+        <div style="font-family:var(--font-mono);font-size:11px;color:var(--pass);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px">G5 · episodic memory</div>
+        <div style="font-size:15px;font-weight:600;color:var(--text-strong);margin-bottom:6px">The system learns from its own runs</div>
+        <p style="color:var(--text-muted);font-size:13.5px;line-height:1.6;margin:0">
+          Every approve / edit / reject at every gate is captured as an episode. Over time the system knows: "for this product area, reviewer X always rewrites the negative cases this way." That feedback nudges future generations — and is auditable.
+        </p>
+      </div>
+
+      <div class="card">
+        <div style="font-family:var(--font-mono);font-size:11px;color:var(--pass);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px">G6 · audit hooks</div>
+        <div style="font-size:15px;font-weight:600;color:var(--text-strong);margin-bottom:6px">Pre / post hooks at every stage</div>
+        <p style="color:var(--text-muted);font-size:13.5px;line-height:1.6;margin:0">
+          Logging is structured, not freeform. Every LLM call, every source fetch, every gate decision is a typed event with cost, latency, model, and source hashes. Reproducibility and cost attribution come for free.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================== COST + COVERAGE ================== -->
+<section class="block" style="padding-top:24px;padding-bottom:24px">
+  <div class="wrap-narrow">
+    <div class="section-index">// cost · coverage</div>
+    <h2 class="h2" style="margin-bottom:14px;color:var(--text-strong)">Why the staged design is also the cheap design</h2>
+    <div class="prose" style="max-width:100%">
+      <p>
+        Token cost is dominated by two things: how much context you feed in, and how often you re-feed it. The architecture attacks both.
+      </p>
+      <ul>
+        <li><strong>Context caching</strong> at the ingest layer means the same Confluence page contributes once per change, not once per run.</li>
+        <li><strong>Summarisation</strong> happens at chunk time and is cached against the source hash. Stage 1 reads the summary; only Stage 3 dereferences back to the full chunk when expanding steps.</li>
+        <li><strong>Cheap stages early.</strong> Stage 2 emits titles + one-liners — tiny outputs. The model is not asked to write 400-line test cases that the human will throw away.</li>
+        <li><strong>Knowledge base is reusable across runs.</strong> Business-skill content is loaded once per session, not re-derived from raw sources.</li>
+      </ul>
+      <p>
+        The coverage guardrail is the other half of the cost story. Generating one "balanced" prompt that returns thirty cases and re-running it three times because positive/negative/edge are missing is more expensive than three targeted prompts that each return ten. <strong>Asking the right question once beats asking the wrong question three times.</strong>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ================== ADVANCED TIER ================== -->
+<section class="block" style="padding-top:24px;padding-bottom:24px">
+  <div class="wrap-narrow">
+    <div class="section-index">// v2 surface</div>
+    <h2 class="h2" style="margin-bottom:14px;color:var(--text-strong)">What "advanced" looks like once the base pipeline is trusted</h2>
+    <div class="prose" style="max-width:100%">
+      <ul>
+        <li><strong>Live KB editing from the gate UI.</strong> When a reviewer corrects a requirement, the edit becomes a KB patch in the same click. No "I'll update the wiki later."</li>
+        <li><strong>Round-trip blueprint editing.</strong> Reviewer can drag, edit, or write new titles; the system re-runs only the affected step generations, not the whole batch.</li>
+        <li><strong>One-click TCM import</strong> via API to AIO / Xray / Zephyr — but only after Gate 3 and the dedup pass.</li>
+        <li><strong>Episodic memory feeds back into the business skill.</strong> Patterns the team approves repeatedly become first-class rules; patterns they reject repeatedly become first-class anti-patterns.</li>
+        <li><strong>Coverage check is bidirectional.</strong> Not just "did we generate positive / negative / edge" — also "does the existing TCM already cover this for the requirement, or is there a real gap?"</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ================== WHY ARCH MATTERS ================== -->
+<section class="block" style="padding-top:24px;padding-bottom:48px">
+  <div class="wrap-narrow">
+    <div class="section-index">// why design it this way</div>
+    <h2 class="h2" style="margin-bottom:14px;color:var(--text-strong)">The solution-architect bet</h2>
+    <div class="prose" style="max-width:100%">
+      <p>
+        The instinct with Gen AI is to wire a single model call to a single input and admire the output. That ships fast, demos well, and rots in production. The bet behind this design is the opposite: <strong>treat the LLM as one stage in a system, not the system itself.</strong>
+      </p>
+      <p>
+        Everything that makes the architecture interesting — staged gates, business-skill memory, coverage matrix, episodic feedback, dedup, audit hooks — is what would be in the design doc for any production data pipeline. The LLM is the cheap, replaceable component in the middle. The expensive parts are the contracts around it.
+      </p>
+      <p>
+        That is the framing I would bring to building this for real. <a href="essay-ai-hitl.html">AI accelerates. Humans still decide</a> — and the architecture is what makes "humans still decide" cheap enough to actually do.
+      </p>
+    </div>
+
+    <div style="margin-top:32px;padding:24px 28px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md)">
+      <div style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:8px">// status</div>
+      <p style="color:var(--text-muted);font-size:14.5px;line-height:1.65;margin:0">
+        This is an architecture proposal, not a shipped system. Pieces of it exist in production work I have done — the <a href="case-qa-agent-skill.html">qa-agent skill stack</a> handles the guardrails-and-gates layer, the <a href="aio-tcc.html">AIO TCC skill</a> handles the format-enforcement layer, and the <a href="case-multimodal-triage.html">multimodal triage pipeline</a> is a worked example of staged LLM gates over multi-source input. The piece I would build next is the requirement-mapping gate and the coverage-matrix contract, because that is where the trust earns the rest of the pipeline.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ================== RELATED ================== -->
+<section class="block">
+  <div class="wrap-narrow">
+    <div class="section-index">// related</div>
+    <h2 class="h2" style="margin-bottom:20px;color:var(--text-strong)">Adjacent work on this site</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px">
+
+      <a href="aio-tcc.html" class="card linkable">
+        <div class="card-meta" style="margin-bottom:8px">skill · format enforcement</div>
+        <div class="card-title" style="font-size:16px;margin-bottom:8px">AIO Test Case Creator Skill</div>
+        <div class="card-body">The 1,658-line skill that already enforces TCM-shaped output. The format-guardrail layer in this proposal would build directly on it.</div>
+        <div class="card-foot"><span class="muted">view skill</span><span class="arrow">→</span></div>
+      </a>
+
+      <a href="case-multimodal-triage.html" class="card linkable">
+        <div class="card-meta" style="margin-bottom:8px">case study · multimodal · staged</div>
+        <div class="card-title" style="font-size:16px;margin-bottom:8px">Multimodal Triage Pipeline</div>
+        <div class="card-body">A worked example of staged LLM gates over multi-source input — video + Jira + structured metadata. Same architectural pattern, different problem.</div>
+        <div class="card-foot"><span class="muted">read case study</span><span class="arrow">→</span></div>
+      </a>
+
+      <a href="essay-ai-hitl.html" class="card linkable">
+        <div class="card-meta" style="margin-bottom:8px">essay · 7 min</div>
+        <div class="card-title" style="font-size:16px;margin-bottom:8px">AI accelerates. Humans still decide.</div>
+        <div class="card-body">Why every agent I ship has a human-in-the-loop boundary — and why the cost calculus for fully autonomous AI is usually worse than it looks.</div>
+        <div class="card-foot"><span class="muted">read essay</span><span class="arrow">→</span></div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================== FOOTER ================== -->
+<footer class="site-foot">
+  <div class="foot-grid">
+    <div class="foot-col">
+      <h4>// Anmol</h4>
+      <p style="color:var(--text-muted);max-width:340px;font-size:14px;line-height:1.6;margin:0">QA Engineer building deterministic test systems for AI-era products. Available for the right team.</p>
+    </div>
+    <div class="foot-col">
+      <h4>// pages</h4>
+      <ul>
+        <li><a href="index.html">home</a></li>
+        <li><a href="work.html">work</a></li>
+        <li><a href="visual-diff.html">visual diff</a></li>
+        <li><a href="aio-tcc.html">aio tcc</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>// outbound</h4>
+      <ul>
+        <li><a href="writing.html">writing</a></li>
+        <li><a href="https://medium.com/@anmolsoin1">medium</a></li>
+        <li><a href="https://linkedin.com/in/mrnewdelhi">linkedin</a></li>
+        <li><a href="https://github.com/MrNewDelhi">github</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>// contact</h4>
+      <ul>
+        <li><a href="mailto:anmolsoin1@gmail.com">anmolsoin1@gmail.com</a></li>
+        <li><a href="about.html">about</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-status">
+    <span class="item"><span class="dot"></span> all systems · operational</span>
+    <span class="item">build · <span data-deploy-ts>—</span></span>
+    <span class="item">v1.0.0 · 41 specs · 132 assertions</span>
+  </div>
+</footer>
+
+<script src="site.js"></script>
+<script src="console-widget.js"></script>
+</body>
+</html>

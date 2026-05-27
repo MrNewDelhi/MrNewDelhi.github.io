@@ -1,0 +1,6 @@
+# Private drafts and unpublished writeups — never push to the public site repo
+drafts/
+*.draft.md
+
+# macOS metadata
+.DS_Store
