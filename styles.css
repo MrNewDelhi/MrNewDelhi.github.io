@@ -178,7 +178,34 @@ section.block + section.block {
 }
 section.block:first-of-type { padding-top: 40px; }
 
+/* Hero-style first block on leaf pages (cases, essays, feature pages).
+   Tightens the gap to the next section so dark-bg pages don't read as broken. */
+section.block.block-hero { padding: 56px 0 32px; }
+section.block.block-hero + section.block { padding-top: 40px; }
+
 .divider { height: 1px; background: var(--border); width: 100%; margin: 24px 0; }
+
+/* Back-link breadcrumb shown above hero on leaf pages */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-muted);
+  text-decoration: none;
+  letter-spacing: 0.04em;
+  margin-bottom: 18px;
+  padding: 4px 10px 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+.back-link:hover {
+  color: var(--pass);
+  border-color: var(--pass);
+  background: rgba(0, 220, 130, 0.05);
+}
 
 /* =====================================================
    NAVBAR

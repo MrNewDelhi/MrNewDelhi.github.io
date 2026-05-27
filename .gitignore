@@ -4,3 +4,6 @@ drafts/
 
 # macOS metadata
 .DS_Store
+
+# Local screenshot tooling (Playwright + generated PNGs)
+.preview/
