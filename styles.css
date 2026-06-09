@@ -441,6 +441,8 @@ section.block.block-hero + section.block { padding-top: 40px; }
   padding: 24px;
   position: relative;
   transition: border-color 200ms, transform 200ms;
+  display: flex;
+  flex-direction: column;
 }
 .card:hover {
   border-color: var(--pass-dim);
@@ -477,7 +479,7 @@ section.block.block-hero + section.block { padding-top: 40px; }
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 16px;
+  margin-top: auto;
   padding-top: 16px;
   border-top: 1px solid var(--border);
   font-family: var(--font-mono);
