@@ -457,6 +457,8 @@ section.block.block-hero + section.block { padding-top: 40px; }
   gap: 16px;
   margin-bottom: 12px;
 }
+.card-head > div:first-child { min-width: 0; }
+.card-head .card-meta { flex-shrink: 0; white-space: nowrap; }
 .card-title {
   font-size: 19px;
   font-weight: 600;
