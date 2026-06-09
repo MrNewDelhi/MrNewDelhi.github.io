@@ -5,6 +5,18 @@
 <link rel="icon" type="image/svg+xml" href="favicon.svg" />
 <title>404 · Test Failure</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="Page not found — Anmol's QA portfolio." />
+<link rel="canonical" href="https://mrnewdelhi.github.io/404.html" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://mrnewdelhi.github.io/404.html" />
+<meta property="og:title" content="404 · Test Failure" />
+<meta property="og:description" content="Page not found — Anmol's QA portfolio." />
+<meta property="og:image" content="https://mrnewdelhi.github.io/assets/og-card.jpg" />
+<meta property="og:site_name" content="Anmol · QA Engineer" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="404 · Test Failure" />
+<meta name="twitter:description" content="Page not found — Anmol's QA portfolio." />
+<meta name="twitter:image" content="https://mrnewdelhi.github.io/assets/og-card.jpg" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&display=swap" />
@@ -12,6 +24,7 @@
 </head>
 <body>
 
+<a class="skip-link" href="#main">skip to content</a>
 <nav class="nav">
   <div class="nav-inner">
     <div class="nav-logo" title="Try tapping me 7 times">
@@ -32,6 +45,8 @@
     </div>
   </div>
 </nav>
+
+<main id="main">
 
 <section class="block" style="padding-top: 64px">
   <div class="wrap-narrow">
@@ -63,10 +78,10 @@
     <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:24px">
       <a class="btn btn-primary" href="index.html">↩ back to home</a>
       <a class="btn" href="work.html">view case studies</a>
-      <a class="btn" href="#" onclick="window.__toggleShortcuts();return false;">
+      <button type="button" class="btn" onclick="window.__toggleShortcuts();">
         <span class="kbd" style="background:transparent;border-color:var(--text-muted)">?</span>
         <span>shortcuts</span>
-      </a>
+      </button>
     </div>
 
     <p class="muted" style="margin-top: 32px; font-family: var(--font-mono); font-size: 12.5px">
@@ -74,6 +89,8 @@
     </p>
   </div>
 </section>
+
+</main>
 
 <footer class="site-foot">
   <div class="foot-status">

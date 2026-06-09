@@ -416,19 +416,19 @@
         <span class="cw-pill-label">console</span>
         <span class="cw-pill-key">\`</span>
       </button>
-      <div class="cw-window">
+      <div class="cw-window" role="dialog" aria-modal="false" aria-label="Interactive QA console">
         <header class="cw-head">
           <div class="cw-lights"><span></span><span></span><span></span></div>
           <div class="cw-title">anmol@qa-console · ~</div>
           <div class="cw-actions">
-            <button data-action="clear" title="Clear">clear</button>
-            <button data-action="close" title="Close">×</button>
+            <button data-action="clear" title="Clear" aria-label="Clear console output">clear</button>
+            <button data-action="close" title="Close" aria-label="Close console">×</button>
           </div>
         </header>
-        <div class="cw-output" id="cw-output"></div>
+        <div class="cw-output" id="cw-output" aria-live="polite"></div>
         <form class="cw-input-row" autocomplete="off">
           <span class="cw-prompt">&gt;</span>
-          <input class="cw-input" type="text" autocomplete="off" spellcheck="false" placeholder="type help" />
+          <input class="cw-input" type="text" autocomplete="off" spellcheck="false" placeholder="type help" aria-label="Console command input" />
           <span class="cw-cursor"></span>
         </form>
       </div>
@@ -466,10 +466,10 @@
         root.classList.add('collapsed');
         localStorage.setItem(STATE_KEY, 'closed');
       },
-      open() {
+      open(focus = true) {
         root.classList.remove('collapsed');
         localStorage.setItem(STATE_KEY, 'open');
-        setTimeout(() => input.focus(), 60);
+        if (focus) setTimeout(() => input.focus({ preventScroll: true }), 60);
       },
       get history() { return history; }
     };
@@ -572,9 +572,9 @@
 
     printWelcome();
 
-    // Restore open state
+    // Restore open state without stealing focus or scroll position
     if (localStorage.getItem(STATE_KEY) === 'open') {
-      ctx.open();
+      ctx.open(false);
     }
   }
 

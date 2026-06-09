@@ -5,12 +5,25 @@
 <link rel="icon" type="image/svg+xml" href="favicon.svg" />
 <title>Work · Anmol</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="Case studies: a self-healing Appium framework, multimodal Gemini ticket triage, visual diff analyzer, MCP servers, and the AI tooling built to remove manual QA toil." />
+<link rel="canonical" href="https://mrnewdelhi.github.io/work.html" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://mrnewdelhi.github.io/work.html" />
+<meta property="og:title" content="Work · Anmol" />
+<meta property="og:description" content="Case studies: a self-healing Appium framework, multimodal Gemini ticket triage, visual diff analyzer, MCP servers, and the AI tooling built to remove manual QA toil." />
+<meta property="og:image" content="https://mrnewdelhi.github.io/assets/og-card.jpg" />
+<meta property="og:site_name" content="Anmol · QA Engineer" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Work · Anmol" />
+<meta name="twitter:description" content="Case studies: a self-healing Appium framework, multimodal Gemini ticket triage, visual diff analyzer, MCP servers, and the AI tooling built to remove manual QA toil." />
+<meta name="twitter:image" content="https://mrnewdelhi.github.io/assets/og-card.jpg" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&display=swap" />
 <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+<a class="skip-link" href="#main">skip to content</a>
 <nav class="nav">
   <div class="nav-inner">
     <div class="nav-logo" title="Try tapping me 7 times">
@@ -31,6 +44,8 @@
     </div>
   </div>
 </nav>
+
+<main id="main">
 
 <section class="block" style="padding-top:64px;padding-bottom:24px">
   <div class="wrap">
@@ -99,7 +114,7 @@
         <div class="card-foot"><span class="muted">read full case</span><span class="arrow">→</span></div>
       </a>
 
-      <a href="case-multimodal-triage.html" class="card linkable" data-tag="agent">
+      <a href="case-multimodal-triage.html" class="card linkable" data-tag="agent" id="multimodal-triage">
         <div class="card-head">
           <div>
             <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap">
@@ -113,7 +128,7 @@
         <div class="card-foot"><span class="muted">read full case</span><span class="arrow">→</span></div>
       </a>
 
-      <a href="case-self-healing.html" class="card linkable" data-tag="framework">
+      <a href="case-self-healing.html" class="card linkable" data-tag="framework" id="self-healing">
         <div class="card-head">
           <div>
             <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap">
@@ -155,7 +170,7 @@
         <div class="card-foot"><span class="muted">read full case</span><span class="arrow">→</span></div>
       </a>
 
-      <a href="case-slack-bots.html" class="card linkable" data-tag="agent">
+      <a href="case-slack-bots.html" class="card linkable" data-tag="agent" id="slack-rca">
         <div class="card-head">
           <div>
             <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap">
@@ -211,19 +226,19 @@
         <div class="card-foot"><span class="muted">read full case</span><span class="arrow">→</span></div>
       </a>
 
-      <a href="work.html#account-pool" class="card linkable" data-tag="infra">
+      <div class="card" data-tag="infra" id="account-pool">
         <div class="card-head">
           <div>
             <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap">
-              <span class="badge badge-pass">infra · production</span><span class="badge badge-info">postgres</span><span class="badge badge-muted">draft</span>
+              <span class="badge badge-pass">infra · production</span><span class="badge badge-info">postgres</span><span class="badge badge-muted">lotusflare</span>
             </div>
             <div class="card-title">Test-Data Account Pool</div>
           </div>
           <div class="card-meta">12</div>
         </div>
-        <div class="card-body">Postgres-backed, state-tagged account pool that manual QA, debug, and automation share. Killed the "who has a clean account?" bottleneck and cut billable client eSIM inventory burn. <em>Case study draft.</em></div>
-        <div class="card-foot"><span class="muted">read full case</span><span class="arrow">→</span></div>
-      </a>
+        <div class="card-body">Postgres-backed, state-tagged account pool that manual QA, debug, and automation share. Killed the "who has a clean account?" bottleneck and cut billable client eSIM inventory burn. Running daily at Lotusflare.</div>
+        <div class="card-foot"><span class="muted">full case study soon</span></div>
+      </div>
 
       <a href="case-bot-detection.html" class="card linkable" data-tag="tool">
         <div class="card-head">
@@ -266,27 +281,27 @@
       <div class="meta"><a href="https://github.com/MrNewDelhi">github.com/MrNewDelhi →</a></div>
     </div>
     <div class="grid grid-3">
-      <a href="https://github.com/MrNewDelhi/qa-agent-skill" class="card linkable" target="_blank">
+      <a href="https://github.com/MrNewDelhi/qa-agent-skill" class="card linkable" target="_blank" rel="noopener noreferrer">
         <div class="card-meta" style="margin-bottom:6px">↗ MrNewDelhi/qa-agent-skill</div>
         <div class="card-title" style="font-size:17px">qa-agent-skill</div>
         <div class="card-body" style="margin-top:8px">Production-grade Playwright QA agent skill stack with 23 sub-skills, hard contracts, audits, and a TS POM template.</div>
       </a>
-      <a href="https://github.com/MrNewDelhi/adb-mcp" class="card linkable" target="_blank">
+      <a href="https://github.com/MrNewDelhi/adb-mcp" class="card linkable" target="_blank" rel="noopener noreferrer">
         <div class="card-meta" style="margin-bottom:6px">↗ MrNewDelhi/adb-mcp</div>
         <div class="card-title" style="font-size:17px">adb-mcp</div>
         <div class="card-body" style="margin-top:8px">MCP server for Android Debug Bridge. 38 typed tools, Zod-validated, with bundled LLM skill.</div>
       </a>
-      <a href="https://github.com/MrNewDelhi/self-healing-locator-framework" class="card linkable" target="_blank">
+      <a href="https://github.com/MrNewDelhi/self-healing-locator-framework" class="card linkable" target="_blank" rel="noopener noreferrer">
         <div class="card-meta" style="margin-bottom:6px">↗ MrNewDelhi/self-healing-locator-framework</div>
         <div class="card-title" style="font-size:17px">self-healing-locator-framework</div>
         <div class="card-body" style="margin-top:8px">Multi-model Appium framework with runtime locator recovery.</div>
       </a>
-      <a href="https://github.com/MrNewDelhi/caffeinate-menu-bar-widget" class="card linkable" target="_blank">
+      <a href="https://github.com/MrNewDelhi/caffeinate-menu-bar-widget" class="card linkable" target="_blank" rel="noopener noreferrer">
         <div class="card-meta" style="margin-bottom:6px">↗ MrNewDelhi/caffeinate-menu-bar-widget</div>
         <div class="card-title" style="font-size:17px">caffeinate-menu-bar-widget</div>
         <div class="card-body" style="margin-top:8px">macOS menu bar utility. Display / system / full / timed modes.</div>
       </a>
-      <a href="https://github.com/MrNewDelhi/mailosaur-mcp" class="card linkable" target="_blank">
+      <a href="https://github.com/MrNewDelhi/mailosaur-mcp" class="card linkable" target="_blank" rel="noopener noreferrer">
         <div class="card-meta" style="margin-bottom:6px">↗ MrNewDelhi/mailosaur-mcp</div>
         <div class="card-title" style="font-size:17px">mailosaur-mcp</div>
         <div class="card-body" style="margin-top:8px">MCP tool wrapping Mailosaur email-testing API. OTP extraction, link extraction, inbox management — used in QA automation at Lotusflare.</div>
@@ -294,6 +309,8 @@
     </div>
   </div>
 </section>
+
+</main>
 
 <footer class="site-foot">
   <div class="foot-grid">
@@ -323,6 +340,7 @@
       <h4>// contact</h4>
       <ul>
         <li><a href="mailto:anmolsoin1@gmail.com">anmolsoin1@gmail.com</a></li>
+        <li><a href="assets/resume/Anmol_Soin_QA_Engineer_Resume.pdf">resume</a></li>
         <li><a href="about.html">about</a></li>
       </ul>
     </div>

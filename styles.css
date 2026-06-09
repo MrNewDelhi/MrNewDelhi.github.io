@@ -16,7 +16,7 @@
   --text:         #e8e6df;
   --text-strong:  #ffffff;
   --text-muted:   #8b8e95;
-  --text-dim:     #5a5d63;
+  --text-dim:     #7d828b;
 
   /* === SEMANTIC STATUS ===*/
   --pass:         #5eead4;   /* teal — primary accent */
@@ -1486,4 +1486,43 @@ pre.code .b { color: var(--text-strong); font-weight: 600; }
 
 @media (max-width: 800px) {
   .idiff-grid { grid-template-columns: 1fr; }
+}
+
+/* =====================================================
+   ACCESSIBILITY
+   ===================================================== */
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--pass);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.skip-link {
+  position: absolute;
+  left: 12px;
+  top: -48px;
+  z-index: 100;
+  padding: 10px 16px;
+  background: var(--pass);
+  color: var(--bg);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  border-radius: var(--r-sm);
+  transition: top 120ms;
+}
+.skip-link:focus {
+  top: 12px;
+  color: var(--bg);
 }
