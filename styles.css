@@ -267,11 +267,13 @@ section.block.block-hero + section.block { padding-top: 40px; }
   position: relative;
 }
 .nav-links a:hover,
-.nav-links a[aria-current="page"] {
+.nav-links a[aria-current="page"],
+.nav-links a[aria-current="true"] {
   color: var(--text-strong);
   background: var(--surface);
 }
-.nav-links a[aria-current="page"]::before {
+.nav-links a[aria-current="page"]::before,
+.nav-links a[aria-current="true"]::before {
   content: '> ';
   color: var(--pass);
 }

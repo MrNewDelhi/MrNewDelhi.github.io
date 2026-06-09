@@ -36,7 +36,7 @@
       <a href="work.html">work</a>
       <a href="visual-diff.html">visual diff</a>
       <a href="aio-tcc.html">aio tcc</a>
-      <a href="writing.html" aria-current="page">writing</a>
+      <a href="writing.html" aria-current="true">writing</a>
       <a href="about.html">about</a>
     </div>
     <div class="nav-status">
@@ -62,6 +62,7 @@
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:24px">
       <span class="badge badge-pass">medium · linkedin</span>
       <span class="badge badge-info">idea post</span>
+      <span class="badge badge-muted">12 min read</span>
       <span class="badge badge-muted">solution architecture</span>
       <span class="badge badge-muted">Gen AI · LLM pipelines</span>
       <span class="badge badge-muted">May 2026</span>
@@ -170,6 +171,11 @@
 <div><span style="color:var(--text-dim)">           │  writes back to ▶ </span><span style="color:var(--warn)">Episodic Memory</span></div>
       </div>
     </div>
+
+    <figure style="margin:24px 0 0">
+      <img src="assets/test-case-generator/pipeline-human-gates.jpg" alt="Diagram of the test-case generation pipeline: multiple sources flow through staged generation steps, each separated by a human approval gate, ending in a verified import" loading="lazy" style="width:100%;border:1px solid var(--border);border-radius:var(--r-md);display:block" />
+      <figcaption style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted);margin-top:10px;letter-spacing:0.04em">// fig 01 · the same pipeline, one frame — generation is cheap, the three human gates are where attention goes</figcaption>
+    </figure>
   </div>
 </section>
 
@@ -215,6 +221,11 @@
         </p>
       </div>
 
+      <figure style="margin:0">
+        <img src="assets/test-case-generator/two-memory-model.jpg" alt="Diagram of the two-memory model: a refreshable RAG knowledge base on one side, a stable hand-curated business skill on the other, both feeding the generation stages" loading="lazy" style="width:100%;border:1px solid var(--border);border-radius:var(--r-md);display:block" />
+        <figcaption style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted);margin-top:10px;letter-spacing:0.04em">// fig 02 · two memories — RAG for fresh truth (left), business skill for stable product literacy (right)</figcaption>
+      </figure>
+
       <!-- Stage 1 · Mapping -->
       <div class="card" style="border-left:3px solid var(--pass)">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:12px">
@@ -232,6 +243,11 @@
         </p>
       </div>
 
+      <figure style="margin:0">
+        <img src="assets/test-case-generator/requirement-mapping-gate.jpg" alt="Diagram of the requirement-mapping gate: source documents map into a structured requirement list with per-item status, which a human reviewer approves before anything advances" loading="lazy" style="width:100%;border:1px solid var(--border);border-radius:var(--r-md);display:block" />
+        <figcaption style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted);margin-top:10px;letter-spacing:0.04em">// fig 03 · gate 1 — the model shows its reading of the story; the human corrects it before a single test case exists</figcaption>
+      </figure>
+
       <!-- Stage 2 · Blueprint -->
       <div class="card" style="border-left:3px solid var(--pass)">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:12px">
@@ -248,6 +264,11 @@
           The interface lets the reviewer reorder, drop, edit, or add titles, and shows the coverage matrix live. <strong>If any axis is empty, the gate refuses to advance.</strong>
         </p>
       </div>
+
+      <figure style="margin:0">
+        <img src="assets/test-case-generator/coverage-matrix-blueprint.jpg" alt="Diagram of the blueprint coverage matrix: proposed test titles arranged across positive, negative, edge, and regression axes, with empty cells flagged before the gate can advance" loading="lazy" style="width:100%;border:1px solid var(--border);border-radius:var(--r-md);display:block" />
+        <figcaption style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted);margin-top:10px;letter-spacing:0.04em">// fig 04 · gate 2 — the live coverage matrix; an empty axis blocks the advance</figcaption>
+      </figure>
 
       <!-- Stage 3 · Steps -->
       <div class="card" style="border-left:3px solid var(--pass)">
@@ -276,6 +297,11 @@
           Before anything lands in <strong>AIO / Xray / Zephyr / TestRail</strong>, the dedup step embeds the new cases and compares them against the existing TCM corpus. Anything above a similarity threshold gets flagged for the human to merge, supersede, or skip. The import itself is a one-click action — but only one click, because the rest of the pipeline already earned the trust.
         </p>
       </div>
+
+      <figure style="margin:0">
+        <img src="assets/test-case-generator/schema-dedup-import.jpg" alt="Diagram of the dedup and import stage: schema validation, embedding similarity check against the existing TCM corpus, and a final reviewed push into the test management tool" loading="lazy" style="width:100%;border:1px solid var(--border);border-radius:var(--r-md);display:block" />
+        <figcaption style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted);margin-top:10px;letter-spacing:0.04em">// fig 05 · schema check, similarity dedup, then — and only then — the TCM import</figcaption>
+      </figure>
 
     </div>
 
@@ -351,6 +377,11 @@
       </div>
 
     </div>
+
+    <figure style="margin:24px 0 0">
+      <img src="assets/test-case-generator/audit-hooks-episodic-memory.jpg" alt="Diagram of audit hooks and episodic memory: every stage emits typed events into a central store, which feeds dashboards and nudges future generations" loading="lazy" style="width:100%;border:1px solid var(--border);border-radius:var(--r-md);display:block" />
+      <figcaption style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted);margin-top:10px;letter-spacing:0.04em">// fig 06 · every gate decision becomes a typed, auditable episode — the system learns from its own runs</figcaption>
+    </figure>
   </div>
 </section>
 
