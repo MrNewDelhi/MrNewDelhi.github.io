@@ -59,6 +59,8 @@
       <span class="badge badge-info">appium</span>
       <span class="badge badge-info">java</span>
       <span class="badge badge-info">multi-model</span>
+      <span class="badge badge-info">flask</span>
+      <span class="badge badge-info">sqlite</span>
       <span class="badge badge-muted">iOS + Android</span>
       <span class="badge badge-muted">open source</span>
     </div>
@@ -100,6 +102,7 @@
       <li><div><h4>Resolver tier 3 · vision model</h4><p>Last resort. Pass the screen + the original element's expected role to a multimodal model, ask "where is the X?" 2-3s.</p></div></li>
       <li><div><h4>Healing · update the cached locator</h4><p>When any tier 1+ resolver succeeds, update the locator cache so the next run hits tier 0 again. Drift recovers itself.</p></div></li>
       <li><div><h4>Telemetry</h4><p>Every healing event logs: which tier rescued it, how long it took, the new locator. Surfaces "this element is breaking weekly" patterns the team can fix at the source.</p></div></li>
+      <li><div><h4>Centralized store · Flask + SQLite</h4><p>The locator cache and healing telemetry live in a shared Flask service backed by SQLite. Every engineer and CI run heals against — and contributes to — the same cache, so a fix found on one machine lands for the whole pod instead of dying in isolated local state.</p></div></li>
     </ul>
   </div>
 </section>
