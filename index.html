@@ -133,7 +133,7 @@
       <div style="background:var(--surface);padding:18px 20px">
         <div style="font-family:var(--font-mono);font-size:10px;text-transform:uppercase;letter-spacing:0.12em;color:var(--text-muted);margin-bottom:6px">// outcomes</div>
         <div style="font-size:14px;color:var(--text-strong);font-weight:600">3× release · 67% toil ↓</div>
-        <div style="font-size:12.5px;color:var(--text-muted);margin-top:2px">2 outages survived green</div>
+        <div style="font-size:12.5px;color:var(--text-muted);margin-top:2px">7 outages survived green</div>
       </div>
       <div style="background:var(--surface);padding:18px 20px">
         <div style="font-family:var(--font-mono);font-size:10px;text-transform:uppercase;letter-spacing:0.12em;color:var(--text-muted);margin-bottom:6px">// status</div>
@@ -497,7 +497,7 @@
           <span class="tag" style="font-weight:600;border-color:var(--pass);color:var(--text-strong)">Gemini 3 multimodal</span>
         </div>
         <div style="font-family:var(--font-mono);font-size:12px;color:var(--text-muted);line-height:1.7">
-          + ChatGPT Enterprise · Browser Use · Computer Use · JAM MCP · Selenium MCP · LangChain · OpenAI SDK · Claude SDK · Google GenAI · DeepEval · PromptFoo · LLM evaluation · AI security hooks
+          + ChatGPT Enterprise · Browser Use · Computer Use · JAM MCP · Selenium MCP · LangChain · OpenAI SDK · Claude SDK · Google GenAI · DeepEval · PromptFoo · LLM-as-a-Judge · multi-agent systems · LLM evaluation · AI security hooks
         </div>
       </div>
       <div class="card">
@@ -508,7 +508,7 @@
           <span class="tag" style="font-weight:600;border-color:var(--pass);color:var(--text-strong)">self-healing locators</span>
         </div>
         <div style="font-family:var(--font-mono);font-size:12px;color:var(--text-muted);line-height:1.7">
-          + Selenium (Java/Python) · Cypress · pytest · Robot Framework · Cucumber · Katalon Studio · XCUITest · UIAutomator2 · Reflect.run · POM · BrowserStack · LambdaTest · visual regression
+          + Selenium (Java/Python) · Cypress · pytest · Robot Framework · Cucumber · Katalon Studio · XCUITest · UIAutomator2 · Espresso · Reflect.run · POM · BrowserStack · LambdaTest · visual regression
         </div>
       </div>
       <div class="card">
@@ -577,7 +577,7 @@ describe(<span style="color:var(--pass)">'anmol'</span>, () => {
   });
 
   it(<span style="color:var(--pass)">'survives outages'</span>, () => {
-    <span class="terminal-key">expect</span>(outages).toBe(<span style="color:var(--info)">2</span>);
+    <span class="terminal-key">expect</span>(outages).toBe(<span style="color:var(--info)">7</span>);
     <span class="terminal-key">expect</span>(suite.color).toBe(<span style="color:var(--pass)">'green'</span>);
   });
 });
